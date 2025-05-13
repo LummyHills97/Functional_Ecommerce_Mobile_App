@@ -7,7 +7,7 @@ class TColors{
   static const Color primary = Color(0xFF4b68ff);
   static const Color secondary = Color(0xFFFFE24B);
   static const Color accent = Color(0xFFb0c7ff);
-  static const Color newAccent = Color(0xFF123456);
+  
 
 
   // Text colors
