@@ -12,17 +12,18 @@ dependencies:
   flutter:
     sdk: flutter
 
-    #Utility Packages
-    http: ^1.1.0
-    intl: ^0.18.1
-    url_launcher: ^6.1.12
+  # Utility Packages
+  http: ^1.2.1
+  intl: ^0.19.0
+  url_launcher: ^6.2.5
 
-  # UI icons
+  # UI Icons
   cupertino_icons: ^1.0.8
   iconsax: ^0.0.8
 
-  # State management
-  get: ^4.6.5
+  # State Management
+  get: ^4.6.6
+  get_storage: ^2.1.1
 
 dev_dependencies:
   flutter_test:
