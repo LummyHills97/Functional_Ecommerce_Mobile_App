@@ -1,6 +1,7 @@
 import 'package:ecommerce_store/utils/constants/image_strings.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
 import 'package:ecommerce_store/utils/constants/text_strings.dart';
+import 'package:ecommerce_store/utils/device/device_utility.dart';
 import 'package:ecommerce_store/utils/helpers/helpers_functions.dart';
 import 'package:flutter/material.dart';
 
@@ -34,6 +35,16 @@ class OnboardingScreen extends StatelessWidget {
           ),
 
           // TODO: Skip Button
+Positioned(
+  top: TDeviceUtils.getAppBarHeight(),
+  right: 16.0, // optional: you can align it right
+  child: TextButton(
+    onPressed: () {
+      // Add your navigation logic here
+    },
+    child: const Text('Skip'),
+  ),
+)
 
           // TODO: Dot Navigation SmoothPageIndicator
 
