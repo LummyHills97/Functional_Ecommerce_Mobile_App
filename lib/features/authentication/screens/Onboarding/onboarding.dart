@@ -4,9 +4,23 @@ import 'package:ecommerce_store/utils/constants/text_strings.dart';
 import 'package:ecommerce_store/utils/device/device_utility.dart';
 import 'package:ecommerce_store/utils/helpers/helpers_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class OnboardingScreen extends StatelessWidget {
+class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
+
+  @override
+  State<OnboardingScreen> createState() => _OnboardingScreenState();
+}
+
+class _OnboardingScreenState extends State<OnboardingScreen> {
+  final PageController _controller = PageController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +29,7 @@ class OnboardingScreen extends StatelessWidget {
         children: [
           // Horizontal scrollable Pages
           PageView(
+            controller: _controller,
             children: const [
               OnBoardingPage(
                 image: TImages.onBoardingImage1,
@@ -34,22 +49,48 @@ class OnboardingScreen extends StatelessWidget {
             ],
           ),
 
-          // TODO: Skip Button
-Positioned(
-  top: TDeviceUtils.getAppBarHeight(),
-  right: 16.0, // optional: you can align it right
-  child: TextButton(
-    onPressed: () {
-      // Add your navigation logic here
-    },
-    child: const Text('Skip'),
-  ),
-)
+          // Skip Button
+          const OnBoardingSkip(),
 
-          // TODO: Dot Navigation SmoothPageIndicator
+          // Dot Navigation (SmoothPageIndicator)
+          Positioned(
+            bottom: 60,
+            left: 0,
+            right: 0,
+            child: Center( 
+              child: SmoothPageIndicator(
+                controller: _controller,
+                count: 3,
+                effect: ExpandingDotsEffect(
+                  dotHeight: 8,
+                  dotWidth: 8,
+                  spacing: 10,
+                  activeDotColor: dark ? TColor.light:Colors.black,
+                ),
+              ),
+            ),
+          ),
 
-          // TODO: Circular Button
+          // TODO: Circular Button (You can position it similarly)
         ],
+      ),
+    );
+  }
+}
+
+class OnBoardingSkip extends StatelessWidget {
+  const OnBoardingSkip({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: TDeviceUtils.getAppBarHeight(),
+      right: 16.0,
+      child: TextButton(
+        onPressed: () {
+          // Add navigation logic here
+        },
+        child: const Text('Skip'),
       ),
     );
   }
