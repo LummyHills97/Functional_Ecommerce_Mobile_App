@@ -1,3 +1,4 @@
+import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:ecommerce_store/utils/constants/image_strings.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
 import 'package:ecommerce_store/utils/constants/text_strings.dart';
@@ -24,6 +25,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Optional: Detect theme brightness
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -50,47 +54,38 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
 
           // Skip Button
-          const OnBoardingSkip(),
+          Positioned(
+            top: TDeviceUtils.getAppBarHeight(),
+            right: 16.0,
+            child: TextButton(
+              onPressed: () {
+                // TODO: Add navigation logic here
+              },
+              child: const Text('Skip'),
+            ),
+          ),
 
-          // Dot Navigation (SmoothPageIndicator)
+          // Dot Navigation
           Positioned(
             bottom: 60,
             left: 0,
             right: 0,
-            child: Center( 
+            child: Center(
               child: SmoothPageIndicator(
                 controller: _controller,
                 count: 3,
                 effect: ExpandingDotsEffect(
-                  dotHeight: 8,
+                  dotHeight: 4,
                   dotWidth: 8,
                   spacing: 10,
-                  activeDotColor: dark ? TColor.light:Colors.black,
+                  activeDotColor: isDark ? TColors.light : TColors.dark,
                 ),
               ),
             ),
           ),
 
-          // TODO: Circular Button (You can position it similarly)
+          // TODO: Add your circular button here
         ],
-      ),
-    );
-  }
-}
-
-class OnBoardingSkip extends StatelessWidget {
-  const OnBoardingSkip({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      top: TDeviceUtils.getAppBarHeight(),
-      right: 16.0,
-      child: TextButton(
-        onPressed: () {
-          // Add navigation logic here
-        },
-        child: const Text('Skip'),
       ),
     );
   }
