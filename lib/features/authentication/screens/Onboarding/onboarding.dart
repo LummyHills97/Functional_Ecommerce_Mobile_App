@@ -6,6 +6,7 @@ import 'package:ecommerce_store/utils/device/device_utility.dart';
 import 'package:ecommerce_store/utils/helpers/helpers_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:iconsax/iconsax.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -83,7 +84,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ),
 
-          // Circular Button (placeholder)
+          // Circular Button with Blue Color
           Positioned(
             right: TSizes.defaultSpace,
             bottom: TDeviceUtils.getBottomNavigationBarHeight(),
@@ -91,7 +92,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               onPressed: () {
                 // TODO: Add your button action
               },
-              child: const Icon(Icons.arrow_forward),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(16),
+              ),
+              child: const Icon(Iconsax.arrow_right_3, color: Colors.white),
             ),
           ),
         ],
