@@ -25,7 +25,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Optional: Detect theme brightness
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
@@ -84,7 +83,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ),
 
-          // TODO: Add your circular button here
+          // Circular Button (placeholder)
+          Positioned(
+            right: TSizes.defaultSpace,
+            bottom: TDeviceUtils.getBottomNavigationBarHeight(),
+            child: ElevatedButton(
+              onPressed: () {
+                // TODO: Add your button action
+              },
+              child: const Icon(Icons.arrow_forward),
+            ),
+          ),
         ],
       ),
     );
