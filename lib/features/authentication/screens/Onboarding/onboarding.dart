@@ -93,7 +93,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 // TODO: Add your button action
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
+                backgroundColor: Colors.black,
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(16),
               ),
