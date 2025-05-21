@@ -33,7 +33,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         children: [
           // PageView for onboarding pages
           PageView(
-            controller: _controller,
+            controller: _controller, 
             children: const [
               OnBoardingPage(
                 image: TImages.onBoardingImage1,

@@ -1,19 +1,38 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class OnboardingController extends GetxController {
   static OnboardingController get instance => Get.find();
 
-  /// variables
-  
-  /// Update Current Index when Page scroll
-  void updatePageIndicator(index) {}
+  final pageController = PageController();
+  final currentPageIndex = 0.obs;
 
-  /// jump to the specific dot selected page
-  void dotNavigationclick(index) {}
+  void updatePageIndicator(int index) {
+    currentPageIndex.value = index;
+  }
 
-  /// update current index & jump to next page
-  void nextPage() {}
+  void dotNavigationClick(int index) {
+    pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
 
-  /// update Current index & jump to the last page
-  void skipPage () {}
+  void nextPage() {
+    if (currentPageIndex.value < 2) {
+      pageController.nextPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+  void skipPage() {
+    pageController.animateToPage(
+      2,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  }
 }
