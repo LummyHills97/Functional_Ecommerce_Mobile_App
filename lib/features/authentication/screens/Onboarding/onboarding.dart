@@ -31,7 +31,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          // Horizontal scrollable Pages
+          // PageView for onboarding screens
           PageView(
             controller: _controller,
             children: const [
@@ -53,19 +53,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ],
           ),
 
-          // Skip Button
+          // Skip button
           Positioned(
             top: TDeviceUtils.getAppBarHeight(),
             right: 16.0,
             child: TextButton(
               onPressed: () {
-                // TODO: Add navigation logic here
+                // TODO: Add navigation logic
               },
               child: const Text('Skip'),
             ),
           ),
 
-          // Dot Navigation
+          // Page Indicator
           Positioned(
             bottom: 60,
             left: 0,
@@ -84,16 +84,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ),
 
-          // Circular Button with Blue Color
+          // Next button
           Positioned(
             right: TSizes.defaultSpace,
             bottom: TDeviceUtils.getBottomNavigationBarHeight(),
             child: ElevatedButton(
               onPressed: () {
-                // TODO: Add your button action
+                // TODO: Add navigation or page change logic
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
+                backgroundColor:
+                    isDark ? TColors.light : TColors.primary, // Choose your color
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(16),
               ),
