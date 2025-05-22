@@ -1,3 +1,4 @@
+import 'package:ecommerce_store/features/authentication/controllers_onboarding/onboarding_controller.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:ecommerce_store/utils/constants/image_strings.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
@@ -7,6 +8,7 @@ import 'package:ecommerce_store/utils/helpers/helpers_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:get/get.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -16,11 +18,12 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  final PageController _controller = PageController();
+  // Initialize the controller
+  final controller = OnboardingController.instance;
 
   @override
   void dispose() {
-    _controller.dispose();
+    controller.pageController.dispose();
     super.dispose();
   }
 
@@ -33,7 +36,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         children: [
           // PageView for onboarding pages
           PageView(
-            controller: _controller, 
+            controller: controller.pageController,
+            onPageChanged: controller.updatePageIndicator,
             children: const [
               OnBoardingPage(
                 image: TImages.onBoardingImage1,
@@ -53,23 +57,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ],
           ),
 
-          // Skip Button
-          Positioned(
-            top: TDeviceUtils.getAppBarHeight(),
-            right: 16.0,
-            child: TextButton(
-              onPressed: () {
-                // TODO: Add navigation logic here
-              },
-              child: const Text('Skip'),
-            ),
-          ),
+          // Skip Button (hide on last page)
+          Obx(() => controller.currentPageIndex.value < 2 
+              ? Positioned(
+                  top: TDeviceUtils.getAppBarHeight(),
+                  right: 16.0,
+                  child: TextButton(
+                    onPressed: controller.skipPage,
+                    child: const Text('Skip'),
+                  ),
+                )
+              : const SizedBox()),
 
           // Dot Navigation aligned to the left
-          OnBoardingDotNavigation(controller: _controller),
+          OnBoardingDotNavigation(controller: controller),
 
-          // Next Button
-          const OnBoardingNextButton(),
+          // Next/Get Started Button
+          Obx(() => controller.currentPageIndex.value == 2 
+              ? OnBoardingFinalButton(controller: controller)
+              : OnBoardingNextButton(controller: controller)),
         ],
       ),
     );
@@ -77,7 +83,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 }
 
 class OnBoardingDotNavigation extends StatelessWidget {
-  final PageController controller;
+  final OnboardingController controller;
 
   const OnBoardingDotNavigation({
     super.key,
@@ -94,14 +100,17 @@ class OnBoardingDotNavigation extends StatelessWidget {
       right: 80,
       child: Align(
         alignment: Alignment.centerLeft,
-        child: SmoothPageIndicator(
-          controller: controller,
-          count: 3,
-          effect: ExpandingDotsEffect(
-            activeDotColor: isDark ? TColors.light : TColors.dark,
-            dotHeight: 6,
-            dotWidth: 8,
-            spacing: 8,
+        child: Obx(
+          () => SmoothPageIndicator(
+            controller: controller.pageController,
+            count: 3,
+            onDotClicked: controller.dotNavigationClick,
+            effect: ExpandingDotsEffect(
+              activeDotColor: isDark ? TColors.light : TColors.dark,
+              dotHeight: 6,
+              dotWidth: 8,
+              spacing: 8,
+            ),
           ),
         ),
       ),
@@ -110,7 +119,12 @@ class OnBoardingDotNavigation extends StatelessWidget {
 }
 
 class OnBoardingNextButton extends StatelessWidget {
-  const OnBoardingNextButton({super.key});
+  final OnboardingController controller;
+
+  const OnBoardingNextButton({
+    super.key,
+    required this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -120,15 +134,44 @@ class OnBoardingNextButton extends StatelessWidget {
       right: TSizes.defaultSpace,
       bottom: TDeviceUtils.getBottomNavigationBarHeight(),
       child: ElevatedButton(
-        onPressed: () {
-          // TODO: Add your button action
-        },
+        onPressed: controller.nextPage,
         style: ElevatedButton.styleFrom(
           backgroundColor: dark ? TColors.primary : Colors.black,
           shape: const CircleBorder(),
           padding: const EdgeInsets.all(16),
         ),
         child: const Icon(Iconsax.arrow_right_3, color: Colors.white),
+      ),
+    );
+  }
+}
+
+class OnBoardingFinalButton extends StatelessWidget {
+  final OnboardingController controller;
+
+  const OnBoardingFinalButton({
+    super.key,
+    required this.controller,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = THelperFunctions.isDarkMode(context);
+
+    return Positioned(
+      right: TSizes.defaultSpace,
+      bottom: TDeviceUtils.getBottomNavigationBarHeight(),
+      child: ElevatedButton(
+        onPressed: controller.navigateToHomeScreen,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: dark ? TColors.primary : Colors.black,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        ),
+        child: const Text(
+          'Get Started',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }

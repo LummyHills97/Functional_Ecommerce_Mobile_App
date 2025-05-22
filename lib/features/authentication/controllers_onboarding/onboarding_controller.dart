@@ -12,6 +12,7 @@ class OnboardingController extends GetxController {
   }
 
   void dotNavigationClick(int index) {
+    currentPageIndex.value = index;
     pageController.animateToPage(
       index,
       duration: const Duration(milliseconds: 300),
@@ -20,7 +21,11 @@ class OnboardingController extends GetxController {
   }
 
   void nextPage() {
-    if (currentPageIndex.value < 2) {
+    if (currentPageIndex.value == 2) {
+      // If we're on the last page, navigate to the home screen
+      navigateToHomeScreen();
+    } else {
+      // Otherwise, go to the next page
       pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -29,10 +34,21 @@ class OnboardingController extends GetxController {
   }
 
   void skipPage() {
+    // Skip to the last page
+    currentPageIndex.value = 2;
     pageController.animateToPage(
       2,
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
+  }
+
+  void navigateToHomeScreen() {
+    // Replace this with your actual navigation logic
+    // For example:
+    // Get.offAll(() => HomeScreen());
+    
+    // For now we'll just print to demonstrate
+    debugPrint('Navigating to Home Screen');
   }
 }
