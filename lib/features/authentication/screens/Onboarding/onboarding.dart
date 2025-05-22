@@ -1,3 +1,4 @@
+import 'package:ecommerce_store/features/authentication/controllers_onboarding/onboarding_controller.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:ecommerce_store/utils/constants/image_strings.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
@@ -9,8 +10,6 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:get/get.dart';
 
-// Don't forget to add the import to your OnboardingController
-import 'package:ecommerce_store/features/authentication/controllers/onboarding_controller.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -20,12 +19,19 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  // Initialize the controller with lazy loading
-  final controller = Get.put(OnboardingController());
+  late final OnboardingController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.put(OnboardingController());
+  }
 
   @override
   void dispose() {
-    controller.pageController.dispose();
+    if (controller.pageController.hasClients) {
+      controller.pageController.dispose();
+    }
     super.dispose();
   }
 
@@ -59,23 +65,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ],
           ),
 
-          // Skip Button (hide on last page)
-          Obx(() => controller.currentPageIndex.value < 2 
-              ? Positioned(
+          // Skip Button
+          Obx(() => Visibility(
+                visible: controller.currentPageIndex.value < 2,
+                child: Positioned(
                   top: TDeviceUtils.getAppBarHeight(),
-                  right: 16.0,
+                  right: TSizes.spaceBtwSections,
                   child: TextButton(
                     onPressed: controller.skipPage,
-                    child: const Text('Skip'),
+                    child: const Text('Skip', semanticsLabel: 'Skip onboarding'),
                   ),
-                )
-              : const SizedBox()),
+                ),
+              )),
 
-          // Dot Navigation aligned to the left
+          // Dot Navigation
           OnBoardingDotNavigation(controller: controller),
 
           // Next/Get Started Button
-          Obx(() => controller.currentPageIndex.value == 2 
+          Obx(() => controller.currentPageIndex.value == 2
               ? OnBoardingFinalButton(controller: controller)
               : OnBoardingNextButton(controller: controller)),
         ],
@@ -98,8 +105,8 @@ class OnBoardingDotNavigation extends StatelessWidget {
 
     return Positioned(
       bottom: TDeviceUtils.getBottomNavigationBarHeight() + 25,
-      left: 10,
-      right: 80,
+      left: TSizes.spaceBtwSections,
+      right: TSizes.spaceBtwSections * 3,
       child: Align(
         alignment: Alignment.centerLeft,
         child: Obx(
@@ -142,7 +149,11 @@ class OnBoardingNextButton extends StatelessWidget {
           shape: const CircleBorder(),
           padding: const EdgeInsets.all(16),
         ),
-        child: const Icon(Iconsax.arrow_right_3, color: Colors.white),
+        child: const Icon(
+          Iconsax.arrow_right_3,
+          color: Colors.white,
+          semanticLabel: 'Next',
+        ),
       ),
     );
   }
@@ -172,6 +183,7 @@ class OnBoardingFinalButton extends StatelessWidget {
         ),
         child: const Text(
           'Get Started',
+          semanticsLabel: 'Get Started with the app',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
@@ -191,15 +203,21 @@ class OnBoardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+
     return Padding(
       padding: const EdgeInsets.all(TSizes.defaultSpace),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image(
-            width: THelperFunctions.screenWidth() * 0.8,
-            height: THelperFunctions.screenHeight() * 0.6,
-            image: AssetImage(image),
+          Image.asset(
+            image,
+            width: width * 0.8,
+            height: height * 0.55,
+            fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) =>
+                const Icon(Icons.broken_image, size: 60),
           ),
           const SizedBox(height: TSizes.spaceBtwItems),
           Text(
