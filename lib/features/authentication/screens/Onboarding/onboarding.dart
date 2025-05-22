@@ -1,4 +1,3 @@
-import 'package:ecommerce_store/features/authentication/controllers_onboarding/onboarding_controller.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:ecommerce_store/utils/constants/image_strings.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
@@ -10,6 +9,9 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:get/get.dart';
 
+// Don't forget to add the import to your OnboardingController
+import 'package:ecommerce_store/features/authentication/controllers/onboarding_controller.dart';
+
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -18,8 +20,8 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  // Initialize the controller
-  final controller = OnboardingController.instance;
+  // Initialize the controller with lazy loading
+  final controller = Get.put(OnboardingController());
 
   @override
   void dispose() {
