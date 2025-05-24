@@ -1,16 +1,15 @@
-import 'package:ecommerce_store/features/authentication/controllers_onboarding/onboarding_controller.dart';
+import 'package:ecommerce_store/features/authentication/screens/widgets/onboarding_dot_navigation.dart';
+import 'package:ecommerce_store/features/authentication/screens/widgets/onboarding_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:ecommerce_store/utils/constants/colors.dart';
+import 'package:ecommerce_store/features/authentication/controllers_onboarding/onboarding_controller.dart';
 import 'package:ecommerce_store/utils/constants/image_strings.dart';
-import 'package:ecommerce_store/utils/constants/sizes.dart';
 import 'package:ecommerce_store/utils/constants/text_strings.dart';
+import 'package:ecommerce_store/utils/constants/colors.dart';
 
 class OnboardingScreen extends StatelessWidget {
   OnboardingScreen({super.key});
-
   final controller = Get.put(OnboardingController());
 
   @override
@@ -55,24 +54,10 @@ class OnboardingScreen extends StatelessWidget {
                 )
               : const SizedBox()),
 
-          // Dot Navigation
-          Positioned(
-            bottom: MediaQuery.of(context).padding.bottom + 90,
-            left: 16,
-            child: Obx(() => SmoothPageIndicator(
-                  controller: controller.pageController,
-                  count: 3,
-                  onDotClicked: controller.dotNavigationClick,
-                  effect: ExpandingDotsEffect(
-                    activeDotColor: isDark ? TColors.light : TColors.dark,
-                    dotHeight: 6,
-                    dotWidth: 8,
-                    spacing: 8,
-                  ),
-                )),
-          ),
+          // Dot Indicator
+          OnBoardingDotNavigation(controller: controller.pageController),
 
-          // Next / Get Started Button
+          // Bottom Button
           Obx(() => Positioned(
                 right: 16,
                 bottom: MediaQuery.of(context).padding.bottom + 30,
@@ -84,10 +69,8 @@ class OnboardingScreen extends StatelessWidget {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                         ),
-                        child: const Text(
-                          'Get Started',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
+                        child: const Text('Get Started',
+                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                       )
                     : ElevatedButton(
                         onPressed: controller.nextPage,
@@ -99,49 +82,6 @@ class OnboardingScreen extends StatelessWidget {
                         child: const Icon(Iconsax.arrow_right_3, color: Colors.white),
                       ),
               )),
-        ],
-      ),
-    );
-  }
-}
-
-class OnBoardingPage extends StatelessWidget {
-  final String image, title, subTitle;
-
-  const OnBoardingPage({
-    super.key,
-    required this.image,
-    required this.title,
-    required this.subTitle,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
-    return Padding(
-      padding: const EdgeInsets.all(TSizes.defaultSpace),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            image,
-            width: screenWidth * 0.8,
-            height: screenHeight * 0.6,
-          ),
-          const SizedBox(height: TSizes.spaceBtwItems),
-          Text(
-            title,
-            style: Theme.of(context).textTheme.headlineMedium,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: TSizes.spaceBtwItems),
-          Text(
-            subTitle,
-            style: Theme.of(context).textTheme.bodyMedium,
-            textAlign: TextAlign.center,
-          ),
         ],
       ),
     );
