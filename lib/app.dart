@@ -15,7 +15,7 @@ class App extends StatelessWidget {
       theme: TAppTheme.lightTheme,
       darkTheme: TAppTheme.darkTheme,
       debugShowCheckedModeBanner: false,
-      home: const OnboardingScreen(), // Set your onboarding screen as home
+      home: OnboardingScreen(), // Set your onboarding screen as home
     );
   }
 }
