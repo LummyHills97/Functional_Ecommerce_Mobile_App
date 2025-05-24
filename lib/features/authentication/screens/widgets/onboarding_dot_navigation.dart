@@ -13,18 +13,14 @@ class OnBoardingDotNavigation extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       bottom: 90,
-      left: 0,
-      right: 0,
-      child: Center(
-        child: SmoothPageIndicator(
-          controller: controller,
-          count: 3,
-          effect: ExpandingDotsEffect(
-            activeDotColor: Colors.black,
-            dotHeight: 8,
-            dotWidth: 8,
-            expansionFactor: 3,
-          ),
+      left: 20, // Adjust this as needed
+      child: SmoothPageIndicator(
+        controller: controller,
+        count: 3,
+        effect: SlideEffect(
+          dotHeight: 10,
+          dotWidth: 10,
+          activeDotColor: Colors.black,
         ),
       ),
     );
