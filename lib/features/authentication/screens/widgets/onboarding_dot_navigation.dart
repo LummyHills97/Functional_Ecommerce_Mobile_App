@@ -17,10 +17,11 @@ class OnBoardingDotNavigation extends StatelessWidget {
       child: SmoothPageIndicator(
         controller: controller,
         count: 3,
-        effect: SlideEffect(
-          dotHeight: 10,
-          dotWidth: 10,
-          activeDotColor: Colors.black,
+        effect: ExpandingDotsEffect(
+              activeDotColor: Colors.black,
+              dotHeight: 6,
+              dotWidth: 8,
+              spacing: 8,
         ),
       ),
     );
