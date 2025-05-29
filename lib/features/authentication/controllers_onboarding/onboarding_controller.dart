@@ -20,8 +20,8 @@ class OnboardingController extends GetxController {
   }
 
   void navigateToHomeScreen() {
-    // Replace with navigation logic
-    Get.offAllNamed('/home');
+    // Navigate to login screen instead of home
+    Get.offAllNamed('/login');
   }
 
   @override
