@@ -2,10 +2,11 @@ import 'package:ecommerce_store/utils/constants/image_strings.dart';
 import 'package:ecommerce_store/utils/helpers/helpers_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import '../../../../common/styles/spacing_styles.dart';
 import '../../../../utils/constants/text_strings.dart';
+import 'package:ecommerce_store/features/authentication/screens/signup/signup.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -88,6 +89,10 @@ class LoginScreen extends StatelessWidget {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            foregroundColor: Colors.white,
+                          ),
                           child: const Text(TTexts.signIn),
                         ),
                       ),
@@ -97,7 +102,7 @@ class LoginScreen extends StatelessWidget {
                       SizedBox(
                         width: double.infinity,
                         child: OutlinedButton(
-                          onPressed: () {},
+                          onPressed: () => Get.to(() => const SignupScreen()),
                           child: const Text(TTexts.createAccount),
                         ),
                       ),
