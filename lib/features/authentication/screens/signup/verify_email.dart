@@ -5,6 +5,7 @@ import 'package:ecommerce_store/utils/helpers/helpers_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ecommerce_store/common/widgets/success_screen/success_screen.dart';
 
 class VerifyEmailScreen extends StatelessWidget {
   const VerifyEmailScreen({super.key});
@@ -33,7 +34,7 @@ class VerifyEmailScreen extends StatelessWidget {
                 width: THelperFunctions.screenWidth() * 0.6,
               ),
               const SizedBox(height: TSizes.spaceBtwSections),
-
+              
               /// Title & Subtitle
               Text(
                 TTexts.confirmEmail,
@@ -41,28 +42,31 @@ class VerifyEmailScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: TSizes.spaceBtwItems),
+              
               Text(
                 'support@LummyHills.com',
                 style: Theme.of(context).textTheme.labelLarge,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: TSizes.spaceBtwItems),
+              
               Text(
                 TTexts.confirmEmailSubTitle,
                 style: Theme.of(context).textTheme.labelMedium,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: TSizes.spaceBtwSections),
-
+              
               /// Buttons
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () => Get.offAllNamed('/login'),
+                  onPressed: () => Get.off(() => const SuccessScreen()), // Fixed: Direct navigation
                   child: const Text(TTexts.tContinue),
                 ),
               ),
               const SizedBox(height: TSizes.spaceBtwItems),
+              
               SizedBox(
                 width: double.infinity,
                 child: TextButton(
