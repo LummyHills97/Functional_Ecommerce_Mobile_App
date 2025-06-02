@@ -1,3 +1,4 @@
+import 'package:ecommerce_store/navigation_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -42,49 +43,90 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   Future<void> _signIn() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
+    if (!_formKey.currentState!.validate()) return;
 
-      // Simulate API call
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      // Simulate API call - Replace with actual authentication logic
       await Future.delayed(const Duration(seconds: 2));
-
-      setState(() {
-        _isLoading = false;
-      });
-
-      // Handle successful login - Navigate to home or dashboard
-      Get.snackbar(
-        'Success',
-        'Login successful!',
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-      );
       
-      // Navigate to your main app screen
-      // Get.offAllNamed('/home'); // Uncomment and adjust route as needed
+      // Simulate random success/failure for demo
+      final bool loginSuccess = DateTime.now().millisecond % 2 == 0;
+      
+      if (loginSuccess) {
+        _handleLoginSuccess();
+      } else {
+        _handleLoginError('Invalid email or password');
+      }
+    } catch (error) {
+      _handleLoginError('An error occurred. Please try again.');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
+  void _handleLoginSuccess() {
+    Get.snackbar(
+      'Success',
+      'Welcome back!',
+      backgroundColor: Colors.green,
+      colorText: Colors.white,
+      snackPosition: SnackPosition.TOP,
+      duration: const Duration(seconds: 3),
+    );
+    
+    // Navigate to main app screen
+    Get.offAll(() => const NavigationMenu());
+  }
+
+  void _handleLoginError(String message) {
+    Get.snackbar(
+      'Login Failed',
+      message,
+      backgroundColor: Colors.red,
+      colorText: Colors.white,
+      snackPosition: SnackPosition.TOP,
+      duration: const Duration(seconds: 3),
+    );
+  }
+
   String? _validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your email';
+    if (value == null || value.trim().isEmpty) {
+      return 'Email is required';
     }
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+    
+    final emailRegex = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    );
+    
+    if (!emailRegex.hasMatch(value.trim())) {
       return 'Please enter a valid email address';
     }
+    
     return null;
   }
 
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please enter your password';
+      return 'Password is required';
     }
+    
     if (value.length < 6) {
-      return 'Password must be at least 6 characters';
+      return 'Password must be at least 6 characters long';
     }
+    
     return null;
+  }
+
+  void _navigateToForgetPassword() {
+    Get.to(() => const ForgetPassword());
   }
 
   @override
@@ -99,10 +141,13 @@ class _LoginFormState extends State<LoginForm> {
             TextFormField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
               validator: _validateEmail,
+              enabled: !_isLoading,
               decoration: const InputDecoration(
                 prefixIcon: Icon(Iconsax.direct_right),
                 labelText: TTexts.email,
+                hintText: 'Enter your email address',
               ),
             ),
             const SizedBox(height: TSizes.spaceBtwInputFields),
@@ -111,12 +156,16 @@ class _LoginFormState extends State<LoginForm> {
             TextFormField(
               controller: _passwordController,
               obscureText: !_isPasswordVisible,
+              textInputAction: TextInputAction.done,
               validator: _validatePassword,
+              enabled: !_isLoading,
+              onFieldSubmitted: (_) => _signIn(),
               decoration: InputDecoration(
                 prefixIcon: const Icon(Iconsax.password_check),
                 labelText: TTexts.password,
+                hintText: 'Enter your password',
                 suffixIcon: IconButton(
-                  onPressed: _togglePasswordVisibility,
+                  onPressed: _isLoading ? null : _togglePasswordVisibility,
                   icon: Icon(
                     _isPasswordVisible ? Iconsax.eye : Iconsax.eye_slash,
                   ),
@@ -131,18 +180,22 @@ class _LoginFormState extends State<LoginForm> {
               children: [
                 /// Remember Me
                 Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Checkbox(
                       value: _isRememberMe,
-                      onChanged: _toggleRememberMe,
+                      onChanged: _isLoading ? null : _toggleRememberMe,
                     ),
-                    const Text(TTexts.rememberMe),
+                    GestureDetector(
+                      onTap: _isLoading ? null : () => _toggleRememberMe(!_isRememberMe),
+                      child: const Text(TTexts.rememberMe),
+                    ),
                   ],
                 ),
 
                 /// Forget Password
                 TextButton(
-                  onPressed: () => Get.to(() => const ForgetPassword()),
+                  onPressed: _isLoading ? null : _navigateToForgetPassword,
                   child: const Text(TTexts.forgetPassword),
                 ),
               ],
@@ -157,6 +210,10 @@ class _LoginFormState extends State<LoginForm> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
                 child: _isLoading
                     ? const SizedBox(
@@ -167,19 +224,16 @@ class _LoginFormState extends State<LoginForm> {
                           valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                         ),
                       )
-                    : const Text(TTexts.signIn),
+                    : const Text(
+                        TTexts.signIn,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
               ),
             ),
-            const SizedBox(height: TSizes.spaceBtwItems),
 
-            /// Create Account Button
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton(
-                onPressed: () => Get.to(() => const SignupScreen()),
-                child: const Text(TTexts.createAccount),
-              ),
-            ),
           ],
         ),
       ),
