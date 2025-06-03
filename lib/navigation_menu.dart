@@ -15,7 +15,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
       builder: (context) {
         final isDark = Theme.of(context).brightness == Brightness.dark;
         return Container(
-          color: isDark ? Colors.grey[900] : Colors.green.shade50,
+          color: Colors.green.shade50,
           child: Center(
             child: Text(
               'Home Page',
@@ -33,7 +33,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
       builder: (context) {
         final isDark = Theme.of(context).brightness == Brightness.dark;
         return Container(
-          color: isDark ? Colors.grey[850] : Colors.blue.shade50,
+          color: Colors.blue.shade50,
           child: Center(
             child: Text(
               'Shop Page',
@@ -51,7 +51,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
       builder: (context) {
         final isDark = Theme.of(context).brightness == Brightness.dark;
         return Container(
-          color: isDark ? Colors.grey[800] : Colors.deepPurple.shade50,
+          color: Colors.deepPurple.shade50,
           child: Center(
             child: Text(
               'Wishlist Page',
@@ -69,7 +69,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
       builder: (context) {
         final isDark = Theme.of(context).brightness == Brightness.dark;
         return Container(
-          color: isDark ? Colors.grey[750] : Colors.orange.shade50,
+          color: Colors.orange.shade50,
           child: Center(
             child: Text(
               'Profile Page',
@@ -93,8 +93,6 @@ class _NavigationMenuState extends State<NavigationMenu> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
@@ -104,10 +102,8 @@ class _NavigationMenuState extends State<NavigationMenu> {
         selectedIndex: _selectedIndex,
         onDestinationSelected: _onItemTapped,
         elevation: 8,
-        backgroundColor: isDark ? Colors.grey[900] : Colors.white,
-        indicatorColor: isDark 
-            ? Colors.blue.shade300.withOpacity(0.3)
-            : Colors.blue.shade100,
+        backgroundColor: Colors.white,
+        indicatorColor: Colors.blue.shade100,
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.home_outlined),
