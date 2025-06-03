@@ -42,87 +42,9 @@ class _LoginFormState extends State<LoginForm> {
     });
   }
 
-  Future<void> _signIn() async {
-    if (!_formKey.currentState!.validate()) return;
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      // Simulate API call - Replace with actual authentication logic
-      await Future.delayed(const Duration(seconds: 2));
-      
-      // Simulate random success/failure for demo
-      final bool loginSuccess = DateTime.now().millisecond % 2 == 0;
-      
-      if (loginSuccess) {
-        _handleLoginSuccess();
-      } else {
-        _handleLoginError('Invalid email or password');
-      }
-    } catch (error) {
-      _handleLoginError('An error occurred. Please try again.');
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
-  }
-
-  void _handleLoginSuccess() {
-    Get.snackbar(
-      'Success',
-      'Welcome back!',
-      backgroundColor: Colors.green,
-      colorText: Colors.white,
-      snackPosition: SnackPosition.TOP,
-      duration: const Duration(seconds: 3),
-    );
-    
-    // Navigate to main app screen
+  void _signIn() {
+    // Direct navigation without validation
     Get.offAll(() => const NavigationMenu());
-  }
-
-  void _handleLoginError(String message) {
-    Get.snackbar(
-      'Login Failed',
-      message,
-      backgroundColor: Colors.red,
-      colorText: Colors.white,
-      snackPosition: SnackPosition.TOP,
-      duration: const Duration(seconds: 3),
-    );
-  }
-
-  String? _validateEmail(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Email is required';
-    }
-    
-    final emailRegex = RegExp(
-      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-    );
-    
-    if (!emailRegex.hasMatch(value.trim())) {
-      return 'Please enter a valid email address';
-    }
-    
-    return null;
-  }
-
-  String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Password is required';
-    }
-    
-    if (value.length < 6) {
-      return 'Password must be at least 6 characters long';
-    }
-    
-    return null;
   }
 
   void _navigateToForgetPassword() {
@@ -142,7 +64,6 @@ class _LoginFormState extends State<LoginForm> {
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
-              validator: _validateEmail,
               enabled: !_isLoading,
               decoration: const InputDecoration(
                 prefixIcon: Icon(Iconsax.direct_right),
@@ -157,7 +78,6 @@ class _LoginFormState extends State<LoginForm> {
               controller: _passwordController,
               obscureText: !_isPasswordVisible,
               textInputAction: TextInputAction.done,
-              validator: _validatePassword,
               enabled: !_isLoading,
               onFieldSubmitted: (_) => _signIn(),
               decoration: InputDecoration(
@@ -206,7 +126,7 @@ class _LoginFormState extends State<LoginForm> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: _isLoading ? null : _signIn,
+                onPressed: _signIn,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white,
@@ -215,22 +135,13 @@ class _LoginFormState extends State<LoginForm> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: _isLoading
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                        ),
-                      )
-                    : const Text(
-                        TTexts.signIn,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                child: const Text(
+                  TTexts.signIn,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
             ),
 
