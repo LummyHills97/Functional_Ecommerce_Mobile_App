@@ -93,6 +93,8 @@ class _NavigationMenuState extends State<NavigationMenu> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
@@ -102,8 +104,10 @@ class _NavigationMenuState extends State<NavigationMenu> {
         selectedIndex: _selectedIndex,
         onDestinationSelected: _onItemTapped,
         elevation: 8,
-        backgroundColor: Colors.white,
-        indicatorColor: Colors.blue.shade100,
+        backgroundColor: isDark ? Colors.grey[900] : Colors.white,
+        indicatorColor: isDark 
+            ? Colors.blue.shade300.withOpacity(0.3)
+            : Colors.blue.shade100,
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.home_outlined),
