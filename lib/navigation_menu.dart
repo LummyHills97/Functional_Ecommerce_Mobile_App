@@ -1,136 +1,81 @@
+import 'package:ecommerce_store/features/authentication/screens/home/home.dart';
+import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
-class NavigationMenu extends StatefulWidget {
+class NavigationMenu extends StatelessWidget {
   const NavigationMenu({super.key});
 
   @override
-  State<NavigationMenu> createState() => _NavigationMenuState();
-}
-
-class _NavigationMenuState extends State<NavigationMenu> {
-  int _selectedIndex = 0;
-
-  final List<Widget> _pages = [
-    Builder(
-      builder: (context) {
-        final isDark = Theme.of(context).brightness == Brightness.dark;
-        return Container(
-          color: Colors.green.shade50,
-          child: Center(
-            child: Text(
-              'Home Page',
-              style: TextStyle(
-                fontSize: 24, 
-                fontWeight: FontWeight.bold,
-                color: isDark ? Colors.white : Colors.black,
-              ),
-            ),
-          ),
-        );
-      },
-    ),
-    Builder(
-      builder: (context) {
-        final isDark = Theme.of(context).brightness == Brightness.dark;
-        return Container(
-          color: Colors.blue.shade50,
-          child: Center(
-            child: Text(
-              'Shop Page',
-              style: TextStyle(
-                fontSize: 24, 
-                fontWeight: FontWeight.bold,
-                color: isDark ? Colors.white : Colors.black,
-              ),
-            ),
-          ),
-        );
-      },
-    ),
-    Builder(
-      builder: (context) {
-        final isDark = Theme.of(context).brightness == Brightness.dark;
-        return Container(
-          color: Colors.deepPurple.shade50,
-          child: Center(
-            child: Text(
-              'Wishlist Page',
-              style: TextStyle(
-                fontSize: 24, 
-                fontWeight: FontWeight.bold,
-                color: isDark ? Colors.white : Colors.black,
-              ),
-            ),
-          ),
-        );
-      },
-    ),
-    Builder(
-      builder: (context) {
-        final isDark = Theme.of(context).brightness == Brightness.dark;
-        return Container(
-          color: Colors.orange.shade50,
-          child: Center(
-            child: Text(
-              'Profile Page',
-              style: TextStyle(
-                fontSize: 24, 
-                fontWeight: FontWeight.bold,
-                color: isDark ? Colors.white : Colors.black,
-              ),
-            ),
-          ),
-        );
-      },
-    ),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+    final controller = Get.put(NavigationController());
+
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _pages,
+      bottomNavigationBar: Obx(
+        () => NavigationBar(
+          height: 80,
+          elevation: 0,
+          selectedIndex: controller.selectedIndex.value,
+          onDestinationSelected: (index) => controller.selectedIndex.value = index,
+          backgroundColor: Colors.white,
+          indicatorColor: TColors.primary.withOpacity(0.1),
+          destinations: const [
+            NavigationDestination(
+              icon: Icon(Iconsax.home),
+              label: 'Home',
+            ),
+            NavigationDestination(
+              icon: Icon(Iconsax.shop),
+              label: 'Store',
+            ),
+            NavigationDestination(
+              icon: Icon(Iconsax.heart),
+              label: 'Wishlist',
+            ),
+            NavigationDestination(
+              icon: Icon(Iconsax.user),
+              label: 'Profile',
+            ),
+          ],
+        ),
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: _onItemTapped,
-        elevation: 8,
-        backgroundColor: isDark ? Colors.grey[900] : Colors.white,
-        indicatorColor: isDark 
-            ? Colors.blue.shade300.withOpacity(0.3)
-            : Colors.blue.shade100,
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.shopping_bag_outlined),
-            selectedIcon: Icon(Icons.shopping_bag),
-            label: 'Shop',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.favorite_outline),
-            selectedIcon: Icon(Icons.favorite),
-            label: 'Wishlist',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-      ),
+      body: Obx(() => controller.screens[controller.selectedIndex.value]),
     );
   }
+}
+
+class NavigationController extends GetxController {
+  final Rx<int> selectedIndex = 0.obs;
+
+  final screens = [
+    const HomeScreen(),
+    Container(
+      color: Colors.purple,
+      child: const Center(
+        child: Text(
+          'Store Screen',
+          style: TextStyle(fontSize: 24, color: Colors.white),
+        ),
+      ),
+    ),
+    Container(
+      color: Colors.orange,
+      child: const Center(
+        child: Text(
+          'Wishlist Screen',
+          style: TextStyle(fontSize: 24, color: Colors.white),
+        ),
+      ),
+    ),
+    Container(
+      color: Colors.blue,
+      child: const Center(
+        child: Text(
+          'Profile Screen',
+          style: TextStyle(fontSize: 24, color: Colors.white),
+        ),
+      ),
+    ),
+  ];
 }

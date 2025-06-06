@@ -1,10 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:ecommerce_store/features/authentication/screens/Onboarding/onboarding.dart';
 import 'package:ecommerce_store/features/authentication/screens/login/login.dart';
-import 'package:ecommerce_store/features/authentication/screens/home/home.dart';
+import 'package:ecommerce_store/navigation_menu.dart';
 import 'package:ecommerce_store/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get/get.dart';
 
 class App extends StatelessWidget {
@@ -13,29 +12,48 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'App',
+      title: 'Ecommerce Store',
+      debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.system,
       theme: TAppTheme.lightTheme,
       darkTheme: TAppTheme.darkTheme,
-      debugShowCheckedModeBanner: false,
-      // Define routes instead of using home
+      
+      // Set initial route
       initialRoute: '/onboarding',
+      
+      // Define all routes
       getPages: [
         GetPage(
           name: '/onboarding',
           page: () => OnboardingScreen(),
+          transition: Transition.fade,
         ),
         GetPage(
           name: '/login',
           page: () => LoginScreen(),
+          transition: Transition.rightToLeft,
+        ),
+        GetPage(
+          name: '/navigation',
+          page: () => NavigationMenu(),
+          transition: Transition.fade,
         ),
         GetPage(
           name: '/home',
-          page: () => HomeScreen(),
+          page: () => NavigationMenu(),
+          transition: Transition.fade,
         ),
-        // Add more routes as needed
-        // GetPage(name: '/signup', page: () => SignupScreen()),
       ],
+      
+      // Fallback route for unknown routes
+      unknownRoute: GetPage(
+        name: '/notfound',
+        page: () => Scaffold(
+          body: Center(
+            child: Text('Page Not Found'),
+          ),
+        ),
+      ),
     );
   }
 }
