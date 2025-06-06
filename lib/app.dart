@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:ecommerce_store/features/authentication/screens/Onboarding/onboarding.dart';
 import 'package:ecommerce_store/features/authentication/screens/login/login.dart';
-import 'package:ecommerce_store/utils/constants/home.dart';
+import 'package:ecommerce_store/features/authentication/screens/home/home.dart';
 import 'package:ecommerce_store/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -31,7 +31,7 @@ class App extends StatelessWidget {
         ),
         GetPage(
           name: '/home',
-          page: () => HomeScreen(), // Add this route
+          page: () => HomeScreen(),
         ),
         // Add more routes as needed
         // GetPage(name: '/signup', page: () => SignupScreen()),
