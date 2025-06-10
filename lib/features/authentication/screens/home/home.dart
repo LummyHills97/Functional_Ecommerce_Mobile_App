@@ -1,4 +1,4 @@
-import 'package:ecommerce_store/common/widgets/custom_shapes/circular_container.dart';
+import 'package:ecommerce_store/common/widgets/custom_shapes/containers/primary_header_container.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -11,128 +11,94 @@ class HomeScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Header Section with Rounded Bottom
-            Container(
-              decoration: BoxDecoration(
-                color: TColors.primary,
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
-                ),
-              ),
-              child: Container(
-                height: 320,
-                child: Stack(
-                  children: [
-                    // Background circular containers
-                    Positioned(
-                      top: -150,
-                      right: -250,
-                      child: TCircular(
-                        width: 400,
-                        height: 400,
-                        backgroundColor: TColors.textWhite.withOpacity(0.1),
-                      ),
-                    ),
-                    Positioned(
-                      top: 100,
-                      right: -300,
-                      child: TCircular(
-                        width: 400,
-                        height: 400,
-                        backgroundColor: TColors.textWhite.withOpacity(0.1),
-                      ),
-                    ),
-                    // Main content
-                    SafeArea(
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // App Bar
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Good day for shopping',
-                                      style: TextStyle(
-                                        color: TColors.textWhite,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      'Welcome to our store',
-                                      style: TextStyle(
-                                        color: TColors.textWhite.withOpacity(0.8),
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                // Notification & Cart Icons
-                                Row(
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(
-                                        Icons.notifications_outlined,
-                                        color: TColors.textWhite,
-                                        size: 24,
-                                      ),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(
-                                        Icons.shopping_cart_outlined,
-                                        color: TColors.textWhite,
-                                        size: 24,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 30),
-                            // Search Bar
-                            Container(
-                              height: 50,
-                              decoration: BoxDecoration(
-                                color: TColors.textWhite,
-                                borderRadius: BorderRadius.circular(25),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    blurRadius: 10,
-                                    offset: const Offset(0, 5),
-                                  ),
-                                ],
-                              ),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  hintText: 'Search products...',
-                                  prefixIcon: Icon(
-                                    Icons.search,
-                                    color: Colors.grey[600],
-                                  ),
-                                  border: InputBorder.none,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 20,
-                                    vertical: 15,
-                                  ),
+            // Header Section using TPrimaryHeaderContainer
+            TPrimaryHeaderContainer(
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // App Bar
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Good day for shopping',
+                                style: TextStyle(
+                                  color: TColors.textWhite,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Welcome to our store',
+                                style: TextStyle(
+                                  color: TColors.textWhite.withOpacity(0.8),
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                          // Notification & Cart Icons
+                          Row(
+                            children: [
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.notifications_outlined,
+                                  color: TColors.textWhite,
+                                  size: 24,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.shopping_cart_outlined,
+                                  color: TColors.textWhite,
+                                  size: 24,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 30),
+                      // Search Bar
+                      Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: TColors.textWhite,
+                          borderRadius: BorderRadius.circular(25),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 10,
+                              offset: const Offset(0, 5),
                             ),
                           ],
                         ),
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Search products...',
+                            prefixIcon: Icon(
+                              Icons.search,
+                              color: Colors.grey[600],
+                            ),
+                            border: InputBorder.none,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 15,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
