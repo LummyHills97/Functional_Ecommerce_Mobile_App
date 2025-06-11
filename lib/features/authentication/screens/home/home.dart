@@ -66,7 +66,7 @@ class HomeScreen extends StatelessWidget {
                 'Welcome to our store',
                 style: TextStyle(
                   color: TColors.textWhite.withOpacity(0.8),
-                  fontSize: 14,
+                  fontSize: 13,
                 ),
               ),
             ],
