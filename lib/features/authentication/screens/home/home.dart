@@ -7,14 +7,16 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Padding(),
+      appBar: AppBar(), // Use AppBar instead of Padding
+      // Or use your custom TAppBar:
+      // appBar: TAppBar(),
       body: SingleChildScrollView(
         child: Column(
           children: [
             // header
             TPrimaryHeaderContainer(
-              child: Container()
-              ),
+              child: Container(),
+            ),
           ],
         ),
       ),
