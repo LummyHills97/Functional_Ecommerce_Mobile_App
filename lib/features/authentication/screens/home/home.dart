@@ -1,3 +1,4 @@
+import 'package:ecommerce_store/common/widgets/appbar.dart';
 import 'package:ecommerce_store/common/widgets/custom_shapes/containers/primary_header_container.dart';
 import 'package:flutter/material.dart';
 
@@ -6,16 +7,19 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(), // Use AppBar instead of Padding
-      // Or use your custom TAppBar:
-      // appBar: TAppBar(),
+    return const Scaffold(
+       
       body: SingleChildScrollView(
         child: Column(
           children: [
             // header
             TPrimaryHeaderContainer(
-              child: Container(),
+              child: Column(
+                children: [
+                  TAppBar()
+
+                ],
+              ),
             ),
           ],
         ),
