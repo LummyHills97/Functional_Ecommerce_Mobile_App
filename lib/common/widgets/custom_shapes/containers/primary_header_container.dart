@@ -17,7 +17,7 @@ class TPrimaryHeaderContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipPath(
-      clipper: BottomCurveClipper(),
+      clipper: InwardCurveClipper(),
       child: Container(
         width: double.infinity,
         height: height,
@@ -27,6 +27,7 @@ class TPrimaryHeaderContainer extends StatelessWidget {
         ),
         child: Stack(
           children: [
+            // Decorative circular shapes
             Positioned(
               top: -150,
               right: -250,
@@ -45,6 +46,8 @@ class TPrimaryHeaderContainer extends StatelessWidget {
                 backgroundColor: TColors.textWhite.withOpacity(0.1),
               ),
             ),
+
+            // Main child content
             child,
           ],
         ),
@@ -53,17 +56,24 @@ class TPrimaryHeaderContainer extends StatelessWidget {
   }
 }
 
-class BottomCurveClipper extends CustomClipper<Path> {
+class InwardCurveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     final path = Path();
+
+    // Left to bottom left
     path.lineTo(0, size.height - 40);
+
+    // Inward curve toward bottom center
     path.quadraticBezierTo(
-      size.width / 2, size.height,
+      size.width / 2, size.height + 40, // Dip inward
       size.width, size.height - 40,
     );
+
+    // Bottom right to top right
     path.lineTo(size.width, 0);
     path.close();
+
     return path;
   }
 
