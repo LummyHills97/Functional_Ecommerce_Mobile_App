@@ -1,14 +1,11 @@
-import 'package:ecommerce_store/common/widgets/appbar.dart';
-import 'package:ecommerce_store/common/widgets/products.cart/cart_menu_icon.dart';
-import 'package:ecommerce_store/features/authentication/screens/home/home.dart';
+import 'package:flutter/material.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:ecommerce_store/utils/constants/text_strings.dart';
-import 'package:flutter/material.dart';
+import 'package:ecommerce_store/common/widgets/appbar.dart';
+import 'package:ecommerce_store/common/widgets/products.cart/cart_menu_icon.dart';
 
 class THomeAppBar extends StatelessWidget {
-  const THomeAppBar({
-    super.key,
-  });
+  const THomeAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,19 +15,25 @@ class THomeAppBar extends StatelessWidget {
         children: [
           Text(
             TTexts.homeAppbarTitle,
-            style: Theme.of(context).textTheme.labelMedium!.apply(color: TColors.grey)
+            style: Theme.of(context)
+                .textTheme
+                .labelMedium
+                ?.copyWith(color: TColors.grey),
           ),
           Text(
             TTexts.homeAppbarSubTitle,
-            style: Theme.of(context).textTheme.headlineSmall!.apply(color: TColors.white)
+            style: Theme.of(context)
+                .textTheme
+                .headlineSmall
+                ?.copyWith(color: TColors.white),
           ),
         ],
       ),
       actions: [
         TCartCounterIcon(
-          onPressed: () {},
+          onPressed: () {}, // Replace with real logic
           iconColor: TColors.white,
-        )
+        ),
       ],
     );
   }

@@ -1,5 +1,4 @@
 import 'package:ecommerce_store/common/widgets/custom_shapes/containers/circular_container.dart';
-import 'package:ecommerce_store/common/widgets/custom_shapes/curved_edges/curved_edges_widget.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -17,40 +16,57 @@ class TPrimaryHeaderContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TCustomCurvedEdgeWidget(
+    return ClipPath(
+      clipper: BottomCurveClipper(),
       child: Container(
+        width: double.infinity,
+        height: height,
+        padding: const EdgeInsets.only(top: 40),
         decoration: BoxDecoration(
           color: backgroundColor ?? TColors.primary,
         ),
-        child: SizedBox(
-          height: height,
-          child: Stack(
-            children: [
-              // Background circular containers for design
-              Positioned(
-                top: -150,
-                right: -250,
-                child: TCircular(
-                  width: 400,
-                  height: 400,
-                  backgroundColor: TColors.textWhite.withOpacity(0.1),
-                ),
+        child: Stack(
+          children: [
+            Positioned(
+              top: -150,
+              right: -250,
+              child: TCircular(
+                width: 400,
+                height: 400,
+                backgroundColor: TColors.textWhite.withOpacity(0.1),
               ),
-              Positioned(
-                top: 100,
-                right: -300,
-                child: TCircular(
-                  width: 400,
-                  height: 400,
-                  backgroundColor: TColors.textWhite.withOpacity(0.1),
-                ),
+            ),
+            Positioned(
+              top: 100,
+              right: -300,
+              child: TCircular(
+                width: 400,
+                height: 400,
+                backgroundColor: TColors.textWhite.withOpacity(0.1),
               ),
-              // Main content passed as child
-              child,
-            ],
-          ),
+            ),
+            child,
+          ],
         ),
       ),
     );
   }
+}
+
+class BottomCurveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+    path.lineTo(0, size.height - 40);
+    path.quadraticBezierTo(
+      size.width / 2, size.height,
+      size.width, size.height - 40,
+    );
+    path.lineTo(size.width, 0);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

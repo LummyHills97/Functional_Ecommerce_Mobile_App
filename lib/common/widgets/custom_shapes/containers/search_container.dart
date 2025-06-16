@@ -22,12 +22,17 @@ class TSearchContainer extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: TDeviceUtils.getScreenWidth(context),
-        margin: EdgeInsets.all(TSizes.md),
-        padding: EdgeInsets.all(TSizes.md),
+        margin: const EdgeInsets.all(TSizes.md),
+        padding: const EdgeInsets.symmetric(
+          vertical: TSizes.sm,
+          horizontal: TSizes.md,
+        ),
         decoration: BoxDecoration(
           color: isDark ? TColors.dark : TColors.light,
           borderRadius: BorderRadius.circular(TSizes.cardRadiusLg),
-          border: Border.all(color: isDark ? TColors.darkerGrey : TColors.grey),
+          border: Border.all(
+            color: isDark ? TColors.darkerGrey : TColors.grey,
+          ),
         ),
         child: Row(
           children: [
@@ -36,7 +41,7 @@ class TSearchContainer extends StatelessWidget {
               color: isDark ? TColors.lightGrey : TColors.darkerGrey,
               size: 20,
             ),
-            SizedBox(width: TSizes.spaceBtwItems),
+            const SizedBox(width: TSizes.spaceBtwItems),
             Text(
               text,
               style: TextStyle(
