@@ -3,6 +3,7 @@ import 'package:ecommerce_store/common/widgets/custom_shapes/containers/primary_
 import 'package:ecommerce_store/common/widgets/home_appbar.dart';
 import 'package:ecommerce_store/common/widgets/custom_shapes/containers/search_container.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
+import 'package:ecommerce_store/utils/constants/colors.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -13,71 +14,72 @@ class HomeScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            /// Header Section
+            /// Header Section with AppBar, Search, and Categories
             TPrimaryHeaderContainer(
-              child: Column(
-                children: [
-                  const THomeAppBar(),
-                  
-                  /// Search Bar with navigation
-                  TSearchContainer(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const TSearchContainer(),
-                        ),
-                      );
-                    },
-                  ),
-                  
-                  const SizedBox(height: TSizes.spaceBtwSections),
-                ],
-              ),
-            ),
-            
-             /// Popular Categories (Now inside header)
-        Text(
-          'Popular Categories',
-          style: Theme.of(context).textTheme.headlineSmall,
-        ),
+  height: 420, // <-- increased from 320 to 420 or more
+  child: Padding(
+    padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const THomeAppBar(),
         const SizedBox(height: TSizes.spaceBtwItems),
-                  
-                  /// Categories List
-                  SizedBox(
-                    height: 80,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: categories.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: TSizes.spaceBtwItems),
-                          child: CategoryItem(
-                            category: categories[index],
-                            onTap: () {
-                              // Navigate to category screen
-                              // Navigator.pushNamed(context, '/category', arguments: categories[index]);
-                            },
+
+                    /// Search Bar
+                    TSearchContainer(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const TSearchContainer(),
                           ),
                         );
                       },
                     ),
-                  ),
-                ],
+                    const SizedBox(height: TSizes.spaceBtwSections),
+
+                    /// Popular Categories
+                    Text(
+                      'Popular Categories',
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColors.textWhite),
+                    ),
+                    const SizedBox(height: TSizes.spaceBtwItems),
+
+                    SizedBox(
+                      height: 80,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: categories.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: TSizes.spaceBtwItems),
+                            child: CategoryItem(
+                              category: categories[index],
+                              onTap: () {
+                                // Handle tap if needed
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            
+
             /// Body Content
             Padding(
               padding: const EdgeInsets.all(TSizes.defaultSpace),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Featured Products',
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   const SizedBox(height: TSizes.spaceBtwItems),
-                  // Add featured products grid here
+                  // TODO: Add product cards here
                 ],
               ),
             ),
@@ -118,7 +120,7 @@ class CategoryItem extends StatelessWidget {
       onTap: onTap,
       child: Column(
         children: [
-          /// Category Image Container
+          /// Category Image
           Container(
             width: 56,
             height: 56,
@@ -157,7 +159,7 @@ class CategoryItem extends StatelessWidget {
             ),
           ),
           const SizedBox(height: TSizes.spaceBtwItems / 2),
-          
+
           /// Category Name
           SizedBox(
             width: 56,
@@ -175,36 +177,12 @@ class CategoryItem extends StatelessWidget {
   }
 }
 
-/// Sample Categories Data
+/// Sample Category List
 final List<Category> categories = [
-  Category(
-    name: 'Electronics',
-    imagePath: 'assets/images/categories/electronics.png',
-    icon: Icons.phone_android,
-  ),
-  Category(
-    name: 'Clothing',
-    imagePath: 'assets/images/categories/clothing.png',
-    icon: Icons.checkroom,
-  ),
-  Category(
-    name: 'Books',
-    imagePath: 'assets/images/categories/books.png',
-    icon: Icons.book,
-  ),
-  Category(
-    name: 'Sports',
-    imagePath: 'assets/images/categories/sports.png',
-    icon: Icons.sports_soccer,
-  ),
-  Category(
-    name: 'Beauty',
-    imagePath: 'assets/images/categories/beauty.png',
-    icon: Icons.face,
-  ),
-  Category(
-    name: 'Home',
-    imagePath: 'assets/images/categories/home.png',
-    icon: Icons.home,
-  ),
+  Category(name: 'Electronics', imagePath: 'assets/images/categories/electronics.png', icon: Icons.phone_android),
+  Category(name: 'Clothing', imagePath: 'assets/images/categories/clothing.png', icon: Icons.checkroom),
+  Category(name: 'Books', imagePath: 'assets/images/categories/books.png', icon: Icons.book),
+  Category(name: 'Sports', imagePath: 'assets/images/categories/sports.png', icon: Icons.sports_soccer),
+  Category(name: 'Beauty', imagePath: 'assets/images/categories/beauty.png', icon: Icons.face),
+  Category(name: 'Home', imagePath: 'assets/images/categories/home.png', icon: Icons.home),
 ];
