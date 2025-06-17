@@ -16,8 +16,11 @@ class TPrimaryHeaderContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipPath(
-      clipper: InwardCurveClipper(),
+    return ClipRRect(
+      borderRadius: const BorderRadius.only(
+        bottomLeft: Radius.circular(40),
+        bottomRight: Radius.circular(40),
+      ),
       child: Container(
         width: double.infinity,
         height: height,
@@ -27,7 +30,7 @@ class TPrimaryHeaderContainer extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            // Decorative circular shapes
+            // Decorative circular backgrounds
             Positioned(
               top: -150,
               right: -250,
@@ -47,36 +50,11 @@ class TPrimaryHeaderContainer extends StatelessWidget {
               ),
             ),
 
-            // Main child content
+            // Your main content inside the header
             child,
           ],
         ),
       ),
     );
   }
-}
-
-class InwardCurveClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final path = Path();
-
-    // Left to bottom left
-    path.lineTo(0, size.height - 40);
-
-    // Inward curve toward bottom center
-    path.quadraticBezierTo(
-      size.width / 2, size.height + 40, // Dip inward
-      size.width, size.height - 40,
-    );
-
-    // Bottom right to top right
-    path.lineTo(size.width, 0);
-    path.close();
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

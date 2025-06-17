@@ -36,17 +36,12 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             
-            /// Categories Section (Moved outside header)
-            Padding(
-              padding: const EdgeInsets.all(TSizes.defaultSpace),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Popular Categories',
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  const SizedBox(height: TSizes.spaceBtwItems),
+             /// Popular Categories (Now inside header)
+        Text(
+          'Popular Categories',
+          style: Theme.of(context).textTheme.headlineSmall,
+        ),
+        const SizedBox(height: TSizes.spaceBtwItems),
                   
                   /// Categories List
                   SizedBox(
