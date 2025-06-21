@@ -14,16 +14,16 @@ class HomeScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            /// Header Section with AppBar, Search, and Categories
+            /// HEADER SECTION: AppBar, Search, Categories
             TPrimaryHeaderContainer(
-  height: 420, // <-- increased from 320 to 420 or more
-  child: Padding(
-    padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const THomeAppBar(),
-        const SizedBox(height: TSizes.spaceBtwItems),
+              height: 420,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const THomeAppBar(),
+                    const SizedBox(height: TSizes.spaceBtwItems),
 
                     /// Search Bar
                     TSearchContainer(
@@ -36,12 +36,15 @@ class HomeScreen extends StatelessWidget {
                         );
                       },
                     ),
+
                     const SizedBox(height: TSizes.spaceBtwSections),
 
                     /// Popular Categories
                     Text(
                       'Popular Categories',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: TColors.textWhite),
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                            color: TColors.textWhite,
+                          ),
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
 
@@ -56,7 +59,7 @@ class HomeScreen extends StatelessWidget {
                             child: CategoryItem(
                               category: categories[index],
                               onTap: () {
-                                // Handle tap if needed
+                                // Handle category tap
                               },
                             ),
                           );
@@ -68,7 +71,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
 
-            /// Body Content
+            /// BODY CONTENT BELOW HEADER
             Padding(
               padding: const EdgeInsets.all(TSizes.defaultSpace),
               child: Column(
@@ -79,7 +82,7 @@ class HomeScreen extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   const SizedBox(height: TSizes.spaceBtwItems),
-                  // TODO: Add product cards here
+                  // TODO: Add featured products grid or carousel here
                 ],
               ),
             ),
@@ -103,7 +106,7 @@ class Category {
   });
 }
 
-/// Category Item Widget
+/// Category Display Widget
 class CategoryItem extends StatelessWidget {
   final Category category;
   final VoidCallback onTap;
@@ -177,7 +180,7 @@ class CategoryItem extends StatelessWidget {
   }
 }
 
-/// Sample Category List
+/// Sample Categories Data
 final List<Category> categories = [
   Category(name: 'Electronics', imagePath: 'assets/images/categories/electronics.png', icon: Icons.phone_android),
   Category(name: 'Clothing', imagePath: 'assets/images/categories/clothing.png', icon: Icons.checkroom),
