@@ -4,6 +4,7 @@ import 'package:ecommerce_store/common/widgets/home_appbar.dart';
 import 'package:ecommerce_store/common/widgets/custom_shapes/containers/search_container.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';
+import 'package:ecommerce_store/utils/constants/image_strings.dart'; // Added missing import
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -72,21 +73,13 @@ class HomeScreen extends StatelessWidget {
             ),
 
             /// BODY CONTENT BELOW HEADER
-            Padding(
-              padding: const EdgeInsets.all(TSizes.defaultSpace),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Featured Products',
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  const SizedBox(height: TSizes.spaceBtwItems),
-                  // TODO: Add featured products grid or carousel here
-                ],
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(TSizes.md), // Fixed: TSizes().md to TSizes.md
               ),
+              child: const Image(image: AssetImage(TImages.promoBanner1)), // Fixed: Removed extra parentheses and commas
             ),
-          ],
+          ], // Fixed: Removed extra closing parentheses and commas
         ),
       ),
     );
