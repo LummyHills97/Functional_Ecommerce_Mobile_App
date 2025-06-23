@@ -4,7 +4,7 @@ import 'package:ecommerce_store/common/widgets/home_appbar.dart';
 import 'package:ecommerce_store/common/widgets/custom_shapes/containers/search_container.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';
-import 'package:ecommerce_store/utils/constants/image_strings.dart'; // Added missing import
+import 'package:ecommerce_store/utils/constants/image_strings.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -29,12 +29,13 @@ class HomeScreen extends StatelessWidget {
                     /// Search Bar
                     TSearchContainer(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const TSearchContainer(),
-                          ),
-                        );
+                        // Navigate to a proper search screen, not TSearchContainer itself
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => const SearchScreen(), // Create a proper SearchScreen
+                        //   ),
+                        // );
                       },
                     ),
 
@@ -60,7 +61,8 @@ class HomeScreen extends StatelessWidget {
                             child: CategoryItem(
                               category: categories[index],
                               onTap: () {
-                                // Handle category tap
+                                // Handle category tap - navigate to category screen
+                                print('Tapped on ${categories[index].name}');
                               },
                             ),
                           );
@@ -73,13 +75,32 @@ class HomeScreen extends StatelessWidget {
             ),
 
             /// BODY CONTENT BELOW HEADER
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(TSizes.md), // Fixed: TSizes().md to TSizes.md
+            Padding(
+              padding: const EdgeInsets.all(TSizes.defaultSpace),
+              child: Column(
+                children: [
+                  /// Promo Banner
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(TSizes.md),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(TSizes.md),
+                      child: const Image(
+                        image: AssetImage(TImages.promoBanner1),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: TSizes.spaceBtwSections),
+                  
+                  /// Additional content can go here
+                  // Add more sections like featured products, deals, etc.
+                ],
               ),
-              child: const Image(image: AssetImage(TImages.promoBanner1)), // Fixed: Removed extra parentheses and commas
             ),
-          ], // Fixed: Removed extra closing parentheses and commas
+          ],
         ),
       ),
     );
