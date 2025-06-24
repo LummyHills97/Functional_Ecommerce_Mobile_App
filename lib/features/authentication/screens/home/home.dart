@@ -579,27 +579,32 @@ class _BannerCarouselState extends State<BannerCarousel> {
 
 /// Centralized banner data management
 class BannerData {
+  // Banner image paths
+  static const String promoBanner1 = "assets/images/products/promo-banner-1.png";
+  static const String promoBanner2 = "assets/images/products/promo-banner-2.png";
+  static const String promoBanner3 = "assets/images/products/promo-banner-3.png";
+
   static const List<Banner> banners = [
     Banner(
       id: '1',
-      title: 'Summer Sale',
-      imagePath: 'assets/images/banners/banner_1.jpg',
-      description: 'Up to 50% off on selected items',
-      actionUrl: '/summer-sale',
+      title: 'Special Offer',
+      imagePath: promoBanner1,
+      description: 'Don\'t miss out on amazing deals',
+      actionUrl: '/promo-1',
     ),
     Banner(
       id: '2',
-      title: 'New Arrivals',
-      imagePath: 'assets/images/banners/banner_2.jpg',
-      description: 'Check out our latest collection',
-      actionUrl: '/new-arrivals',
+      title: 'Featured Products',
+      imagePath: promoBanner2,
+      description: 'Discover trending items',
+      actionUrl: '/promo-2',
     ),
     Banner(
       id: '3',
-      title: 'Flash Deal',
-      imagePath: 'assets/images/banners/banner_3.jpg',
-      description: 'Limited time offer - Hurry up!',
-      actionUrl: '/flash-deals',
+      title: 'Best Sellers',
+      imagePath: promoBanner3,
+      description: 'Most popular items this week',
+      actionUrl: '/promo-3',
     ),
   ];
 
