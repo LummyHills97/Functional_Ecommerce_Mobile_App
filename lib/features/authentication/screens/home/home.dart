@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:ecommerce_store/common/widgets/custom_shapes/containers/primary_header_container.dart';
 import 'package:ecommerce_store/common/widgets/home_appbar.dart';
 import 'package:ecommerce_store/common/widgets/custom_shapes/containers/search_container.dart';
@@ -95,7 +96,7 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildPromoBanner(),
+          _buildBannerCarousel(),
           const SizedBox(height: TSizes.spaceBtwSections),
           _buildFeaturedProducts(context),
           const SizedBox(height: TSizes.spaceBtwSections),
@@ -105,41 +106,15 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  /// Promo banner with error handling
-  Widget _buildPromoBanner() {
-    return Container(
-      width: double.infinity,
+  /// Banner carousel with multiple images
+  Widget _buildBannerCarousel() {
+    return BannerCarousel(
+      banners: BannerData.banners,
       height: 190,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(TSizes.md),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 2,
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(TSizes.md),
-        child: Image.asset(
-          "assets/images/banners/banner_3.jpg",
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return Container(
-              color: Colors.grey[200],
-              child: const Center(
-                child: Icon(
-                  Icons.image_not_supported,
-                  size: 48,
-                  color: Colors.grey,
-                ),
-              ),
-            );
-          },
-        ),
-      ),
+      onBannerTap: (banner) {
+        // TODO: Handle banner tap - navigate to promotion/product page
+        debugPrint('Tapped on banner: ${banner.title}');
+      },
     );
   }
 
@@ -360,7 +335,283 @@ class CategoryItem extends StatelessWidget {
   }
 }
 
-/// Centralized category data management
+/// Banner model for carousel
+class Banner {
+  final String id;
+  final String title;
+  final String imagePath;
+  final String? description;
+  final String? actionUrl;
+
+  const Banner({
+    required this.id,
+    required this.title,
+    required this.imagePath,
+    this.description,
+    this.actionUrl,
+  });
+}
+
+/// Banner carousel widget with auto-scroll and indicators
+class BannerCarousel extends StatefulWidget {
+  final List<Banner> banners;
+  final double height;
+  final Function(Banner)? onBannerTap;
+  final Duration autoPlayDuration;
+
+  const BannerCarousel({
+    super.key,
+    required this.banners,
+    this.height = 190,
+    this.onBannerTap,
+    this.autoPlayDuration = const Duration(seconds: 4),
+  });
+
+  @override
+  State<BannerCarousel> createState() => _BannerCarouselState();
+}
+
+class _BannerCarouselState extends State<BannerCarousel> {
+  late PageController _pageController;
+  int _currentIndex = 0;
+  Timer? _autoPlayTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+    _startAutoPlay();
+  }
+
+  @override
+  void dispose() {
+    _autoPlayTimer?.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _startAutoPlay() {
+    if (widget.banners.length > 1) {
+      _autoPlayTimer = Timer.periodic(widget.autoPlayDuration, (timer) {
+        if (_currentIndex < widget.banners.length - 1) {
+          _currentIndex++;
+        } else {
+          _currentIndex = 0;
+        }
+        
+        if (_pageController.hasClients) {
+          _pageController.animateToPage(
+            _currentIndex,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
+      });
+    }
+  }
+
+  void _stopAutoPlay() {
+    _autoPlayTimer?.cancel();
+  }
+
+  void _resumeAutoPlay() {
+    _stopAutoPlay();
+    _startAutoPlay();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.banners.isEmpty) {
+      return _buildEmptyBanner();
+    }
+
+    return Column(
+      children: [
+        SizedBox(
+          height: widget.height,
+          child: PageView.builder(
+            controller: _pageController,
+            onPageChanged: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+            itemCount: widget.banners.length,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  widget.onBannerTap?.call(widget.banners[index]);
+                },
+                onTapDown: (_) => _stopAutoPlay(),
+                onTapUp: (_) => _resumeAutoPlay(),
+                onTapCancel: () => _resumeAutoPlay(),
+                child: _buildBannerItem(widget.banners[index]),
+              );
+            },
+          ),
+        ),
+        if (widget.banners.length > 1) ...[
+          const SizedBox(height: TSizes.spaceBtwItems),
+          _buildPageIndicator(),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildBannerItem(Banner banner) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(TSizes.md),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 2,
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(TSizes.md),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Image.asset(
+              banner.imagePath,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  color: Colors.grey[200],
+                  child: const Center(
+                    child: Icon(
+                      Icons.image_not_supported,
+                      size: 48,
+                      color: Colors.grey,
+                    ),
+                  ),
+                );
+              },
+            ),
+            if (banner.title.isNotEmpty || banner.description != null)
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [
+                        Colors.black.withOpacity(0.7),
+                        Colors.transparent,
+                      ],
+                    ),
+                  ),
+                  padding: const EdgeInsets.all(TSizes.md),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (banner.title.isNotEmpty)
+                        Text(
+                          banner.title,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      if (banner.description != null)
+                        Text(
+                          banner.description!,
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 14,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPageIndicator() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(
+        widget.banners.length,
+        (index) => Container(
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          width: _currentIndex == index ? 24 : 8,
+          height: 8,
+          decoration: BoxDecoration(
+            color: _currentIndex == index
+                ? Theme.of(context).primaryColor
+                : Colors.grey.withOpacity(0.3),
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyBanner() {
+    return Container(
+      height: widget.height,
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(TSizes.md),
+      ),
+      child: const Center(
+        child: Text('No banners available'),
+      ),
+    );
+  }
+}
+
+/// Centralized banner data management
+class BannerData {
+  static const List<Banner> banners = [
+    Banner(
+      id: '1',
+      title: 'Summer Sale',
+      imagePath: 'assets/images/banners/banner_1.jpg',
+      description: 'Up to 50% off on selected items',
+      actionUrl: '/summer-sale',
+    ),
+    Banner(
+      id: '2',
+      title: 'New Arrivals',
+      imagePath: 'assets/images/banners/banner_2.jpg',
+      description: 'Check out our latest collection',
+      actionUrl: '/new-arrivals',
+    ),
+    Banner(
+      id: '3',
+      title: 'Flash Deal',
+      imagePath: 'assets/images/banners/banner_3.jpg',
+      description: 'Limited time offer - Hurry up!',
+      actionUrl: '/flash-deals',
+    ),
+  ];
+
+  /// Get banner by ID
+  static Banner? getBannerById(String id) {
+    try {
+      return banners.firstWhere((banner) => banner.id == id);
+    } catch (e) {
+      return null;
+    }
+  }
+}
 class CategoryData {
   static const List<Category> categories = [
     Category(
