@@ -1,3 +1,4 @@
+import 'package:ecommerce_store/common/widgets/custom_shapes/containers/circular_container.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:ecommerce_store/common/widgets/custom_shapes/containers/primary_header_container.dart';
@@ -6,6 +7,9 @@ import 'package:ecommerce_store/common/widgets/custom_shapes/containers/search_c
 import 'package:ecommerce_store/utils/constants/sizes.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:ecommerce_store/utils/constants/image_strings.dart';
+
+// Import your TCircular widget here
+// import 'package:ecommerce_store/common/widgets/t_circular.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -56,7 +60,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  /// Popular categories section
+  /// Popular categories section - ENHANCED WITH TCIRCULAR
   Widget _buildPopularCategories(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,7 +82,7 @@ class HomeScreen extends StatelessWidget {
             separatorBuilder: (context, index) => 
                 const SizedBox(width: TSizes.spaceBtwItems),
             itemBuilder: (context, index) {
-              return CategoryItem(
+              return CategoryItemWithTCircular(
                 category: CategoryData.categories[index],
                 onTap: () => _handleCategoryTap(CategoryData.categories[index]),
               );
@@ -98,11 +102,76 @@ class HomeScreen extends StatelessWidget {
         children: [
           _buildBannerCarousel(),
           const SizedBox(height: TSizes.spaceBtwSections),
+          _buildQuickActions(context), // NEW: Quick action buttons
+          const SizedBox(height: TSizes.spaceBtwSections),
           _buildFeaturedProducts(context),
           const SizedBox(height: TSizes.spaceBtwSections),
           _buildDealsSection(context),
         ],
       ),
+    );
+  }
+
+  /// NEW: Quick action buttons using TCircular
+  Widget _buildQuickActions(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Quick Actions',
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+        ),
+        const SizedBox(height: TSizes.spaceBtwItems),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            // Wishlist Button
+            TCircular.iconButton(
+              icon: const Icon(Icons.favorite_border, color: Colors.red),
+              onTap: () => debugPrint('Wishlist tapped'),
+              backgroundColor: Colors.red.withOpacity(0.1),
+              size: 60,
+            ),
+            // Cart Button with Badge
+            Stack(
+              children: [
+                TCircular.iconButton(
+                  icon: const Icon(Icons.shopping_cart_outlined, color: Colors.blue),
+                  onTap: () => debugPrint('Cart tapped'),
+                  backgroundColor: Colors.blue.withOpacity(0.1),
+                  size: 60,
+                ),
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  child: TCircular.badge(
+                    size: 18,
+                    backgroundColor: Colors.red,
+                    child: const Text('3', 
+                      style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
+                  ),
+                ),
+              ],
+            ),
+            // Orders Button
+            TCircular.iconButton(
+              icon: const Icon(Icons.receipt_long_outlined, color: Colors.green),
+              onTap: () => debugPrint('Orders tapped'),
+              backgroundColor: Colors.green.withOpacity(0.1),
+              size: 60,
+            ),
+            // Profile Button
+            TCircular.avatar(
+              size: 60,
+              backgroundColor: Colors.orange.withOpacity(0.1),
+              child: const Icon(Icons.person_outline, size: 30, color: Colors.orange),
+              onTap: () => debugPrint('Profile tapped'),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -118,7 +187,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  /// Featured products section
+  /// Featured products section - ENHANCED WITH TCIRCULAR
   Widget _buildFeaturedProducts(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,26 +201,51 @@ class HomeScreen extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
             ),
-            TextButton(
-              onPressed: () {
-                // TODO: Navigate to featured products screen
-                debugPrint('View all featured products');
-              },
-              child: const Text('View All'),
+            TCircular(
+              width: 40,
+              height: 40,
+              backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
+              borderRadius: 20,
+              onTap: () => debugPrint('View all featured products'),
+              child: Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+                color: Theme.of(context).primaryColor,
+              ),
             ),
           ],
         ),
         const SizedBox(height: TSizes.spaceBtwItems),
-        // TODO: Add featured products grid/list
-        Container(
-          height: 100,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.grey[100],
-            borderRadius: BorderRadius.circular(TSizes.sm),
-          ),
-          child: const Center(
-            child: Text('Featured Products Coming Soon'),
+        // Sample featured products using TCircular
+        SizedBox(
+          height: 120,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: 5,
+            separatorBuilder: (context, index) => const SizedBox(width: TSizes.spaceBtwItems),
+            itemBuilder: (context, index) {
+              return Column(
+                children: [
+                  TCircular(
+                    width: 80,
+                    height: 80,
+                    backgroundColor: Colors.grey[100]!,
+                    borderRadius: 40,
+                    onTap: () => debugPrint('Product $index tapped'),
+                    child: Icon(
+                      Icons.shopping_bag_outlined,
+                      size: 32,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Product ${index + 1}',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ],
@@ -194,6 +288,75 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
+/// Enhanced category item using TCircular
+class CategoryItemWithTCircular extends StatelessWidget {
+  final Category category;
+  final VoidCallback onTap;
+
+  const CategoryItemWithTCircular({
+    super.key,
+    required this.category,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TCircular(
+            width: 56,
+            height: 56,
+            backgroundColor: Colors.white,
+            borderRadius: 28,
+            onTap: onTap,
+            child: Center(
+              child: category.imagePath.isNotEmpty
+                  ? Image.asset(
+                      category.imagePath,
+                      width: 32,
+                      height: 32,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Icon(
+                          category.icon,
+                          size: 32,
+                          color: Theme.of(context).primaryColor,
+                        );
+                      },
+                    )
+                  : Icon(
+                      category.icon,
+                      size: 32,
+                      color: Theme.of(context).primaryColor,
+                    ),
+            ),
+          ),
+          const SizedBox(height: TSizes.spaceBtwItems / 2),
+          SizedBox(
+            width: 56,
+            child: Text(
+              category.name,
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: TColors.textWhite,
+                  ),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Keep all your existing classes (Category, CategoryItem, Banner, BannerCarousel, etc.)
+// They remain the same...
+
 /// Category model with validation
 class Category {
   final String id;
@@ -230,7 +393,6 @@ class Category {
 
   /// Helper method to get IconData from string
   static IconData _getIconFromString(String? iconString) {
-    // This is a simplified version - you might want to implement a more robust mapping
     switch (iconString) {
       case 'phone_android':
         return Icons.phone_android;
@@ -247,91 +409,6 @@ class Category {
       default:
         return Icons.category;
     }
-  }
-}
-
-/// Enhanced category display widget
-class CategoryItem extends StatelessWidget {
-  final Category category;
-  final VoidCallback onTap;
-
-  const CategoryItem({
-    super.key,
-    required this.category,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _buildCategoryImage(context),
-          const SizedBox(height: TSizes.spaceBtwItems / 2),
-          _buildCategoryName(context),
-        ],
-      ),
-    );
-  }
-
-  /// Category image with animation and better error handling
-  Widget _buildCategoryImage(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      width: 56,
-      height: 56,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(28),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.15),
-            spreadRadius: 1,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Center(
-        child: category.imagePath.isNotEmpty
-            ? Image.asset(
-                category.imagePath,
-                width: 32,
-                height: 32,
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) {
-                  return Icon(
-                    category.icon,
-                    size: 32,
-                    color: Theme.of(context).primaryColor,
-                  );
-                },
-              )
-            : Icon(
-                category.icon,
-                size: 32,
-                color: Theme.of(context).primaryColor,
-              ),
-      ),
-    );
-  }
-
-  /// Category name with better text handling
-  Widget _buildCategoryName(BuildContext context) {
-    return SizedBox(
-      width: 56,
-      child: Text(
-        category.name,
-        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              fontWeight: FontWeight.w500,
-            ),
-        textAlign: TextAlign.center,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      ),
-    );
   }
 }
 
@@ -617,6 +694,7 @@ class BannerData {
     }
   }
 }
+
 class CategoryData {
   static const List<Category> categories = [
     Category(
