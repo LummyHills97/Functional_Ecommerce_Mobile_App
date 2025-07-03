@@ -1,4 +1,5 @@
 import 'package:ecommerce_store/common/styles/shadow_styles.dart';
+import 'package:ecommerce_store/common/widgets/t_rounded_image.dart';
 import 'package:ecommerce_store/utils/constants/image_strings.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';
@@ -11,7 +12,7 @@ class TProductCardVertical extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);
-    
+
     return Container(
       width: 180,
       padding: const EdgeInsets.all(TSizes.sm),
@@ -41,7 +42,7 @@ class TProductCardVertical extends StatelessWidget {
                   fit: BoxFit.cover,
                   borderRadius: TSizes.productImageRadius,
                 ),
-                
+
                 // Sale Tag (Optional)
                 Positioned(
                   top: TSizes.xs,
@@ -64,14 +65,16 @@ class TProductCardVertical extends StatelessWidget {
                     ),
                   ),
                 ),
-                
+
                 // Favorite Icon
                 Positioned(
                   top: TSizes.xs,
                   right: TSizes.xs,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: isDark ? TColors.black.withOpacity(0.9) : TColors.white.withOpacity(0.9),
+                      color: isDark
+                          ? TColors.black.withOpacity(0.9)
+                          : TColors.white.withOpacity(0.9),
                       borderRadius: BorderRadius.circular(TSizes.lg),
                     ),
                     child: IconButton(
@@ -87,9 +90,9 @@ class TProductCardVertical extends StatelessWidget {
               ],
             ),
           ),
-          
+
           const SizedBox(height: TSizes.spaceBtwItems / 2),
-          
+
           // Product Details
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: TSizes.xs),
@@ -103,9 +106,9 @@ class TProductCardVertical extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                 ),
-                
+
                 const SizedBox(height: TSizes.xs),
-                
+
                 // Brand Name with Icon
                 Row(
                   children: [
@@ -124,9 +127,9 @@ class TProductCardVertical extends StatelessWidget {
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: TSizes.spaceBtwItems / 2),
-                
+
                 // Price and Add to Cart Button
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -139,23 +142,29 @@ class TProductCardVertical extends StatelessWidget {
                           // Original Price (if on sale)
                           Text(
                             '\$35.00',
-                            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                              decoration: TextDecoration.lineThrough,
-                              color: TColors.darkGrey,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelMedium
+                                ?.copyWith(
+                                  decoration: TextDecoration.lineThrough,
+                                  color: TColors.darkGrey,
+                                ),
                           ),
                           // Sale Price
                           Text(
                             '\$25.00',
-                            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                              color: TColors.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall
+                                ?.copyWith(
+                                  color: TColors.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
                           ),
                         ],
                       ),
                     ),
-                    
+
                     // Add to Cart Button
                     Container(
                       decoration: BoxDecoration(
