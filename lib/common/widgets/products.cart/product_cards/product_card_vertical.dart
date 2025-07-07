@@ -26,7 +26,7 @@ class TProductCardVertical extends StatelessWidget {
         children: [
           // Product Image Section
           Container(
-            height: 180,
+            height: 150,
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(TSizes.productImageRadius),

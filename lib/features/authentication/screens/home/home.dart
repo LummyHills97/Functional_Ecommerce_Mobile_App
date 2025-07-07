@@ -1,4 +1,5 @@
 import 'package:ecommerce_store/common/widgets/custom_shapes/containers/circular_container.dart';
+import 'package:ecommerce_store/common/widgets/products.cart/product_cards/product_card_vertical.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:ecommerce_store/common/widgets/custom_shapes/containers/primary_header_container.dart';
@@ -8,8 +9,6 @@ import 'package:ecommerce_store/utils/constants/sizes.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:ecommerce_store/utils/constants/image_strings.dart';
 
-// Import your TCircular widget here
-// import 'package:ecommerce_store/common/widgets/t_circular.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -102,7 +101,7 @@ class HomeScreen extends StatelessWidget {
         children: [
           _buildBannerCarousel(),
           const SizedBox(height: TSizes.spaceBtwSections),
-          _buildQuickActions(context), // NEW: Quick action buttons
+          _buildPopularProducts(context), // UPDATED: Popular products instead of quick actions
           const SizedBox(height: TSizes.spaceBtwSections),
           _buildFeaturedProducts(context),
           const SizedBox(height: TSizes.spaceBtwSections),
@@ -112,64 +111,49 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  /// NEW: Quick action buttons using TCircular
-  Widget _buildQuickActions(BuildContext context) {
+  /// UPDATED: Popular products section using TProductCardVertical
+  Widget _buildPopularProducts(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Quick Actions',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-        ),
-        const SizedBox(height: TSizes.spaceBtwItems),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Wishlist Button
-            TCircular.iconButton(
-              icon: const Icon(Icons.favorite_border, color: Colors.red),
-              onTap: () => debugPrint('Wishlist tapped'),
-              backgroundColor: Colors.red.withOpacity(0.1),
-              size: 60,
-            ),
-            // Cart Button with Badge
-            Stack(
-              children: [
-                TCircular.iconButton(
-                  icon: const Icon(Icons.shopping_cart_outlined, color: Colors.blue),
-                  onTap: () => debugPrint('Cart tapped'),
-                  backgroundColor: Colors.blue.withOpacity(0.1),
-                  size: 60,
-                ),
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: TCircular.badge(
-                    size: 18,
-                    backgroundColor: Colors.red,
-                    child: const Text('3', 
-                      style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
+            Text(
+              'Popular Products',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
                   ),
-                ),
-              ],
             ),
-            // Orders Button
-            TCircular.iconButton(
-              icon: const Icon(Icons.receipt_long_outlined, color: Colors.green),
-              onTap: () => debugPrint('Orders tapped'),
-              backgroundColor: Colors.green.withOpacity(0.1),
-              size: 60,
-            ),
-            // Profile Button
-            TCircular.avatar(
-              size: 60,
-              backgroundColor: Colors.orange.withOpacity(0.1),
-              child: const Icon(Icons.person_outline, size: 30, color: Colors.orange),
-              onTap: () => debugPrint('Profile tapped'),
+            TextButton(
+              onPressed: () {
+                // TODO: Navigate to all products page
+                debugPrint('View all popular products');
+              },
+              child: Text(
+                'View All',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).primaryColor,
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
             ),
           ],
+        ),
+        const SizedBox(height: TSizes.spaceBtwItems),
+        // Horizontal scrollable product cards
+        SizedBox(
+          height: 280, // Adjust height based on your product card
+          child: ListView.separated(
+            physics: const BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            itemCount: 3, // Show 3 products as requested
+            separatorBuilder: (context, index) => 
+                const SizedBox(width: TSizes.spaceBtwItems),
+            itemBuilder: (context, index) {
+              return const TProductCardVertical();
+            },
+          ),
         ),
       ],
     );
