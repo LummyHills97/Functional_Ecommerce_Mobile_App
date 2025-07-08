@@ -23,10 +23,11 @@ class TProductCardVertical extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           // Product Image Section
           Container(
-            height: 150,
+            height: 140,
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(TSizes.productImageRadius),
@@ -66,22 +67,26 @@ class TProductCardVertical extends StatelessWidget {
                   ),
                 ),
 
-                // Favorite Icon
+                // Favorite Icon - CHANGED TO RED
                 Positioned(
                   top: TSizes.xs,
                   right: TSizes.xs,
                   child: Container(
+                    width: 32,
+                    height: 32,
                     decoration: BoxDecoration(
                       color: isDark
                           ? TColors.black.withOpacity(0.9)
                           : TColors.white.withOpacity(0.9),
-                      borderRadius: BorderRadius.circular(TSizes.lg),
+                      borderRadius: BorderRadius.circular(16),
                     ),
                     child: IconButton(
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
                       onPressed: () {},
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.favorite_border,
-                        color: isDark ? TColors.white : TColors.dark,
+                        color: Colors.red, // CHANGED: Red favorite icon
                         size: TSizes.iconMd,
                       ),
                     ),
@@ -94,94 +99,103 @@ class TProductCardVertical extends StatelessWidget {
           const SizedBox(height: TSizes.spaceBtwItems / 2),
 
           // Product Details
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: TSizes.xs),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Product Title
-                Text(
-                  'Green Nike Air Shoes',
-                  style: Theme.of(context).textTheme.labelLarge,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                ),
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: TSizes.xs),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Product Title
+                  Text(
+                    'Green Nike Air Shoes',
+                    style: Theme.of(context).textTheme.labelLarge,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
 
-                const SizedBox(height: TSizes.xs),
+                  const SizedBox(height: TSizes.xs / 2),
 
-                // Brand Name with Icon
-                Row(
-                  children: [
-                    Icon(
-                      Icons.verified,
-                      color: TColors.primary,
-                      size: TSizes.iconXs,
-                    ),
-                    const SizedBox(width: TSizes.xs / 2),
-                    Expanded(
-                      child: Text(
-                        'Nike',
-                        style: Theme.of(context).textTheme.labelMedium,
-                        overflow: TextOverflow.ellipsis,
+                  // Brand Name with Icon
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.verified,
+                        color: TColors.primary,
+                        size: TSizes.iconXs,
                       ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: TSizes.spaceBtwItems / 2),
-
-                // Price and Add to Cart Button
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // Price
-                    Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Original Price (if on sale)
-                          Text(
-                            '\$35.00',
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium
-                                ?.copyWith(
-                                  decoration: TextDecoration.lineThrough,
-                                  color: TColors.darkGrey,
-                                ),
-                          ),
-                          // Sale Price
-                          Text(
-                            '\$25.00',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineSmall
-                                ?.copyWith(
-                                  color: TColors.primary,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // Add to Cart Button
-                    Container(
-                      decoration: BoxDecoration(
-                        color: TColors.dark,
-                        borderRadius: BorderRadius.circular(TSizes.cardRadiusSm),
-                      ),
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.add,
-                          color: TColors.white,
+                      const SizedBox(width: TSizes.xs / 2),
+                      Expanded(
+                        child: Text(
+                          'Nike',
+                          style: Theme.of(context).textTheme.labelMedium,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+
+                  const SizedBox(height: TSizes.spaceBtwItems / 2),
+
+                  // Price and Add to Cart Button
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Price
+                      Flexible(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Original Price (if on sale)
+                            Text(
+                              '\$35.00',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelMedium
+                                  ?.copyWith(
+                                    decoration: TextDecoration.lineThrough,
+                                    color: TColors.darkGrey,
+                                  ),
+                            ),
+                            // Sale Price
+                            Text(
+                              '\$25.00',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall
+                                  ?.copyWith(
+                                    color: TColors.primary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // Add to Cart Button
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: TColors.dark,
+                          borderRadius: BorderRadius.circular(TSizes.cardRadiusSm),
+                        ),
+                        child: IconButton(
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.add,
+                            color: TColors.white,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],
