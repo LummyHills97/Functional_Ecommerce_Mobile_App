@@ -22,6 +22,8 @@ class HomeScreen extends StatelessWidget {
           children: [
             _buildHeaderSection(context),
             _buildBodyContent(context),
+            // Add bottom padding to prevent overflow
+            const SizedBox(height: TSizes.spaceBtwItems),
           ],
         ),
       ),
@@ -92,7 +94,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  /// Body content below header
+  /// Body content below header - FIXED SPACING
   Widget _buildBodyContent(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(TSizes.defaultSpace),
@@ -101,17 +103,19 @@ class HomeScreen extends StatelessWidget {
         children: [
           _buildBannerCarousel(),
           const SizedBox(height: TSizes.spaceBtwSections),
-          _buildPopularProducts(context), // UPDATED: Popular products now vertical
+          _buildPopularProducts(context),
           const SizedBox(height: TSizes.spaceBtwSections),
           _buildFeaturedProducts(context),
           const SizedBox(height: TSizes.spaceBtwSections),
           _buildDealsSection(context),
+          // Reduced final spacing to prevent overflow
+          const SizedBox(height: TSizes.spaceBtwItems),
         ],
       ),
     );
   }
 
-  /// UPDATED: Popular products section - NOW TRULY VERTICAL WITH GRIDVIEW
+  /// UPDATED: Popular products section - ADJUSTED HEIGHT
   Widget _buildPopularProducts(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,17 +145,17 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
         const SizedBox(height: TSizes.spaceBtwItems),
-        // CHANGED: GridView for vertical layout instead of horizontal ListView
+        // ADJUSTED: Better aspect ratio to prevent overflow
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 0.65, // Adjust this to control card height
+            childAspectRatio: 0.68, // Slightly increased from 0.65
             crossAxisSpacing: TSizes.spaceBtwItems,
             mainAxisSpacing: TSizes.spaceBtwItems,
           ),
-          itemCount: 6, // Show 6 products in 3 rows of 2 columns
+          itemCount: 4, // Reduced from 6 to 4 to prevent overflow
           itemBuilder: (context, index) {
             return const TProductCardVertical();
           },
@@ -160,11 +164,11 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  /// Banner carousel with multiple images
+  /// Banner carousel with multiple images - ADJUSTED HEIGHT
   Widget _buildBannerCarousel() {
     return BannerCarousel(
       banners: BannerData.banners,
-      height: 190,
+      height: 180, // Reduced from 190 to 180
       onBannerTap: (banner) {
         // TODO: Handle banner tap - navigate to promotion/product page
         debugPrint('Tapped on banner: ${banner.title}');
@@ -172,7 +176,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  /// Featured products section - ENHANCED WITH TCIRCULAR
+  /// Featured products section - ADJUSTED HEIGHT
   Widget _buildFeaturedProducts(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,9 +205,9 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
         const SizedBox(height: TSizes.spaceBtwItems),
-        // Sample featured products using TCircular
+        // ADJUSTED: Reduced height to prevent overflow
         SizedBox(
-          height: 120,
+          height: 110, // Reduced from 120 to 110
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: 5,
@@ -212,18 +216,18 @@ class HomeScreen extends StatelessWidget {
               return Column(
                 children: [
                   TCircular(
-                    width: 80,
-                    height: 80,
+                    width: 75, // Reduced from 80 to 75
+                    height: 75, // Reduced from 80 to 75
                     backgroundColor: Colors.grey[100]!,
-                    borderRadius: 40,
+                    borderRadius: 37.5,
                     onTap: () => debugPrint('Product $index tapped'),
                     child: Icon(
                       Icons.shopping_bag_outlined,
-                      size: 32,
+                      size: 30, // Reduced from 32 to 30
                       color: Colors.grey[600],
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 6), // Reduced from 8 to 6
                   Text(
                     'Product ${index + 1}',
                     style: Theme.of(context).textTheme.bodySmall,
@@ -237,7 +241,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  /// Deals section
+  /// Deals section - ADJUSTED HEIGHT
   Widget _buildDealsSection(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,9 +253,9 @@ class HomeScreen extends StatelessWidget {
               ),
         ),
         const SizedBox(height: TSizes.spaceBtwItems),
-        // TODO: Add deals grid/list
+        // ADJUSTED: Reduced height to prevent overflow
         Container(
-          height: 100,
+          height: 90, // Reduced from 100 to 90
           width: double.infinity,
           decoration: BoxDecoration(
             color: Colors.grey[100],
