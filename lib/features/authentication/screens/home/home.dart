@@ -101,7 +101,7 @@ class HomeScreen extends StatelessWidget {
         children: [
           _buildBannerCarousel(),
           const SizedBox(height: TSizes.spaceBtwSections),
-          _buildPopularProducts(context), // UPDATED: Popular products instead of quick actions
+          _buildPopularProducts(context), // UPDATED: Popular products now vertical
           const SizedBox(height: TSizes.spaceBtwSections),
           _buildFeaturedProducts(context),
           const SizedBox(height: TSizes.spaceBtwSections),
@@ -111,7 +111,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  /// UPDATED: Popular products section using TProductCardVertical
+  /// UPDATED: Popular products section - NOW TRULY VERTICAL WITH GRIDVIEW
   Widget _buildPopularProducts(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,19 +141,20 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
         const SizedBox(height: TSizes.spaceBtwItems),
-        // Horizontal scrollable product cards
-        SizedBox(
-          height: 280, // Adjust height based on your product card
-          child: ListView.separated(
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            itemCount: 3, // Show 3 products as requested
-            separatorBuilder: (context, index) => 
-                const SizedBox(width: TSizes.spaceBtwItems),
-            itemBuilder: (context, index) {
-              return const TProductCardVertical();
-            },
+        // CHANGED: GridView for vertical layout instead of horizontal ListView
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 0.65, // Adjust this to control card height
+            crossAxisSpacing: TSizes.spaceBtwItems,
+            mainAxisSpacing: TSizes.spaceBtwItems,
           ),
+          itemCount: 6, // Show 6 products in 3 rows of 2 columns
+          itemBuilder: (context, index) {
+            return const TProductCardVertical();
+          },
         ),
       ],
     );
@@ -337,9 +338,6 @@ class CategoryItemWithTCircular extends StatelessWidget {
     );
   }
 }
-
-// Keep all your existing classes (Category, CategoryItem, Banner, BannerCarousel, etc.)
-// They remain the same...
 
 /// Category model with validation
 class Category {
