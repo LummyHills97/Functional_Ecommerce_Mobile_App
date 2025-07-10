@@ -73,42 +73,40 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
                     ),
                   ),
                 ),
+// Favorite Icon - FULLY RED HEART ICON WITH RED BACKGROUND
+Positioned(
+  top: TSizes.xs,
+  right: TSizes.xs,
+  child: GestureDetector(
+    onTap: () {
+      setState(() {
+        isFavorite = !isFavorite;
+      });
+    },
+    child: Container(
+      width: 32,
+      height: 32,
+      decoration: BoxDecoration(
+        color: Colors.red, // Red background
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.red.withOpacity(0.3),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Icon(
+        Icons.favorite,
+        color: isFavorite ? Colors.red.shade700 : Colors.white, // Red heart if active, white if not
+        size: TSizes.iconMd,
+      ),
+    ),
+  ),
+),
 
-                // Favorite Icon - COMPLETELY RED WITH FILLED HEART
-                Positioned(
-                  top: TSizes.xs,
-                  right: TSizes.xs,
-                  child: Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: Colors.red, // RED background
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.red.withOpacity(0.3),
-                          spreadRadius: 1,
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: IconButton(
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                      onPressed: () {
-                        setState(() {
-                          isFavorite = !isFavorite;
-                        });
-                      },
-                      icon: Icon(
-                        isFavorite ? Icons.favorite : Icons.favorite_border,
-                        color: Colors.white, // WHITE heart icon
-                        size: TSizes.iconMd,
-                      ),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),

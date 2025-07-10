@@ -9,7 +9,6 @@ import 'package:ecommerce_store/utils/constants/sizes.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:ecommerce_store/utils/constants/image_strings.dart';
 
-
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -22,8 +21,6 @@ class HomeScreen extends StatelessWidget {
           children: [
             _buildHeaderSection(context),
             _buildBodyContent(context),
-            // Add bottom padding to prevent overflow
-            const SizedBox(height: TSizes.spaceBtwItems),
           ],
         ),
       ),
@@ -33,7 +30,7 @@ class HomeScreen extends StatelessWidget {
   /// Header section with AppBar, Search, and Categories
   Widget _buildHeaderSection(BuildContext context) {
     return TPrimaryHeaderContainer(
-      height: 420,
+      height: 380, // Reduced from 420
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
         child: Column(
@@ -42,7 +39,7 @@ class HomeScreen extends StatelessWidget {
             const THomeAppBar(),
             const SizedBox(height: TSizes.spaceBtwItems),
             _buildSearchBar(),
-            const SizedBox(height: TSizes.spaceBtwSections),
+            const SizedBox(height: TSizes.spaceBtwItems), // Reduced spacing
             _buildPopularCategories(context),
           ],
         ),
@@ -61,7 +58,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  /// Popular categories section - ENHANCED WITH TCIRCULAR
+  /// Popular categories section - FIXED OVERFLOW
   Widget _buildPopularCategories(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,7 +72,7 @@ class HomeScreen extends StatelessWidget {
         ),
         const SizedBox(height: TSizes.spaceBtwItems),
         SizedBox(
-          height: 80,
+          height: 70, // Reduced from 80
           child: ListView.separated(
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
@@ -94,7 +91,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  /// Body content below header - FIXED SPACING
+  /// Body content below header - FIXED OVERFLOW
   Widget _buildBodyContent(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(TSizes.defaultSpace),
@@ -108,14 +105,12 @@ class HomeScreen extends StatelessWidget {
           _buildFeaturedProducts(context),
           const SizedBox(height: TSizes.spaceBtwSections),
           _buildDealsSection(context),
-          // Reduced final spacing to prevent overflow
-          const SizedBox(height: TSizes.spaceBtwItems),
         ],
       ),
     );
   }
 
-  /// UPDATED: Popular products section - ADJUSTED HEIGHT
+  /// FIXED: Popular products section - MAJOR OVERFLOW FIX
   Widget _buildPopularProducts(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,11 +118,13 @@ class HomeScreen extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Popular Products',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
+            Expanded( // FIXED: Wrap with Expanded
+              child: Text(
+                'Popular Products',
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -145,30 +142,39 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
         const SizedBox(height: TSizes.spaceBtwItems),
-        // ADJUSTED: Better aspect ratio to prevent overflow
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 0.68, // Slightly increased from 0.65
-            crossAxisSpacing: TSizes.spaceBtwItems,
-            mainAxisSpacing: TSizes.spaceBtwItems,
-          ),
-          itemCount: 4, // Reduced from 6 to 4 to prevent overflow
-          itemBuilder: (context, index) {
-            return const TProductCardVertical();
+        // FIXED: Better grid configuration
+        LayoutBuilder(
+          builder: (context, constraints) {
+            // Calculate width available for each item
+            final availableWidth = constraints.maxWidth;
+            final itemWidth = (availableWidth - TSizes.spaceBtwItems) / 2;
+            final aspectRatio = itemWidth / 280; // Approximate card height
+            
+            return GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: aspectRatio.clamp(0.6, 0.8), // Constrain aspect ratio
+                crossAxisSpacing: TSizes.spaceBtwItems,
+                mainAxisSpacing: TSizes.spaceBtwItems,
+              ),
+              itemCount: 4,
+              itemBuilder: (context, index) {
+                return const TProductCardVertical();
+              },
+            );
           },
         ),
       ],
     );
   }
 
-  /// Banner carousel with multiple images - ADJUSTED HEIGHT
+  /// Banner carousel - FIXED HEIGHT
   Widget _buildBannerCarousel() {
     return BannerCarousel(
       banners: BannerData.banners,
-      height: 180, // Reduced from 190 to 180
+      height: 160, // Further reduced from 180
       onBannerTap: (banner) {
         // TODO: Handle banner tap - navigate to promotion/product page
         debugPrint('Tapped on banner: ${banner.title}');
@@ -176,7 +182,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  /// Featured products section - ADJUSTED HEIGHT
+  /// Featured products section - FIXED OVERFLOW
   Widget _buildFeaturedProducts(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,55 +190,66 @@ class HomeScreen extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Featured Products',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
+            Expanded( // FIXED: Wrap with Expanded
+              child: Text(
+                'Featured Products',
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
             ),
             TCircular(
-              width: 40,
-              height: 40,
+              width: 36, // Reduced from 40
+              height: 36, // Reduced from 40
               backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
-              borderRadius: 20,
+              borderRadius: 18,
               onTap: () => debugPrint('View all featured products'),
               child: Icon(
                 Icons.arrow_forward_ios,
-                size: 16,
+                size: 14, // Reduced from 16
                 color: Theme.of(context).primaryColor,
               ),
             ),
           ],
         ),
         const SizedBox(height: TSizes.spaceBtwItems),
-        // ADJUSTED: Reduced height to prevent overflow
+        // FIXED: Better height management
         SizedBox(
-          height: 110, // Reduced from 120 to 110
+          height: 95, // Further reduced from 110
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: 5,
             separatorBuilder: (context, index) => const SizedBox(width: TSizes.spaceBtwItems),
             itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  TCircular(
-                    width: 75, // Reduced from 80 to 75
-                    height: 75, // Reduced from 80 to 75
-                    backgroundColor: Colors.grey[100]!,
-                    borderRadius: 37.5,
-                    onTap: () => debugPrint('Product $index tapped'),
-                    child: Icon(
-                      Icons.shopping_bag_outlined,
-                      size: 30, // Reduced from 32 to 30
-                      color: Colors.grey[600],
+              return SizedBox(
+                width: 65, // Fixed width to prevent overflow
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TCircular(
+                      width: 65,
+                      height: 65,
+                      backgroundColor: Colors.grey[100]!,
+                      borderRadius: 32.5,
+                      onTap: () => debugPrint('Product $index tapped'),
+                      child: Icon(
+                        Icons.shopping_bag_outlined,
+                        size: 28, // Reduced from 30
+                        color: Colors.grey[600],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 6), // Reduced from 8 to 6
-                  Text(
-                    'Product ${index + 1}',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ],
+                    const SizedBox(height: 4), // Reduced spacing
+                    Flexible( // FIXED: Use Flexible to prevent overflow
+                      child: Text(
+                        'Product ${index + 1}',
+                        style: Theme.of(context).textTheme.bodySmall,
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
               );
             },
           ),
@@ -241,7 +258,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  /// Deals section - ADJUSTED HEIGHT
+  /// Deals section - FIXED HEIGHT
   Widget _buildDealsSection(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -253,9 +270,8 @@ class HomeScreen extends StatelessWidget {
               ),
         ),
         const SizedBox(height: TSizes.spaceBtwItems),
-        // ADJUSTED: Reduced height to prevent overflow
         Container(
-          height: 90, // Reduced from 100 to 90
+          height: 80, // Further reduced from 90
           width: double.infinity,
           decoration: BoxDecoration(
             color: Colors.grey[100],
@@ -277,7 +293,7 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-/// Enhanced category item using TCircular
+/// FIXED: Enhanced category item using TCircular - OVERFLOW FIXED
 class CategoryItemWithTCircular extends StatelessWidget {
   final Category category;
   final VoidCallback onTap;
@@ -292,43 +308,44 @@ class CategoryItemWithTCircular extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TCircular(
-            width: 56,
-            height: 56,
-            backgroundColor: Colors.white,
-            borderRadius: 28,
-            onTap: onTap,
-            child: Center(
-              child: category.imagePath.isNotEmpty
-                  ? Image.asset(
-                      category.imagePath,
-                      width: 32,
-                      height: 32,
-                      fit: BoxFit.contain,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Icon(
-                          category.icon,
-                          size: 32,
-                          color: Theme.of(context).primaryColor,
-                        );
-                      },
-                    )
-                  : Icon(
-                      category.icon,
-                      size: 32,
-                      color: Theme.of(context).primaryColor,
-                    ),
+      child: SizedBox(
+        width: 50, // FIXED: Set fixed width to prevent overflow
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TCircular(
+              width: 50, // Reduced from 56
+              height: 50, // Reduced from 56
+              backgroundColor: Colors.white,
+              borderRadius: 25,
+              onTap: onTap,
+              child: Center(
+                child: category.imagePath.isNotEmpty
+                    ? Image.asset(
+                        category.imagePath,
+                        width: 28, // Reduced from 32
+                        height: 28, // Reduced from 32
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(
+                            category.icon,
+                            size: 28,
+                            color: Theme.of(context).primaryColor,
+                          );
+                        },
+                      )
+                    : Icon(
+                        category.icon,
+                        size: 28,
+                        color: Theme.of(context).primaryColor,
+                      ),
+              ),
             ),
-          ),
-          const SizedBox(height: TSizes.spaceBtwItems / 2),
-          SizedBox(
-            width: 56,
-            child: Text(
+            const SizedBox(height: 4), // Reduced spacing
+            // FIXED: Better text handling
+            Text(
               category.name,
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              style: Theme.of(context).textTheme.labelSmall?.copyWith( // Changed to labelSmall
                     fontWeight: FontWeight.w500,
                     color: TColors.textWhite,
                   ),
@@ -336,8 +353,8 @@ class CategoryItemWithTCircular extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -415,7 +432,7 @@ class Banner {
   });
 }
 
-/// Banner carousel widget with auto-scroll and indicators
+/// FIXED: Banner carousel widget with auto-scroll and indicators - OVERFLOW FIXED
 class BannerCarousel extends StatefulWidget {
   final List<Banner> banners;
   final double height;
@@ -425,7 +442,7 @@ class BannerCarousel extends StatefulWidget {
   const BannerCarousel({
     super.key,
     required this.banners,
-    this.height = 190,
+    this.height = 160, // Reduced default height
     this.onBannerTap,
     this.autoPlayDuration = const Duration(seconds: 4),
   });
@@ -572,7 +589,7 @@ class _BannerCarouselState extends State<BannerCarousel> {
                       ],
                     ),
                   ),
-                  padding: const EdgeInsets.all(TSizes.md),
+                  padding: const EdgeInsets.all(TSizes.sm), // Reduced padding
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
@@ -582,18 +599,20 @@ class _BannerCarouselState extends State<BannerCarousel> {
                           banner.title,
                           style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 18,
+                            fontSize: 16, // Reduced from 18
                             fontWeight: FontWeight.bold,
                           ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       if (banner.description != null)
                         Text(
                           banner.description!,
                           style: const TextStyle(
                             color: Colors.white70,
-                            fontSize: 14,
+                            fontSize: 12, // Reduced from 14
                           ),
-                          maxLines: 2,
+                          maxLines: 1, // Reduced from 2
                           overflow: TextOverflow.ellipsis,
                         ),
                     ],
@@ -613,13 +632,13 @@ class _BannerCarouselState extends State<BannerCarousel> {
         widget.banners.length,
         (index) => Container(
           margin: const EdgeInsets.symmetric(horizontal: 4),
-          width: _currentIndex == index ? 24 : 8,
-          height: 8,
+          width: _currentIndex == index ? 20 : 6, // Reduced sizes
+          height: 6,
           decoration: BoxDecoration(
             color: _currentIndex == index
                 ? Theme.of(context).primaryColor
                 : Colors.grey.withOpacity(0.3),
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(3),
           ),
         ),
       ),
