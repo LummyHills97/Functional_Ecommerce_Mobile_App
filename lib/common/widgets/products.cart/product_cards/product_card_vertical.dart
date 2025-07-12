@@ -6,15 +6,8 @@ import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:ecommerce_store/utils/helpers/helpers_functions.dart';
 import 'package:flutter/material.dart';
 
-class TProductCardVertical extends StatefulWidget {
+class TProductCardVertical extends StatelessWidget {
   const TProductCardVertical({super.key});
-
-  @override
-  State<TProductCardVertical> createState() => _TProductCardVerticalState();
-}
-
-class _TProductCardVerticalState extends State<TProductCardVertical> {
-  bool isFavorite = false;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +44,7 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
                   borderRadius: TSizes.productImageRadius,
                 ),
 
-                // Sale Tag (Optional)
+                // Sale Tag
                 Positioned(
                   top: TSizes.xs,
                   left: TSizes.xs,
@@ -67,46 +60,31 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
                     child: Text(
                       '25%',
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: TColors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
+                            color: TColors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                   ),
                 ),
-// Favorite Icon - FULLY RED HEART ICON WITH RED BACKGROUND
-Positioned(
-  top: TSizes.xs,
-  right: TSizes.xs,
-  child: GestureDetector(
-    onTap: () {
-      setState(() {
-        isFavorite = !isFavorite;
-      });
-    },
-    child: Container(
-      width: 32,
-      height: 32,
-      decoration: BoxDecoration(
-        color: Colors.red, // Red background
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.red.withOpacity(0.3),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Icon(
-        Icons.favorite,
-        color: isFavorite ? Colors.red.shade700 : Colors.white, // Red heart if active, white if not
-        size: TSizes.iconMd,
-      ),
-    ),
-  ),
-),
 
+                // STATIC RED Favorite Icon
+                Positioned(
+                  top: TSizes.xs,
+                  right: TSizes.xs,
+                  child: Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: const Icon(
+                      Icons.favorite,
+                      color: Colors.red,
+                      size: TSizes.iconMd,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -121,24 +99,16 @@ Positioned(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Product Title
                   Text(
                     'Green Nike Air Shoes',
                     style: Theme.of(context).textTheme.labelLarge,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                   ),
-
                   const SizedBox(height: TSizes.xs / 2),
-
-                  // Brand Name with Icon
                   Row(
                     children: [
-                      Icon(
-                        Icons.verified,
-                        color: TColors.primary,
-                        size: TSizes.iconXs,
-                      ),
+                      Icon(Icons.verified, color: TColors.primary, size: TSizes.iconXs),
                       const SizedBox(width: TSizes.xs / 2),
                       Expanded(
                         child: Text(
@@ -149,37 +119,24 @@ Positioned(
                       ),
                     ],
                   ),
-
                   const SizedBox(height: TSizes.spaceBtwItems / 2),
-
-                  // Price and Add to Cart Button
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Price
                       Flexible(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            // Original Price (if on sale)
                             Text(
                               '\$35.00',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelMedium
-                                  ?.copyWith(
+                              style: Theme.of(context).textTheme.labelMedium?.copyWith(
                                     decoration: TextDecoration.lineThrough,
                                     color: TColors.darkGrey,
                                   ),
                             ),
-                            // Sale Price
                             Text(
                               '\$25.00',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall
-                                  ?.copyWith(
+                              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                                     color: TColors.primary,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -187,8 +144,6 @@ Positioned(
                           ],
                         ),
                       ),
-
-                      // Add to Cart Button
                       Container(
                         width: 40,
                         height: 40,
@@ -199,15 +154,8 @@ Positioned(
                         child: IconButton(
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(),
-                          onPressed: () {
-                            // Add to cart logic here
-                            debugPrint('Added to cart');
-                          },
-                          icon: const Icon(
-                            Icons.add,
-                            color: TColors.white,
-                            size: 20,
-                          ),
+                          onPressed: () => debugPrint('Added to cart'),
+                          icon: const Icon(Icons.add, color: TColors.white, size: 20),
                         ),
                       ),
                     ],
@@ -222,16 +170,9 @@ Positioned(
   }
 }
 
-// ALTERNATIVE: Compact version with red favorite icon
-class TProductCardVerticalCompact extends StatefulWidget {
+// COMPACT VERSION
+class TProductCardVerticalCompact extends StatelessWidget {
   const TProductCardVerticalCompact({super.key});
-
-  @override
-  State<TProductCardVerticalCompact> createState() => _TProductCardVerticalCompactState();
-}
-
-class _TProductCardVerticalCompactState extends State<TProductCardVerticalCompact> {
-  bool isFavorite = false;
 
   @override
   Widget build(BuildContext context) {
@@ -249,7 +190,6 @@ class _TProductCardVerticalCompactState extends State<TProductCardVerticalCompac
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Product Image Section - COMPACT
           Container(
             height: 130,
             width: double.infinity,
@@ -259,7 +199,6 @@ class _TProductCardVerticalCompactState extends State<TProductCardVerticalCompac
             ),
             child: Stack(
               children: [
-                // Product Image
                 TRoundedImage(
                   imageUrl: TImages.productImage1,
                   width: double.infinity,
@@ -267,8 +206,6 @@ class _TProductCardVerticalCompactState extends State<TProductCardVerticalCompac
                   fit: BoxFit.cover,
                   borderRadius: TSizes.productImageRadius,
                 ),
-
-                // Sale Tag (Optional)
                 Positioned(
                   top: TSizes.xs,
                   left: TSizes.xs,
@@ -284,79 +221,50 @@ class _TProductCardVerticalCompactState extends State<TProductCardVerticalCompac
                     child: Text(
                       '25%',
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: TColors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 10,
-                      ),
+                            color: TColors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 10,
+                          ),
                     ),
                   ),
                 ),
-
-                // Favorite Icon - RED COMPACT
                 Positioned(
                   top: TSizes.xs,
                   right: TSizes.xs,
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isFavorite = !isFavorite;
-                      });
-                    },
-                    child: Container(
-                      width: 28,
-                      height: 28,
-                      decoration: BoxDecoration(
-                        color: Colors.red.withOpacity(0.9),
-                        borderRadius: BorderRadius.circular(14),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.red.withOpacity(0.3),
-                            spreadRadius: 1,
-                            blurRadius: 3,
-                            offset: const Offset(0, 1),
-                          ),
-                        ],
-                      ),
-                      child: Icon(
-                        isFavorite ? Icons.favorite : Icons.favorite_border,
-                        color: Colors.white,
-                        size: 16,
-                      ),
+                  child: Container(
+                    width: 28,
+                    height: 28,
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: const Icon(
+                      Icons.favorite_border,
+                      color: Colors.red,
+                      size: 12,
                     ),
                   ),
                 ),
               ],
             ),
           ),
-
           const SizedBox(height: TSizes.spaceBtwItems / 2),
-
-          // Product Details - COMPACT
           Flexible(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: TSizes.xs),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Product Title
                   Text(
                     'Green Nike Air Shoes',
                     style: Theme.of(context).textTheme.labelMedium,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
-
                   const SizedBox(height: TSizes.xs / 4),
-
-                  // Brand Name with Icon - COMPACT
                   Row(
                     children: [
-                      Icon(
-                        Icons.verified,
-                        color: TColors.primary,
-                        size: 12,
-                      ),
+                      Icon(Icons.verified, color: TColors.primary, size: 12),
                       const SizedBox(width: TSizes.xs / 4),
                       Expanded(
                         child: Text(
@@ -367,37 +275,24 @@ class _TProductCardVerticalCompactState extends State<TProductCardVerticalCompac
                       ),
                     ],
                   ),
-
                   const SizedBox(height: TSizes.spaceBtwItems / 2),
-
-                  // Price and Add to Cart Button - COMPACT
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Price
                       Flexible(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            // Original Price (if on sale)
                             Text(
                               '\$35.00',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelSmall
-                                  ?.copyWith(
+                              style: Theme.of(context).textTheme.labelSmall?.copyWith(
                                     decoration: TextDecoration.lineThrough,
                                     color: TColors.darkGrey,
                                   ),
                             ),
-                            // Sale Price
                             Text(
                               '\$25.00',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.copyWith(
+                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                     color: TColors.primary,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -405,8 +300,6 @@ class _TProductCardVerticalCompactState extends State<TProductCardVerticalCompac
                           ],
                         ),
                       ),
-
-                      // Add to Cart Button - COMPACT
                       Container(
                         width: 36,
                         height: 36,
@@ -417,15 +310,8 @@ class _TProductCardVerticalCompactState extends State<TProductCardVerticalCompac
                         child: IconButton(
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(),
-                          onPressed: () {
-                            // Add to cart logic here
-                            debugPrint('Added to cart');
-                          },
-                          icon: const Icon(
-                            Icons.add,
-                            color: TColors.white,
-                            size: 18,
-                          ),
+                          onPressed: () => debugPrint('Added to cart'),
+                          icon: const Icon(Icons.add, color: TColors.white, size: 18),
                         ),
                       ),
                     ],

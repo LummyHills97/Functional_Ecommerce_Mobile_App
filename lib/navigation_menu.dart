@@ -1,81 +1,45 @@
 import 'package:ecommerce_store/features/authentication/screens/home/home.dart';
-import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 
-class NavigationMenu extends StatelessWidget {
+class NavigationMenu extends StatefulWidget {
   const NavigationMenu({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final controller = Get.put(NavigationController());
-
-    return Scaffold(
-      bottomNavigationBar: Obx(
-        () => NavigationBar(
-          height: 80,
-          elevation: 0,
-          selectedIndex: controller.selectedIndex.value,
-          onDestinationSelected: (index) => controller.selectedIndex.value = index,
-          backgroundColor: Colors.white,
-          indicatorColor: TColors.primary.withOpacity(0.1),
-          destinations: const [
-            NavigationDestination(
-              icon: Icon(Iconsax.home),
-              label: 'Home',
-            ),
-            NavigationDestination(
-              icon: Icon(Iconsax.shop),
-              label: 'Store',
-            ),
-            NavigationDestination(
-              icon: Icon(Iconsax.heart),
-              label: 'Wishlist',
-            ),
-            NavigationDestination(
-              icon: Icon(Iconsax.user),
-              label: 'Profile',
-            ),
-          ],
-        ),
-      ),
-      body: Obx(() => controller.screens[controller.selectedIndex.value]),
-    );
-  }
+  State<NavigationMenu> createState() => _NavigationMenuState();
 }
 
-class NavigationController extends GetxController {
-  final Rx<int> selectedIndex = 0.obs;
+class _NavigationMenuState extends State<NavigationMenu> {
+  int _selectedIndex = 0;
 
-  final screens = [
-    const HomeScreen(),
-    Container(
-      color: Colors.purple,
-      child: const Center(
-        child: Text(
-          'Store Screen',
-          style: TextStyle(fontSize: 24, color: Colors.white),
-        ),
-      ),
-    ),
-    Container(
-      color: Colors.orange,
-      child: const Center(
-        child: Text(
-          'Wishlist Screen',
-          style: TextStyle(fontSize: 24, color: Colors.white),
-        ),
-      ),
-    ),
-    Container(
-      color: Colors.blue,
-      child: const Center(
-        child: Text(
-          'Profile Screen',
-          style: TextStyle(fontSize: 24, color: Colors.white),
-        ),
-      ),
-    ),
+  static const List<Widget> _pages = [
+    HomePage(),
+    Center(child: Text('Search')),
+    Center(child: Text('Cart')),
+    Center(child: Text('Profile')),
   ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.red,
+        unselectedItemColor: Colors.grey,
+        onTap: _onItemTapped,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Cart'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        ],
+      ),
+    );
+  }
 }
