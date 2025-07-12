@@ -44,17 +44,12 @@ class HomePage extends StatelessWidget {
     Banner(
       title: 'Summer Sale',
       description: 'Up to 50% off on selected items',
-      imageUrl: 'assets/images/banner1.jpg',
-    ),
-    Banner(
-      title: 'New Arrivals',
-      description: 'Check out our latest collection',
-      imageUrl: 'assets/images/banner2.jpg',
+      imageUrl: 'assets/images/banners/banner_1.jpg',
     ),
     Banner(
       title: 'Free Shipping',
       description: 'On orders above \$50',
-      imageUrl: 'assets/images/banner3.jpg',
+      imageUrl: 'assets/images/banners/banner_3.jpg',
     ),
   ];
 
@@ -169,14 +164,42 @@ class HomePage extends StatelessWidget {
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: 6,
+          itemCount: 4, // Reduced from 6 to 4 to prevent overflow
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             mainAxisSpacing: TSizes.spaceBtwItems,
             crossAxisSpacing: TSizes.spaceBtwItems,
-            childAspectRatio: 0.65,
+            childAspectRatio: 0.75, // Adjusted ratio to prevent overflow
           ),
-          itemBuilder: (context, index) => const TProductCardVertical(),
+          itemBuilder: (context, index) => Stack(
+            children: [
+              const TProductCardVertical(),
+              Positioned(
+                top: 8,
+                right: 8,
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Icon(
+                    Icons.favorite_outline,
+                    size: 18,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -205,10 +228,40 @@ class HomePage extends StatelessWidget {
                     height: 80,
                     backgroundColor: Colors.grey[100]!,
                     borderRadius: 40,
-                    child: Icon(
-                      Icons.shopping_bag_outlined,
-                      size: 28,
-                      color: Colors.grey[700],
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: Icon(
+                            Icons.shopping_bag_outlined,
+                            size: 28,
+                            color: Colors.grey[700],
+                          ),
+                        ),
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: Container(
+                            width: 24,
+                            height: 24,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.3),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              Icons.favorite_outline,
+                              size: 14,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -376,13 +429,13 @@ class _BannerCarouselState extends State<_BannerCarousel> {
                   margin: const EdgeInsets.symmetric(horizontal: 4),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(TSizes.md),
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.blue.withOpacity(0.8),
-                        Colors.purple.withOpacity(0.8),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+                    image: DecorationImage(
+                      image: AssetImage(banner.imageUrl),
+                      fit: BoxFit.cover,
+                      colorFilter: ColorFilter.mode(
+                        Colors.black.withOpacity(0.3),
+                        BlendMode.darken,
+                      ),
                     ),
                   ),
                   child: Padding(
