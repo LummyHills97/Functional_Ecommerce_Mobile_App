@@ -152,7 +152,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // POPULAR PRODUCTS
+  // POPULAR PRODUCTS - Fixed favorite icon and overflow
   Widget _buildPopularProducts(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,48 +164,72 @@ class HomePage extends StatelessWidget {
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: 4, // Reduced from 6 to 4 to prevent overflow
+          itemCount: 4,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             mainAxisSpacing: TSizes.spaceBtwItems,
             crossAxisSpacing: TSizes.spaceBtwItems,
-            childAspectRatio: 0.75, // Adjusted ratio to prevent overflow
+            childAspectRatio: 0.75, // Adjusted for better proportions
           ),
-          itemBuilder: (context, index) => Stack(
-            children: [
-              const TProductCardVertical(),
-              Positioned(
-                top: 8,
-                right: 8,
-                child: Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
+          itemBuilder: (context, index) => Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(TSizes.sm),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.1),
+                  spreadRadius: 1,
+                  blurRadius: 3,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Stack(
+              children: [
+                // Product card
+                const TProductCardVertical(),
+                // Transparent favorite icon overlay
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.8),
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          spreadRadius: 1,
+                          blurRadius: 2,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
+                    ),
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.favorite_border,
+                        size: 18,
                       ),
-                    ],
-                  ),
-                  child: Icon(
-                    Icons.favorite_outline,
-                    size: 18,
-                    color: Colors.grey[600],
+                      onPressed: () {
+                        debugPrint('Favorite pressed for item $index');
+                      },
+                      color: Colors.red,
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                      splashRadius: 16,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],
     );
   }
 
-  // FEATURED PRODUCTS
+  // FEATURED PRODUCTS - Fixed overflow
   Widget _buildFeaturedProducts(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -215,58 +239,41 @@ class HomePage extends StatelessWidget {
         }),
         const SizedBox(height: TSizes.spaceBtwItems),
         SizedBox(
-          height: 100,
+          height: 110, // Fixed height to prevent overflow
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: 5,
             separatorBuilder: (_, __) => const SizedBox(width: TSizes.spaceBtwItems),
             itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  _CircularContainer(
-                    width: 80,
-                    height: 80,
-                    backgroundColor: Colors.grey[100]!,
-                    borderRadius: 40,
-                    child: Stack(
-                      children: [
-                        Center(
-                          child: Icon(
-                            Icons.shopping_bag_outlined,
-                            size: 28,
-                            color: Colors.grey[700],
-                          ),
-                        ),
-                        Positioned(
-                          top: 8,
-                          right: 8,
-                          child: Container(
-                            width: 24,
-                            height: 24,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.3),
-                                  blurRadius: 4,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: Icon(
-                              Icons.favorite_outline,
-                              size: 14,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        ),
-                      ],
+              return SizedBox(
+                width: 80, // Fixed width for consistent layout
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _CircularContainer(
+                      width: 70, // Slightly reduced to fit better
+                      height: 70,
+                      backgroundColor: Colors.grey[100]!,
+                      borderRadius: 35,
+                      child: Icon(
+                        Icons.shopping_bag_outlined,
+                        size: 24, // Reduced icon size
+                        color: Colors.grey[700],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text('Item ${index + 1}', style: Theme.of(context).textTheme.bodySmall),
-                ],
+                    const SizedBox(height: 8),
+                    Flexible(
+                      child: Text(
+                        'Item ${index + 1}',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              fontSize: 12,
+                            ),
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
               );
             },
           ),
