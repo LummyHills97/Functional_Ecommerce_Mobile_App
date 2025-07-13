@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-
 import 'package:ecommerce_store/common/widgets/custom_shapes/containers/primary_header_container.dart';
 import 'package:ecommerce_store/common/widgets/custom_shapes/containers/search_container.dart';
 import 'package:ecommerce_store/common/widgets/home_appbar.dart';
@@ -51,6 +50,26 @@ class HomePage extends StatelessWidget {
       description: 'On orders above \$50',
       imageUrl: 'assets/images/banners/banner_3.jpg',
     ),
+  ];
+
+  // Mock product data
+  static final List<Map<String, dynamic>> _popularProducts = [
+    {
+      'name': 'Nike Wildhorse Trail',
+      'brand': 'Nike',
+      'image': 'assets/images/products/NikeWildhorse.png',
+      'price': 129.99,
+      'originalPrice': 159.99,
+      'discount': 19,
+    },
+    {
+      'name': 'Nike Air Max',
+      'brand': 'Nike',
+      'image': 'assets/images/products/nike-shoes.png',
+      'price': 89.99,
+      'originalPrice': 119.99,
+      'discount': 25,
+    },
   ];
 
   @override
@@ -152,7 +171,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // POPULAR PRODUCTS - Fixed favorite icon and overflow
+  // POPULAR PRODUCTS - Using ListView horizontal approach
   Widget _buildPopularProducts(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,75 +180,184 @@ class HomePage extends StatelessWidget {
           debugPrint('View all popular products');
         }),
         const SizedBox(height: TSizes.spaceBtwItems),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: 4,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: TSizes.spaceBtwItems,
-            crossAxisSpacing: TSizes.spaceBtwItems,
-            childAspectRatio: 0.75, // Adjusted for better proportions
-          ),
-          itemBuilder: (context, index) => Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(TSizes.sm),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.1),
-                  spreadRadius: 1,
-                  blurRadius: 3,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Stack(
-              children: [
-                // Product card
-                const TProductCardVertical(),
-                // Transparent favorite icon overlay
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.8),
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          spreadRadius: 1,
-                          blurRadius: 2,
-                          offset: const Offset(0, 1),
-                        ),
-                      ],
-                    ),
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.favorite_border,
-                        size: 18,
+        SizedBox(
+          height: 280, // Fixed height to prevent overflow
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: _popularProducts.length,
+            separatorBuilder: (context, index) => const SizedBox(width: TSizes.spaceBtwItems),
+            itemBuilder: (context, index) {
+              final product = _popularProducts[index];
+              return SizedBox(
+                width: 160, // Fixed width for each product card
+                child: Stack(
+                  children: [
+                    // Product card container
+                    Container(
+                      width: 160,
+                      height: 280,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(TSizes.sm),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            spreadRadius: 1,
+                            blurRadius: 3,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
                       ),
-                      onPressed: () {
-                        debugPrint('Favorite pressed for item $index');
-                      },
-                      color: Colors.red,
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                      splashRadius: 16,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Product image
+                          Container(
+                            height: 160,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[100],
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(TSizes.sm),
+                                topRight: Radius.circular(TSizes.sm),
+                              ),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(TSizes.sm),
+                                topRight: Radius.circular(TSizes.sm),
+                              ),
+                              child: Image.asset(
+                                product['image'],
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Icon(
+                                    Icons.shopping_bag_outlined,
+                                    size: 48,
+                                    color: Colors.grey[400],
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                          // Product details
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    product['name'],
+                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    product['brand'],
+                                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '\$${product['price']}',
+                                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        '\$${product['originalPrice']}',
+                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                          color: Colors.grey[500],
+                                          decoration: TextDecoration.lineThrough,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+                    // Discount badge
+                    Positioned(
+                      top: 8,
+                      left: 8,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          '${product['discount']}% OFF',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Transparent favorite icon overlay
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: Container(
+                        width: 32,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.9),
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              spreadRadius: 1,
+                              blurRadius: 2,
+                              offset: const Offset(0, 1),
+                            ),
+                          ],
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(16),
+                            onTap: () {
+                              debugPrint('Favorite pressed for ${product['name']}');
+                            },
+                            child: const Icon(
+                              Icons.favorite_border,
+                              size: 18,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              );
+            },
           ),
         ),
       ],
     );
   }
 
-  // FEATURED PRODUCTS - Fixed overflow
+  // FEATURED PRODUCTS - Just 2 items in a row
   Widget _buildFeaturedProducts(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -238,45 +366,60 @@ class HomePage extends StatelessWidget {
           debugPrint('View all featured');
         }),
         const SizedBox(height: TSizes.spaceBtwItems),
-        SizedBox(
-          height: 110, // Fixed height to prevent overflow
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: 5,
-            separatorBuilder: (_, __) => const SizedBox(width: TSizes.spaceBtwItems),
-            itemBuilder: (context, index) {
-              return SizedBox(
-                width: 80, // Fixed width for consistent layout
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _CircularContainer(
-                      width: 70, // Slightly reduced to fit better
-                      height: 70,
-                      backgroundColor: Colors.grey[100]!,
-                      borderRadius: 35,
-                      child: Icon(
-                        Icons.shopping_bag_outlined,
-                        size: 24, // Reduced icon size
-                        color: Colors.grey[700],
-                      ),
+        Row(
+          children: [
+            Expanded(
+              child: Column(
+                children: [
+                  _CircularContainer(
+                    width: 70,
+                    height: 70,
+                    backgroundColor: Colors.orange[100]!,
+                    borderRadius: 35,
+                    child: Icon(
+                      Icons.laptop_mac,
+                      size: 32,
+                      color: Colors.orange[700],
                     ),
-                    const SizedBox(height: 8),
-                    Flexible(
-                      child: Text(
-                        'Item ${index + 1}',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              fontSize: 12,
-                            ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.center,
-                      ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Electronics',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.w500,
                     ),
-                  ],
-                ),
-              );
-            },
-          ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: TSizes.spaceBtwItems),
+            Expanded(
+              child: Column(
+                children: [
+                  _CircularContainer(
+                    width: 70,
+                    height: 70,
+                    backgroundColor: Colors.pink[100]!,
+                    borderRadius: 35,
+                    child: Icon(
+                      Icons.checkroom,
+                      size: 32,
+                      color: Colors.pink[700],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Fashion',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ],
     );
