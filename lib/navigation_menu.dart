@@ -13,7 +13,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
 
   static const List<Widget> _pages = [
     HomePage(),
-    Center(child: Text('Search')),
+    Center(child: Text('Store')),
     Center(child: Text('Cart')),
     Center(child: Text('Profile')),
   ];
@@ -35,7 +35,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
         onTap: _onItemTapped,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Store'),
           BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Cart'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
@@ -43,3 +43,4 @@ class _NavigationMenuState extends State<NavigationMenu> {
     );
   }
 }
+

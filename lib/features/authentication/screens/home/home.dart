@@ -50,6 +50,7 @@ class HomePage extends StatelessWidget {
       description: 'On orders above \$50',
       imageUrl: 'assets/images/banners/banner_3.jpg',
     ),
+    
   ];
 
   // Mock product data
