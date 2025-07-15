@@ -1,5 +1,8 @@
+import 'package:ecommerce_store/common/widgets/custom_shapes/containers/search_container.dart';
 import 'package:ecommerce_store/common/widgets/products.cart/cart_menu_icon.dart';
 import 'package:ecommerce_store/navigation_menu.dart';
+import 'package:ecommerce_store/utils/constants/sizes.dart';
+import 'package:ecommerce_store/utils/helpers/helpers_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_store/common/widgets/appbar.dart';
 import 'package:get/get.dart';
@@ -25,28 +28,41 @@ class Store extends StatelessWidget {
           ),
         ],
       ),
-      body: const Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Welcome to Our Store',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 16),
-            Expanded(
-              child: Center(
-                child: Text(
-                  'Store products will be displayed here',
-                  style: TextStyle(fontSize: 16),
+      body: NestedScrollView(
+        headerSliverBuilder: (_, innerBoxIsScrolled) {
+          return [
+            SliverAppBar(
+              pinned: true,
+              floating: true,
+              backgroundColor: THelperFunctions.isDarkMode(context) 
+                  ? Colors.black 
+                  : Colors.white,
+              expandedHeight: 440,
+              flexibleSpace: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ListView(
+                  shrinkWrap: true, 
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    // Search bar
+                    SizedBox(height: TSizes.spaceBtwItems),
+                    TSearchContainer(text: '',)
+                    // Categories
+                    // Featured brands
+                  ],
                 ),
               ),
             ),
-          ],
+          ];
+        },
+        body: const Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              // Products grid or list
+              Text('Products will be displayed here'),
+            ],
+          ),
         ),
       ),
     );
