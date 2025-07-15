@@ -1,7 +1,8 @@
 import 'package:ecommerce_store/common/widgets/products.cart/cart_menu_icon.dart';
+import 'package:ecommerce_store/navigation_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_store/common/widgets/appbar.dart';
-
+import 'package:get/get.dart';
 
 class Store extends StatelessWidget {
   const Store({super.key});
@@ -10,18 +11,43 @@ class Store extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TAppBar(
-        title: const Text('Store'),
+        title: const Text(
+          'Store',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         actions: [
           TCartCounterIcon(
             onPressed: () {
-              // TODO: Handle cart button action
+              // Navigate to cart page
+              Get.find<NavigationController>().changeIndex(2);
             },
-            // iconColor: Colors.black, // optional
+            iconColor: Colors.black,
           ),
         ],
       ),
-      body: const Center(
-        child: Text('Store content goes here'),
+      body: const Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Welcome to Our Store',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 16),
+            Expanded(
+              child: Center(
+                child: Text(
+                  'Store products will be displayed here',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
