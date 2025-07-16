@@ -19,6 +19,12 @@ class Store extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
+          IconButton(
+            onPressed: () {
+              // Handle notifications
+            },
+            icon: const Icon(Icons.notifications_outlined),
+          ),
           TCartCounterIcon(
             onPressed: () {
               // Navigate to cart page
@@ -34,21 +40,64 @@ class Store extends StatelessWidget {
             SliverAppBar(
               pinned: true,
               floating: true,
-              backgroundColor: THelperFunctions.isDarkMode(context) 
-                  ? Colors.black 
+              backgroundColor: THelperFunctions.isDarkMode(context)
+                  ? Colors.black
                   : Colors.white,
               expandedHeight: 440,
               flexibleSpace: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(TSizes.defaultSpace),
                 child: ListView(
-                  shrinkWrap: true, 
+                  shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
                     // Search bar
-                    SizedBox(height: TSizes.spaceBtwItems),
-                    TSearchContainer(text: '',)
-                    // Categories
-                    // Featured brands
+                    const SizedBox(height: TSizes.spaceBtwItems),
+                    const TSearchContainer(
+                      text: 'Search in Store',
+                    ),
+                    const SizedBox(height: TSizes.spaceBtwSections),
+                    
+                    // Featured Brands
+                    Padding(
+                      padding: const EdgeInsets.only(left: TSizes.defaultSpace),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Featured Brands',
+                            style: Theme.of(context).textTheme.headlineSmall,
+                          ),
+                          const SizedBox(height: TSizes.spaceBtwItems / 1.5),
+                          
+                          // Brands Grid
+                          GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: 4,
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: TSizes.gridViewSpacing,
+                              crossAxisSpacing: TSizes.gridViewSpacing,
+                              mainAxisExtent: 80,
+                            ),
+                            itemBuilder: (_, index) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(TSizes.productImageRadius),
+                                  color: Colors.grey.shade100,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Brand ${index + 1}',
+                                    style: Theme.of(context).textTheme.labelMedium,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -56,7 +105,7 @@ class Store extends StatelessWidget {
           ];
         },
         body: const Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(TSizes.defaultSpace),
           child: Column(
             children: [
               // Products grid or list
