@@ -1,4 +1,5 @@
 import 'package:ecommerce_store/features/authentication/screens/home/home.dart';
+import 'package:ecommerce_store/features/authentication/screens/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -31,7 +32,7 @@ class NavigationController extends GetxController {
   
   final List<Widget> screens = const [
     HomePage(),
-    Store(),
+    Store(), // This should use your proper Store widget from the second file
     Cart(),
     Profile(),
   ];
@@ -41,96 +42,29 @@ class NavigationController extends GetxController {
   }
 }
 
-// Enhanced Store widget with store name and cart bar like homepage
-class Store extends StatelessWidget {
-  const Store({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'My Store',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.purple,
-        automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.shopping_cart, color: Colors.white),
-            onPressed: () {
-              // Navigate to cart or show cart functionality
-              Get.find<NavigationController>().changeIndex(2);
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.white),
-            onPressed: () {
-              // Add search functionality
-            },
-          ),
-        ],
-      ),
-      body: Container(
-        color: Colors.purple.shade50,
-        child: Column(
-          children: [
-            // Store header section
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              color: Colors.purple,
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Welcome to Our Store',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Find amazing products at great prices',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // Store content
-            Expanded(
-              child: const Center(
-                child: Text(
-                  'Store Products Will Be Displayed Here',
-                  style: TextStyle(
-                    color: Colors.purple,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+// Remove the purple Store widget completely and use the one from your second file
+// Make sure to import the correct Store widget from your store file
 
 class Cart extends StatelessWidget {
   const Cart({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.orange,
-      child: const Center(
-        child: Text('Cart', style: TextStyle(color: Colors.white, fontSize: 24)),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Cart',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0,
+      ),
+      body: const Center(
+        child: Text(
+          'Your cart items will be displayed here',
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+        ),
       ),
     );
   }
@@ -141,10 +75,21 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.blueGrey,
-      child: const Center(
-        child: Text('Profile', style: TextStyle(color: Colors.white, fontSize: 24)),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Profile',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0,
+      ),
+      body: const Center(
+        child: Text(
+          'Profile settings will be displayed here',
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+        ),
       ),
     );
   }
