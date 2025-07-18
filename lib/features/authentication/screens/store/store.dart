@@ -79,11 +79,13 @@ class Store extends StatelessWidget {
                       children: [
                         TSectionHeading(
                           title: 'Featured Brands',
+                          showActionButton: true,
+                          buttonTitle: 'View all',
                           onPressed: () {},
                         ),
                         const SizedBox(height: TSizes.spaceBtwItems / 1.5),
 
-                        // Brand showcase container
+                        // Featured brand showcase (Large Nike container)
                         Container(
                           padding: const EdgeInsets.all(TSizes.sm),
                           decoration: BoxDecoration(
@@ -98,7 +100,7 @@ class Store extends StatelessWidget {
                           ),
                           child: Row(
                             children: [
-                              // Icon
+                              // Brand icon
                               Container(
                                 width: 56,
                                 height: 56,
@@ -124,9 +126,19 @@ class Store extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Text(
-                                      'Nike',
-                                      style: Theme.of(context).textTheme.titleLarge,
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Nike',
+                                          style: Theme.of(context).textTheme.titleLarge,
+                                        ),
+                                        const SizedBox(width: TSizes.xs),
+                                        Icon(
+                                          Icons.verified,
+                                          color: TColors.primary,
+                                          size: 16,
+                                        ),
+                                      ],
                                     ),
                                     Text(
                                       '256 Products',
@@ -193,10 +205,20 @@ class Store extends StatelessWidget {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Text(
-                                          'Brand ${index + 1}',
-                                          style: Theme.of(context).textTheme.labelLarge,
-                                          overflow: TextOverflow.ellipsis,
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Nike',
+                                              style: Theme.of(context).textTheme.labelLarge,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            const SizedBox(width: TSizes.xs / 2),
+                                            Icon(
+                                              Icons.verified,
+                                              color: TColors.primary,
+                                              size: 12,
+                                            ),
+                                          ],
                                         ),
                                         Text(
                                           '${(index + 1) * 25} Products',
