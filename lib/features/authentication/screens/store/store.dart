@@ -3,7 +3,6 @@ import 'package:ecommerce_store/common/widgets/products.cart/cart_menu_icon.dart
 import 'package:ecommerce_store/common/widgets/texts/section_heading.dart';
 import 'package:ecommerce_store/navigation_menu.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';
-import 'package:ecommerce_store/utils/constants/image_strings.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
 import 'package:ecommerce_store/utils/helpers/helpers_functions.dart';
 import 'package:flutter/material.dart';
@@ -20,27 +19,20 @@ class Store extends StatelessWidget {
         title: Text(
           'Store',
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: THelperFunctions.isDarkMode(context) ? TColors.white : TColors.dark,
-          ),
+                fontWeight: FontWeight.bold,
+                color: THelperFunctions.isDarkMode(context) ? TColors.white : TColors.dark,
+              ),
         ),
         actions: [
-          // Notification icon
           IconButton(
-            onPressed: () {
-              // Handle notifications
-            },
+            onPressed: () {},
             icon: Icon(
               Icons.notifications_outlined,
               color: THelperFunctions.isDarkMode(context) ? TColors.white : TColors.dark,
             ),
           ),
-          // Cart icon
           TCartCounterIcon(
-            onPressed: () {
-              // Navigate to cart page
-              Get.find<NavigationController>().changeIndex(2);
-            },
+            onPressed: () => Get.find<NavigationController>().changeIndex(2),
             iconColor: THelperFunctions.isDarkMode(context) ? TColors.white : TColors.dark,
           ),
         ],
@@ -52,27 +44,21 @@ class Store extends StatelessWidget {
               automaticallyImplyLeading: false,
               pinned: true,
               floating: true,
-              backgroundColor: THelperFunctions.isDarkMode(context)
-                  ? TColors.black
-                  : TColors.white,
-              expandedHeight: 440,
+              backgroundColor: THelperFunctions.isDarkMode(context) ? TColors.black : TColors.white,
+              expandedHeight: 360, // Reduced to account for removed large container
               flexibleSpace: Padding(
                 padding: const EdgeInsets.all(TSizes.defaultSpace),
                 child: ListView(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
-                    // Search bar - simplified
                     const SizedBox(height: TSizes.spaceBtwItems),
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(horizontal: TSizes.xs),
-                      child: const TSearchContainer(
-                        text: 'Search in Store',
-                      ),
+                      child: const TSearchContainer(text: 'Search in Store'),
                     ),
                     const SizedBox(height: TSizes.spaceBtwSections),
-                    
                     // Featured Brands
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,76 +70,6 @@ class Store extends StatelessWidget {
                           onPressed: () {},
                         ),
                         const SizedBox(height: TSizes.spaceBtwItems / 1.5),
-
-                        // Featured brand showcase (Large Nike container)
-                        Container(
-                          padding: const EdgeInsets.all(TSizes.sm),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: THelperFunctions.isDarkMode(context) 
-                                  ? TColors.darkGrey 
-                                  : TColors.grey,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(TSizes.productImageRadius),
-                            color: Colors.transparent,
-                          ),
-                          child: Row(
-                            children: [
-                              // Brand icon
-                              Container(
-                                width: 56,
-                                height: 56,
-                                padding: const EdgeInsets.all(TSizes.sm),
-                                decoration: BoxDecoration(
-                                  color: THelperFunctions.isDarkMode(context) 
-                                      ? TColors.black 
-                                      : TColors.white,
-                                  borderRadius: BorderRadius.circular(100),
-                                ),
-                                child: Image(
-                                  image: AssetImage(TImages.clothIcon),
-                                  color: THelperFunctions.isDarkMode(context) 
-                                      ? TColors.white 
-                                      : TColors.dark,
-                                ),
-                              ),
-                              const SizedBox(width: TSizes.spaceBtwItems),
-                              
-                              // Brand info
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Nike',
-                                          style: Theme.of(context).textTheme.titleLarge,
-                                        ),
-                                        const SizedBox(width: TSizes.xs),
-                                        Icon(
-                                          Icons.verified,
-                                          color: TColors.primary,
-                                          size: 16,
-                                        ),
-                                      ],
-                                    ),
-                                    Text(
-                                      '256 Products',
-                                      style: Theme.of(context).textTheme.labelMedium,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        
-                        const SizedBox(height: TSizes.spaceBtwItems),
-                        
-                        // Brands Grid
                         GridView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
@@ -165,12 +81,14 @@ class Store extends StatelessWidget {
                             mainAxisExtent: 80,
                           ),
                           itemBuilder: (_, index) {
+                            // Sample brand names for variety
+                            final brands = ['Nike', 'Adidas', 'Puma', 'Reebok'];
                             return Container(
                               padding: const EdgeInsets.all(TSizes.sm),
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                  color: THelperFunctions.isDarkMode(context) 
-                                      ? TColors.darkGrey 
+                                  color: THelperFunctions.isDarkMode(context)
+                                      ? TColors.darkGrey
                                       : TColors.grey,
                                   width: 1,
                                 ),
@@ -179,27 +97,25 @@ class Store extends StatelessWidget {
                               ),
                               child: Row(
                                 children: [
-                                  // Brand icon
                                   Container(
                                     width: 40,
                                     height: 40,
                                     padding: const EdgeInsets.all(TSizes.xs),
                                     decoration: BoxDecoration(
-                                      color: THelperFunctions.isDarkMode(context) 
-                                          ? TColors.black 
+                                      color: THelperFunctions.isDarkMode(context)
+                                          ? TColors.black
                                           : TColors.white,
                                       borderRadius: BorderRadius.circular(100),
                                     ),
-                                    child: Image(
-                                      image: AssetImage(TImages.clothIcon),
-                                      color: THelperFunctions.isDarkMode(context) 
-                                          ? TColors.white 
+                                    child: Icon(
+                                      Icons.checkroom,
+                                      color: THelperFunctions.isDarkMode(context)
+                                          ? TColors.white
                                           : TColors.dark,
+                                      size: 20,
                                     ),
                                   ),
                                   const SizedBox(width: TSizes.spaceBtwItems / 2),
-                                  
-                                  // Brand name
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -208,7 +124,7 @@ class Store extends StatelessWidget {
                                         Row(
                                           children: [
                                             Text(
-                                              'Nike',
+                                              brands[index],
                                               style: Theme.of(context).textTheme.labelLarge,
                                               overflow: TextOverflow.ellipsis,
                                             ),
@@ -223,8 +139,8 @@ class Store extends StatelessWidget {
                                         Text(
                                           '${(index + 1) * 25} Products',
                                           style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                                            color: TColors.darkGrey,
-                                          ),
+                                                color: TColors.darkGrey,
+                                              ),
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ],
@@ -247,7 +163,6 @@ class Store extends StatelessWidget {
           padding: EdgeInsets.all(TSizes.defaultSpace),
           child: Column(
             children: [
-              // Products grid or list
               Text(
                 'Products will be displayed here',
                 style: TextStyle(
