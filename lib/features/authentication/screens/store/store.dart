@@ -41,25 +41,29 @@ class Store extends StatelessWidget {
             ),
           ],
         ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(TSizes.defaultSpace),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 🔍 Search bar
-              const TSearchContainer(text: 'Search in Store'),
-              const SizedBox(height: TSizes.spaceBtwSections),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Search Bar
+            const Padding(
+              padding: EdgeInsets.all(TSizes.defaultSpace),
+              child: TSearchContainer(text: 'Search in Store'),
+            ),
 
-              // ⭐ Featured Brands
-              TSectionHeading(
+            // Featured Brands Section
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+              child: TSectionHeading(
                 title: 'Featured Brands',
                 showActionButton: true,
                 buttonTitle: 'View all',
                 onPressed: () {},
               ),
-              const SizedBox(height: TSizes.sm),
-              GridView.builder(
-                padding: EdgeInsets.zero,
+            ),
+            const SizedBox(height: TSizes.sm),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+              child: GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: 4,
@@ -131,40 +135,62 @@ class Store extends StatelessWidget {
                   );
                 },
               ),
+            ),
 
-              const SizedBox(height: TSizes.spaceBtwSections),
+            const SizedBox(height: TSizes.spaceBtwSections),
 
-              // 🧭 Tabs (Start AFTER featured brands)
-              const TabBar(
-                isScrollable: true,
-                indicatorColor: TColors.primary,
-                unselectedLabelColor: TColors.darkerGrey,
-                labelColor: TColors.primary,
-                tabs: [
-                  Tab(child: Text('Sport')),
-                  Tab(child: Text('Furniture')),
-                  Tab(child: Text('Electronics')),
-                  Tab(child: Text('Clothes')),
-                  Tab(child: Text('Cosmetics')),
+            // Tabs and Tab Content as a Unit
+            Expanded(
+              child: Column(
+                children: [
+                  const TabBar(
+                    isScrollable: true,
+                    indicatorColor: TColors.primary,
+                    unselectedLabelColor: TColors.darkerGrey,
+                    labelColor: TColors.primary,
+                    tabs: [
+                      Tab(child: Text('Sport')),
+                      Tab(child: Text('Furniture')),
+                      Tab(child: Text('Electronics')),
+                      Tab(child: Text('Clothes')),
+                      Tab(child: Text('Cosmetics')),
+                    ],
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        _buildTabContent('Sport products go here'),
+                        _buildTabContent('Furniture products go here'),
+                        _buildTabContent('Electronics products go here'),
+                        _buildTabContent('Clothes products go here'),
+                        _buildTabContent('Cosmetics products go here'),
+                      ],
+                    ),
+                  ),
                 ],
               ),
-
-              // 🛍️ Tab content
-              SizedBox(
-                height: 400, // Set fixed height or use MediaQuery
-                child: TabBarView(
-                  children: [
-                    Center(child: Text('Sport products go here')),
-                    Center(child: Text('Furniture products go here')),
-                    Center(child: Text('Electronics products go here')),
-                    Center(child: Text('Clothes products go here')),
-                    Center(child: Text('Cosmetics products go here')),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildTabContent(String text) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(TSizes.defaultSpace),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            text,
+            style: const TextStyle(
+              fontSize: 16,
+              color: TColors.darkGrey,
+            ),
+          ),
+          const SizedBox(height: 400), // Example space to simulate scroll
+        ],
       ),
     );
   }
