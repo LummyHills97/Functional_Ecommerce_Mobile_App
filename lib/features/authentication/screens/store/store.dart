@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ecommerce_store/common/widgets/appbar.dart';
+import 'package:ecommerce_store/common/widgets/appbar/tabbar.dart';
+import 'package:ecommerce_store/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_store/common/widgets/custom_shapes/containers/search_container.dart';
 import 'package:ecommerce_store/common/widgets/products.cart/cart_menu_icon.dart';
 import 'package:ecommerce_store/common/widgets/texts/section_heading.dart';
@@ -48,13 +49,10 @@ class Store extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Search Bar
                     const Padding(
                       padding: EdgeInsets.all(TSizes.defaultSpace),
                       child: TSearchContainer(text: 'Search in Store'),
                     ),
-
-                    // Featured Brands Section
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                       child: TSectionHeading(
@@ -117,7 +115,7 @@ class Store extends StatelessWidget {
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                           const SizedBox(width: TSizes.xs / 2),
-                                          Icon(
+                                          const Icon(
                                             Icons.verified,
                                             color: TColors.primary,
                                             size: 12,
@@ -146,13 +144,7 @@ class Store extends StatelessWidget {
               ),
               SliverPersistentHeader(
                 delegate: _SliverAppBarDelegate(
-                  TabBar(
-                    isScrollable: true,
-                    indicatorColor: TColors.primary,
-                    unselectedLabelColor: TColors.darkerGrey,
-                    labelColor: TColors.primary,
-                    labelStyle: const TextStyle(fontWeight: FontWeight.bold),
-                    unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
+                  TTabBar(
                     tabs: const [
                       Tab(child: Text('Sport')),
                       Tab(child: Text('Furniture')),
@@ -195,7 +187,7 @@ class Store extends StatelessWidget {
                 color: TColors.darkGrey,
               ),
             ),
-            const SizedBox(height: 400), // Example space to simulate scroll
+            const SizedBox(height: 400), // Simulate scroll content
           ],
         ),
       ),
@@ -204,27 +196,24 @@ class Store extends StatelessWidget {
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  _SliverAppBarDelegate(this._tabBar);
+  _SliverAppBarDelegate(this.child);
 
-  final TabBar _tabBar;
-
-  @override
-  double get minExtent => _tabBar.preferredSize.height;
-  @override
-  double get maxExtent => _tabBar.preferredSize.height;
+  final PreferredSizeWidget child;
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+  double get minExtent => child.preferredSize.height;
+  @override
+  double get maxExtent => child.preferredSize.height;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     final isDark = THelperFunctions.isDarkMode(context);
     return Container(
       color: isDark ? TColors.black : TColors.white,
-      child: _tabBar,
+      child: child,
     );
   }
 
   @override
-  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
-    return false;
-  }
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) => false;
 }
