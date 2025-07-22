@@ -41,114 +41,119 @@ class Store extends StatelessWidget {
             ),
           ],
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Search Bar
-            const Padding(
-              padding: EdgeInsets.all(TSizes.defaultSpace),
-              child: TSearchContainer(text: 'Search in Store'),
-            ),
+        body: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return <Widget>[
+              SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Search Bar
+                    const Padding(
+                      padding: EdgeInsets.all(TSizes.defaultSpace),
+                      child: TSearchContainer(text: 'Search in Store'),
+                    ),
 
-            // Featured Brands Section
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-              child: TSectionHeading(
-                title: 'Featured Brands',
-                showActionButton: true,
-                buttonTitle: 'View all',
-                onPressed: () {},
-              ),
-            ),
-            const SizedBox(height: TSizes.sm),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-              child: GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: 4,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: TSizes.gridViewSpacing,
-                  crossAxisSpacing: TSizes.gridViewSpacing,
-                  mainAxisExtent: 80,
-                ),
-                itemBuilder: (_, index) {
-                  final brands = ['Nike', 'Adidas', 'Puma', 'Reebok'];
-                  return Container(
-                    padding: const EdgeInsets.all(TSizes.sm),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: isDark ? TColors.darkGrey : TColors.grey,
+                    // Featured Brands Section
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+                      child: TSectionHeading(
+                        title: 'Featured Brands',
+                        showActionButton: true,
+                        buttonTitle: 'View all',
+                        onPressed: () {},
                       ),
-                      borderRadius: BorderRadius.circular(TSizes.productImageRadius),
                     ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 40,
-                          height: 40,
-                          padding: const EdgeInsets.all(TSizes.xs),
-                          decoration: BoxDecoration(
-                            color: isDark ? TColors.black : TColors.white,
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                          child: Icon(
-                            Icons.checkroom,
-                            size: 20,
-                            color: isDark ? TColors.white : TColors.dark,
-                          ),
+                    const SizedBox(height: TSizes.sm),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: 4,
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: TSizes.gridViewSpacing,
+                          crossAxisSpacing: TSizes.gridViewSpacing,
+                          mainAxisExtent: 80,
                         ),
-                        const SizedBox(width: TSizes.spaceBtwItems / 2),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    brands[index],
-                                    style: Theme.of(context).textTheme.labelLarge,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  const SizedBox(width: TSizes.xs / 2),
-                                  Icon(
-                                    Icons.verified,
-                                    color: TColors.primary,
-                                    size: 12,
-                                  ),
-                                ],
+                        itemBuilder: (_, index) {
+                          final brands = ['Nike', 'Adidas', 'Puma', 'Reebok'];
+                          return Container(
+                            padding: const EdgeInsets.all(TSizes.sm),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: isDark ? TColors.darkGrey : TColors.grey,
                               ),
-                              Text(
-                                '${(index + 1) * 25} Products',
-                                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                                      color: TColors.darkGrey,
-                                    ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                              borderRadius: BorderRadius.circular(TSizes.productImageRadius),
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 40,
+                                  height: 40,
+                                  padding: const EdgeInsets.all(TSizes.xs),
+                                  decoration: BoxDecoration(
+                                    color: isDark ? TColors.black : TColors.white,
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                  child: Icon(
+                                    Icons.checkroom,
+                                    size: 20,
+                                    color: isDark ? TColors.white : TColors.dark,
+                                  ),
+                                ),
+                                const SizedBox(width: TSizes.spaceBtwItems / 2),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            brands[index],
+                                            style: Theme.of(context).textTheme.labelLarge,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          const SizedBox(width: TSizes.xs / 2),
+                                          Icon(
+                                            Icons.verified,
+                                            color: TColors.primary,
+                                            size: 12,
+                                          ),
+                                        ],
+                                      ),
+                                      Text(
+                                        '${(index + 1) * 25} Products',
+                                        style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                                              color: TColors.darkGrey,
+                                            ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  );
-                },
+                    const SizedBox(height: TSizes.spaceBtwSections),
+                  ],
+                ),
               ),
-            ),
-
-            const SizedBox(height: TSizes.spaceBtwSections),
-
-            // Tabs and Tab Content as a Unit
-            Expanded(
-              child: Column(
-                children: [
-                  const TabBar(
+              SliverPersistentHeader(
+                delegate: _SliverAppBarDelegate(
+                  TabBar(
                     isScrollable: true,
                     indicatorColor: TColors.primary,
                     unselectedLabelColor: TColors.darkerGrey,
                     labelColor: TColors.primary,
-                    tabs: [
+                    labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+                    unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
+                    tabs: const [
                       Tab(child: Text('Sport')),
                       Tab(child: Text('Furniture')),
                       Tab(child: Text('Electronics')),
@@ -156,42 +161,70 @@ class Store extends StatelessWidget {
                       Tab(child: Text('Cosmetics')),
                     ],
                   ),
-                  Expanded(
-                    child: TabBarView(
-                      children: [
-                        _buildTabContent('Sport products go here'),
-                        _buildTabContent('Furniture products go here'),
-                        _buildTabContent('Electronics products go here'),
-                        _buildTabContent('Clothes products go here'),
-                        _buildTabContent('Cosmetics products go here'),
-                      ],
-                    ),
-                  ),
-                ],
+                ),
+                pinned: true,
               ),
-            ),
-          ],
+            ];
+          },
+          body: TabBarView(
+            children: [
+              _buildTabContent('Sport products go here', isDark),
+              _buildTabContent('Furniture products go here', isDark),
+              _buildTabContent('Electronics products go here', isDark),
+              _buildTabContent('Clothes products go here', isDark),
+              _buildTabContent('Cosmetics products go here', isDark),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildTabContent(String text) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(TSizes.defaultSpace),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            text,
-            style: const TextStyle(
-              fontSize: 16,
-              color: TColors.darkGrey,
+  Widget _buildTabContent(String text, bool isDark) {
+    return Container(
+      color: isDark ? TColors.black : TColors.white,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(TSizes.defaultSpace),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              text,
+              style: const TextStyle(
+                fontSize: 16,
+                color: TColors.darkGrey,
+              ),
             ),
-          ),
-          const SizedBox(height: 400), // Example space to simulate scroll
-        ],
+            const SizedBox(height: 400), // Example space to simulate scroll
+          ],
+        ),
       ),
     );
+  }
+}
+
+class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  _SliverAppBarDelegate(this._tabBar);
+
+  final TabBar _tabBar;
+
+  @override
+  double get minExtent => _tabBar.preferredSize.height;
+  @override
+  double get maxExtent => _tabBar.preferredSize.height;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    final isDark = THelperFunctions.isDarkMode(context);
+    return Container(
+      color: isDark ? TColors.black : TColors.white,
+      child: _tabBar,
+    );
+  }
+
+  @override
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
+    return false;
   }
 }
