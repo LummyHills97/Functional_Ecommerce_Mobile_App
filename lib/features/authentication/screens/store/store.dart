@@ -36,7 +36,7 @@ class Store extends StatelessWidget {
             ),
             TCartCounterIcon(
               onPressed: () {
-                // Replace with your actual logic or remove
+                // Replace with your actual logic or leave commented
                 // Get.find<NavigationController>().changeIndex(2);
               },
               iconColor: isDark ? TColors.white : TColors.dark,
@@ -66,17 +66,18 @@ class Store extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                     child: SizedBox(
-                      height: 100, // give GridView a height
+                      height: 200, // enough space for 2 rows of GridView
                       child: GridView.builder(
-                        scrollDirection: Axis.horizontal,
                         itemCount: 4,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
                         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 1,
+                          crossAxisCount: 2,
                           mainAxisSpacing: TSizes.gridViewSpacing,
                           crossAxisSpacing: TSizes.gridViewSpacing,
-                          mainAxisExtent: 180,
+                          mainAxisExtent: 80,
                         ),
-                        itemBuilder: (_, index) {
+                        itemBuilder: (context, index) {
                           final brands = ['Nike', 'Adidas', 'Puma', 'Reebok'];
                           return Container(
                             padding: const EdgeInsets.all(TSizes.sm),
@@ -105,8 +106,8 @@ class Store extends StatelessWidget {
                                 const SizedBox(width: TSizes.spaceBtwItems / 2),
                                 Expanded(
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Row(
                                         children: [
