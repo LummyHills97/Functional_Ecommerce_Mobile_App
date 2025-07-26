@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:ecommerce_store/utils/constants/text_strings.dart';
-import 'package:ecommerce_store/common/widgets/appbar.dart';
+import 'package:ecommerce_store/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_store/common/widgets/products.cart/cart_menu_icon.dart';
 
 class THomeAppBar extends StatelessWidget {
