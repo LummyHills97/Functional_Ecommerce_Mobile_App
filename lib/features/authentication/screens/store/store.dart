@@ -14,6 +14,7 @@ class Store extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);
+    final brands = ['Nike', 'Adidas', 'Puma', 'Reebok'];
 
     return DefaultTabController(
       length: 5,
@@ -36,15 +37,17 @@ class Store extends StatelessWidget {
             ),
             TCartCounterIcon(
               onPressed: () {
-                // Replace with your actual logic or leave commented
-                // Get.find<NavigationController>().changeIndex(2);
+                // Optional: Get.find<NavigationController>().changeIndex(2);
               },
               iconColor: isDark ? TColors.white : TColors.dark,
             ),
           ],
         ),
+
+        // Sticky TabBar using NestedScrollView + Slivers
         body: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            // Search + Featured Brands section (scrolls away)
             SliverToBoxAdapter(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,9 +69,9 @@ class Store extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                     child: SizedBox(
-                      height: 200, // enough space for 2 rows of GridView
+                      height: 200,
                       child: GridView.builder(
-                        itemCount: 4,
+                        itemCount: brands.length,
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -78,7 +81,6 @@ class Store extends StatelessWidget {
                           mainAxisExtent: 80,
                         ),
                         itemBuilder: (context, index) {
-                          final brands = ['Nike', 'Adidas', 'Puma', 'Reebok'];
                           return Container(
                             padding: const EdgeInsets.all(TSizes.sm),
                             decoration: BoxDecoration(
@@ -106,8 +108,8 @@ class Store extends StatelessWidget {
                                 const SizedBox(width: TSizes.spaceBtwItems / 2),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
@@ -145,7 +147,10 @@ class Store extends StatelessWidget {
                 ],
               ),
             ),
+
+            // Sticky TabBar
             SliverPersistentHeader(
+              pinned: true,
               delegate: _SliverAppBarDelegate(
                 TabBar(
                   isScrollable: true,
@@ -163,11 +168,11 @@ class Store extends StatelessWidget {
                     Tab(text: 'Cosmetics'),
                   ],
                 ),
-                context,
               ),
-              pinned: true,
             ),
           ],
+
+          // Scrollable tab content
           body: TabBarView(
             children: [
               _buildTabContent('Sport products go here', isDark),
@@ -183,40 +188,37 @@ class Store extends StatelessWidget {
   }
 
   Widget _buildTabContent(String text, bool isDark) {
-    return Container(
-      color: isDark ? TColors.black : TColors.white,
-      child: ListView.builder(
-        padding: const EdgeInsets.all(TSizes.defaultSpace),
-        itemCount: 10,
-        itemBuilder: (context, index) => Container(
-          margin: const EdgeInsets.only(bottom: TSizes.spaceBtwItems),
-          padding: const EdgeInsets.all(TSizes.md),
-          decoration: BoxDecoration(
-            color: isDark ? TColors.darkGrey.withOpacity(0.1) : TColors.grey.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(TSizes.cardRadiusLg),
-            border: Border.all(
-              color: isDark ? TColors.darkGrey : TColors.grey.withOpacity(0.3),
+    return ListView.builder(
+      padding: const EdgeInsets.all(TSizes.defaultSpace),
+      itemCount: 10,
+      itemBuilder: (context, index) => Container(
+        margin: const EdgeInsets.only(bottom: TSizes.spaceBtwItems),
+        padding: const EdgeInsets.all(TSizes.md),
+        decoration: BoxDecoration(
+          color: isDark ? TColors.darkGrey.withOpacity(0.1) : TColors.grey.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(TSizes.cardRadiusLg),
+          border: Border.all(
+            color: isDark ? TColors.darkGrey : TColors.grey.withOpacity(0.3),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Product ${index + 1}',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: isDark ? TColors.white : TColors.dark,
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Product ${index + 1}',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: isDark ? TColors.white : TColors.dark,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              const SizedBox(height: TSizes.sm),
-              Text(
-                'This is a sample product description for $text category.',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: isDark ? TColors.grey : TColors.darkGrey,
-                    ),
-              ),
-            ],
-          ),
+            const SizedBox(height: TSizes.sm),
+            Text(
+              'This is a sample product description for $text category.',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: isDark ? TColors.grey : TColors.darkGrey,
+                  ),
+            ),
+          ],
         ),
       ),
     );
@@ -224,25 +226,25 @@ class Store extends StatelessWidget {
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  _SliverAppBarDelegate(this.child, this.context);
+  _SliverAppBarDelegate(this.tabBar);
 
-  final Widget child;
-  final BuildContext context;
+  final TabBar tabBar;
 
   @override
-  double get minExtent => 48;
+  double get minExtent => tabBar.preferredSize.height;
+
   @override
-  double get maxExtent => 48;
+  double get maxExtent => tabBar.preferredSize.height;
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     final isDark = THelperFunctions.isDarkMode(context);
     return Container(
       color: isDark ? TColors.black : TColors.white,
-      child: child,
+      child: tabBar,
     );
   }
 
   @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => false;
+  bool shouldRebuild(covariant _SliverAppBarDelegate oldDelegate) => false;
 }
