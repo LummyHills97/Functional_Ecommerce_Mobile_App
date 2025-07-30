@@ -44,10 +44,8 @@ class Store extends StatelessWidget {
           ],
         ),
 
-        // Sticky TabBar using NestedScrollView + Slivers
         body: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            // Search + Featured Brands section (scrolls away)
             SliverToBoxAdapter(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,64 +79,7 @@ class Store extends StatelessWidget {
                           mainAxisExtent: 80,
                         ),
                         itemBuilder: (context, index) {
-                          return Container(
-                            padding: const EdgeInsets.all(TSizes.sm),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: isDark ? TColors.darkGrey : TColors.grey,
-                              ),
-                              borderRadius: BorderRadius.circular(TSizes.productImageRadius),
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 40,
-                                  height: 40,
-                                  padding: const EdgeInsets.all(TSizes.xs),
-                                  decoration: BoxDecoration(
-                                    color: isDark ? TColors.black : TColors.white,
-                                    borderRadius: BorderRadius.circular(100),
-                                  ),
-                                  child: Icon(
-                                    Icons.checkroom,
-                                    size: 20,
-                                    color: isDark ? TColors.white : TColors.dark,
-                                  ),
-                                ),
-                                const SizedBox(width: TSizes.spaceBtwItems / 2),
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            brands[index],
-                                            style: Theme.of(context).textTheme.labelLarge,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          const SizedBox(width: TSizes.xs / 2),
-                                          const Icon(
-                                            Icons.verified,
-                                            color: TColors.primary,
-                                            size: 12,
-                                          ),
-                                        ],
-                                      ),
-                                      Text(
-                                        '${(index + 1) * 25} Products',
-                                        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                                              color: TColors.darkGrey,
-                                            ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
+                          return _buildBrandCard(context, brands[index], index, isDark);
                         },
                       ),
                     ),
@@ -148,7 +89,6 @@ class Store extends StatelessWidget {
               ),
             ),
 
-            // Sticky TabBar
             SliverPersistentHeader(
               pinned: true,
               delegate: _SliverAppBarDelegate(
@@ -171,68 +111,103 @@ class Store extends StatelessWidget {
               ),
             ),
           ],
-
-          // Scrollable tab content
           body: TabBarView(
-            children: [
-              _buildTabContent('Sport products go here', isDark),
-              _buildTabContent('Furniture products go here', isDark),
-              _buildTabContent('Electronics products go here', isDark),
-              _buildTabContent('Clothes products go here', isDark),
-              _buildTabContent('Cosmetics products go here', isDark),
-            ],
+            children: List.generate(5, (_) => _buildBrandGrid(context, isDark)),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildTabContent(String text, bool isDark) {
-    return ListView.builder(
+  // Brand Grid used in each tab
+  Widget _buildBrandGrid(BuildContext context, bool isDark) {
+    final brands = ['Nike', 'Adidas', 'Puma', 'Reebok'];
+
+    return GridView.builder(
       padding: const EdgeInsets.all(TSizes.defaultSpace),
-      itemCount: 10,
-      itemBuilder: (context, index) => Container(
-        margin: const EdgeInsets.only(bottom: TSizes.spaceBtwItems),
-        padding: const EdgeInsets.all(TSizes.md),
-        decoration: BoxDecoration(
-          color: isDark ? TColors.darkGrey.withOpacity(0.1) : TColors.grey.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(TSizes.cardRadiusLg),
-          border: Border.all(
-            color: isDark ? TColors.darkGrey : TColors.grey.withOpacity(0.3),
+      itemCount: brands.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: TSizes.gridViewSpacing,
+        crossAxisSpacing: TSizes.gridViewSpacing,
+        mainAxisExtent: 80,
+      ),
+      itemBuilder: (context, index) {
+        return _buildBrandCard(context, brands[index], index, isDark);
+      },
+    );
+  }
+
+  // Reusable brand card
+  Widget _buildBrandCard(BuildContext context, String name, int index, bool isDark) {
+    return Container(
+      padding: const EdgeInsets.all(TSizes.sm),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: isDark ? TColors.darkGrey : TColors.grey,
+        ),
+        borderRadius: BorderRadius.circular(TSizes.productImageRadius),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            padding: const EdgeInsets.all(TSizes.xs),
+            decoration: BoxDecoration(
+              color: isDark ? TColors.black : TColors.white,
+              borderRadius: BorderRadius.circular(100),
+            ),
+            child: Icon(
+              Icons.checkroom,
+              size: 20,
+              color: isDark ? TColors.white : TColors.dark,
+            ),
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Product ${index + 1}',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: isDark ? TColors.white : TColors.dark,
-                    fontWeight: FontWeight.bold,
-                  ),
+          const SizedBox(width: TSizes.spaceBtwItems / 2),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      name,
+                      style: Theme.of(context).textTheme.labelLarge,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(width: TSizes.xs / 2),
+                    const Icon(
+                      Icons.verified,
+                      color: TColors.primary,
+                      size: 12,
+                    ),
+                  ],
+                ),
+                Text(
+                  '${(index + 1) * 25} Products',
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: TColors.darkGrey,
+                      ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
-            const SizedBox(height: TSizes.sm),
-            Text(
-              'This is a sample product description for $text category.',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: isDark ? TColors.grey : TColors.darkGrey,
-                  ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
 
+// Sticky TabBar Delegate
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   _SliverAppBarDelegate(this.tabBar);
-
   final TabBar tabBar;
 
   @override
   double get minExtent => tabBar.preferredSize.height;
-
   @override
   double get maxExtent => tabBar.preferredSize.height;
 
