@@ -14,7 +14,6 @@ class Store extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);
-    final brands = ['Nike', 'Adidas', 'Puma', 'Reebok'];
 
     return DefaultTabController(
       length: 5,
@@ -69,7 +68,7 @@ class Store extends StatelessWidget {
                     child: SizedBox(
                       height: 200,
                       child: GridView.builder(
-                        itemCount: brands.length,
+                        itemCount: 4,
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -79,6 +78,7 @@ class Store extends StatelessWidget {
                           mainAxisExtent: 80,
                         ),
                         itemBuilder: (context, index) {
+                          final brands = ['Nike', 'Adidas', 'Puma', 'Reebok'];
                           return _buildBrandCard(context, brands[index], index, isDark);
                         },
                       ),
@@ -112,16 +112,30 @@ class Store extends StatelessWidget {
             ),
           ],
           body: TabBarView(
-            children: List.generate(5, (_) => _buildBrandGrid(context, isDark)),
+            children: [
+              _buildBrandGrid(context, isDark, 'sport'),
+              _buildBrandGrid(context, isDark, 'furniture'),
+              _buildBrandGrid(context, isDark, 'electronics'),
+              _buildBrandGrid(context, isDark, 'clothes'),
+              _buildBrandGrid(context, isDark, 'cosmetics'),
+            ],
           ),
         ),
       ),
     );
   }
 
-  // Brand Grid used in each tab
-  Widget _buildBrandGrid(BuildContext context, bool isDark) {
-    final brands = ['Nike', 'Adidas', 'Puma', 'Reebok'];
+  // Grid of brands per category
+  Widget _buildBrandGrid(BuildContext context, bool isDark, String category) {
+    final brandMap = {
+      'sport': ['Nike', 'Adidas', 'Puma', 'Reebok'],
+      'furniture': ['IKEA', 'Ashley', 'Wayfair', 'HNI'],
+      'electronics': ['Samsung', 'LG', 'Sony', 'Panasonic'],
+      'clothes': ['Zara', 'H&M', 'Uniqlo', 'Levi’s'],
+      'cosmetics': ['Fenty', 'Maybelline', 'L\'Oréal', 'MAC'],
+    };
+
+    final brands = brandMap[category] ?? [];
 
     return GridView.builder(
       padding: const EdgeInsets.all(TSizes.defaultSpace),
@@ -138,7 +152,7 @@ class Store extends StatelessWidget {
     );
   }
 
-  // Reusable brand card
+  // Brand card widget
   Widget _buildBrandCard(BuildContext context, String name, int index, bool isDark) {
     return Container(
       padding: const EdgeInsets.all(TSizes.sm),
