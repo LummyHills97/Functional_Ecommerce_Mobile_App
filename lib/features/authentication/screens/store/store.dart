@@ -42,6 +42,7 @@ class Store extends StatelessWidget {
         ),
         body: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            // Search + Featured Brands
             SliverToBoxAdapter(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,20 +64,20 @@ class Store extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                     child: SizedBox(
-                      height: 350,
+                      height: 200,
                       child: GridView.builder(
                         itemCount: 4,
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 1,
+                          crossAxisCount: 2, // ✅ Featured brands: 2 per row
                           mainAxisSpacing: TSizes.gridViewSpacing,
-                          crossAxisSpacing: 0,
+                          crossAxisSpacing: TSizes.gridViewSpacing,
                           mainAxisExtent: 80,
                         ),
                         itemBuilder: (context, index) {
-                          final brands = ['Nike', 'Adidas', 'Puma', 'Reebok'];
-                          return _buildBrandCard(context, brands[index], index, isDark);
+                          final featuredBrands = ['Nike', 'Adidas', 'Puma', 'Reebok'];
+                          return _buildBrandCard(context, featuredBrands[index], index, isDark);
                         },
                       ),
                     ),
@@ -85,6 +86,8 @@ class Store extends StatelessWidget {
                 ],
               ),
             ),
+
+            // Sticky TabBar
             SliverPersistentHeader(
               pinned: true,
               delegate: _SliverAppBarDelegate(
@@ -107,6 +110,8 @@ class Store extends StatelessWidget {
               ),
             ),
           ],
+
+          // Tab content per category
           body: TabBarView(
             children: [
               _buildBrandGrid(context, isDark, 'sport'),
@@ -121,7 +126,7 @@ class Store extends StatelessWidget {
     );
   }
 
-  // Grid for each tab category
+  // GridView builder for each Tab category
   Widget _buildBrandGrid(BuildContext context, bool isDark, String category) {
     final brandMap = {
       'sport': ['Nike', 'Adidas', 'Puma', 'Reebok'],
@@ -137,7 +142,7 @@ class Store extends StatelessWidget {
       padding: const EdgeInsets.all(TSizes.defaultSpace),
       itemCount: brands.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 1, // ✅ One per row
+        crossAxisCount: 1, // ✅ 1 brand per row in TabBarView
         mainAxisSpacing: TSizes.gridViewSpacing,
         crossAxisSpacing: 0,
         mainAxisExtent: 80,
@@ -148,7 +153,7 @@ class Store extends StatelessWidget {
     );
   }
 
-  // Single Brand Card UI
+  // UI Card for a single brand
   Widget _buildBrandCard(BuildContext context, String name, int index, bool isDark) {
     return Container(
       padding: const EdgeInsets.all(TSizes.sm),
@@ -211,7 +216,7 @@ class Store extends StatelessWidget {
   }
 }
 
-// For sticky tab bar
+// Sticky header for TabBar
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   _SliverAppBarDelegate(this.tabBar);
   final TabBar tabBar;
