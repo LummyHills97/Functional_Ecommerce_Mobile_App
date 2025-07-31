@@ -42,7 +42,6 @@ class Store extends StatelessWidget {
         ),
         body: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            // Search + Featured Brands
             SliverToBoxAdapter(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +69,7 @@ class Store extends StatelessWidget {
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, // ✅ Featured brands: 2 per row
+                          crossAxisCount: 2,
                           mainAxisSpacing: TSizes.gridViewSpacing,
                           crossAxisSpacing: TSizes.gridViewSpacing,
                           mainAxisExtent: 80,
@@ -86,8 +85,6 @@ class Store extends StatelessWidget {
                 ],
               ),
             ),
-
-            // Sticky TabBar
             SliverPersistentHeader(
               pinned: true,
               delegate: _SliverAppBarDelegate(
@@ -110,8 +107,6 @@ class Store extends StatelessWidget {
               ),
             ),
           ],
-
-          // Tab content per category
           body: TabBarView(
             children: [
               _buildBrandGrid(context, isDark, 'sport'),
@@ -126,7 +121,6 @@ class Store extends StatelessWidget {
     );
   }
 
-  // GridView builder for each Tab category
   Widget _buildBrandGrid(BuildContext context, bool isDark, String category) {
     final brandMap = {
       'sport': ['Nike', 'Adidas', 'Puma', 'Reebok'],
@@ -136,87 +130,127 @@ class Store extends StatelessWidget {
       'cosmetics': ['Fenty', 'Maybelline', 'L\'Oréal', 'MAC'],
     };
 
+    final brandImages = {
+      'Nike': [
+        'assets/images/products/product-jacket.png',
+        'assets/images/products/nike2.png',
+        'assets/images/products/nike3.png',
+      ],
+      'Adidas': [
+        'assets/images/brands/sport/nike1.png',
+        'assets/images/brands/sport/nike2.png',
+        'assets/images/brands/sport/nike3.png',
+      ],
+      'IKEA': [
+        'assets/images/brands/furniture/ikea1.png',
+        'assets/images/brands/furniture/ikea2.png',
+        'assets/images/brands/furniture/ikea3.png',
+      ],
+      // Add the rest similarly or reuse images
+    };
+
     final brands = brandMap[category] ?? [];
 
     return GridView.builder(
       padding: const EdgeInsets.all(TSizes.defaultSpace),
       itemCount: brands.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 1, // ✅ 1 brand per row in TabBarView
+        crossAxisCount: 1,
         mainAxisSpacing: TSizes.gridViewSpacing,
         crossAxisSpacing: 0,
-        mainAxisExtent: 80,
+        mainAxisExtent: 140,
       ),
       itemBuilder: (context, index) {
-        return _buildBrandCard(context, brands[index], index, isDark);
+        final name = brands[index];
+        final images = brandImages[name] ?? [];
+        return _buildBrandCard(context, name, index, isDark, images);
       },
     );
   }
 
-  // UI Card for a single brand
-  Widget _buildBrandCard(BuildContext context, String name, int index, bool isDark) {
+  Widget _buildBrandCard(BuildContext context, String name, int index, bool isDark, [List<String> images = const []]) {
     return Container(
       padding: const EdgeInsets.all(TSizes.sm),
       decoration: BoxDecoration(
-        border: Border.all(
-          color: isDark ? TColors.darkGrey : TColors.grey,
-        ),
+        border: Border.all(color: isDark ? TColors.darkGrey : TColors.grey),
         borderRadius: BorderRadius.circular(TSizes.productImageRadius),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 40,
-            height: 40,
-            padding: const EdgeInsets.all(TSizes.xs),
-            decoration: BoxDecoration(
-              color: isDark ? TColors.black : TColors.white,
-              borderRadius: BorderRadius.circular(100),
-            ),
-            child: Icon(
-              Icons.checkroom,
-              size: 20,
-              color: isDark ? TColors.white : TColors.dark,
-            ),
-          ),
-          const SizedBox(width: TSizes.spaceBtwItems / 2),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+          Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                padding: const EdgeInsets.all(TSizes.xs),
+                decoration: BoxDecoration(
+                  color: isDark ? TColors.black : TColors.white,
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: Icon(
+                  Icons.checkroom,
+                  size: 20,
+                  color: isDark ? TColors.white : TColors.dark,
+                ),
+              ),
+              const SizedBox(width: TSizes.spaceBtwItems / 2),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      name,
-                      style: Theme.of(context).textTheme.labelLarge,
-                      overflow: TextOverflow.ellipsis,
+                    Row(
+                      children: [
+                        Text(
+                          name,
+                          style: Theme.of(context).textTheme.labelLarge,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(width: TSizes.xs / 2),
+                        const Icon(
+                          Icons.verified,
+                          color: TColors.primary,
+                          size: 12,
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: TSizes.xs / 2),
-                    const Icon(
-                      Icons.verified,
-                      color: TColors.primary,
-                      size: 12,
+                    Text(
+                      '${(index + 1) * 25} Products',
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            color: TColors.darkGrey,
+                          ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
-                Text(
-                  '${(index + 1) * 25} Products',
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: TColors.darkGrey,
-                      ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
+          const SizedBox(height: TSizes.sm),
+          if (images.isNotEmpty)
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: images.map((path) {
+                  return Container(
+                    margin: const EdgeInsets.only(right: TSizes.sm),
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: TColors.light,
+                    ),
+                    child: Image.asset(path, fit: BoxFit.cover),
+                  );
+                }).toList(),
+              ),
+            ),
         ],
       ),
     );
   }
 }
 
-// Sticky header for TabBar
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   _SliverAppBarDelegate(this.tabBar);
   final TabBar tabBar;
