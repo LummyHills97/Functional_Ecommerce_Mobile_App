@@ -132,14 +132,14 @@ class Store extends StatelessWidget {
 
     final brandImages = {
       'Nike': [
-        'assets/images/products/product-jacket.png',
-        'assets/images/products/nike2.png',
-        'assets/images/products/nike3.png',
+        'assets/images/products/tracksuit_black.png',
+        'assets/images/products/NikeAirMax.png',
+        'assets/images/products/nike-shoes.png',
       ],
       'Adidas': [
-        'assets/images/brands/sport/nike1.png',
-        'assets/images/brands/sport/nike2.png',
-        'assets/images/brands/sport/nike3.png',
+        'assets/images/products/Adidas_Football.png',
+        'assets/images/products/baseball_bat.png',
+        'assets/images/products/product-jacket.png',
       ],
       'IKEA': [
         'assets/images/brands/furniture/ikea1.png',
