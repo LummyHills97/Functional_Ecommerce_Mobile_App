@@ -151,6 +151,16 @@ class Store extends StatelessWidget {
         'assets/images/products/bedroom_lamp.png',
         'assets/images/products/bedroom_bed_black.png',
       ],
+      'Samsung': [
+        'assets/images/products/samsung_s9_mobile.png',
+        'assets/images/products/acer_laptop_var_1.png',
+        'assets/images/products/bedroom_bed_black.png',
+      ],
+      'Ashley': [
+        'assets/images/products/bedroom_sofa.png',
+        'assets/images/products/bedroom_lamp.png',
+        'assets/images/products/bedroom_bed_black.png',
+      ],
       // Add the rest similarly or reuse images
     };
 
