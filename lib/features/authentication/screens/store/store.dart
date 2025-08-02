@@ -142,9 +142,14 @@ class Store extends StatelessWidget {
         'assets/images/products/product-jacket.png',
       ],
       'IKEA': [
-        'assets/images/brands/furniture/ikea1.png',
-        'assets/images/brands/furniture/ikea2.png',
-        'assets/images/brands/furniture/ikea3.png',
+        'assets/images/products/bedroom_sofa.png',
+        'assets/images/products/bedroom_lamp.png',
+        'assets/images/products/bedroom_bed_black.png',
+      ],
+      'Ashley': [
+        'assets/images/products/bedroom_sofa.png',
+        'assets/images/products/bedroom_lamp.png',
+        'assets/images/products/bedroom_bed_black.png',
       ],
       // Add the rest similarly or reuse images
     };
