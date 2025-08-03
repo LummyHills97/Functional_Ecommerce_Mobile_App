@@ -59,28 +59,6 @@ class Store extends StatelessWidget {
                       onPressed: () {},
                     ),
                   ),
-                  const SizedBox(height: TSizes.sm),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-                    child: SizedBox(
-                      height: 200,
-                      child: GridView.builder(
-                        itemCount: 4,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: TSizes.gridViewSpacing,
-                          crossAxisSpacing: TSizes.gridViewSpacing,
-                          mainAxisExtent: 80,
-                        ),
-                        itemBuilder: (context, index) {
-                          final featuredBrands = ['Nike', 'Adidas', 'Puma', 'Reebok'];
-                          return _buildBrandCard(context, featuredBrands[index], index, isDark);
-                        },
-                      ),
-                    ),
-                  ),
                   const SizedBox(height: TSizes.spaceBtwSections),
                 ],
               ),
@@ -123,82 +101,116 @@ class Store extends StatelessWidget {
 
   Widget _buildBrandGrid(BuildContext context, bool isDark, String category) {
     final brandMap = {
-      'sport': ['Nike', 'Adidas', 'Puma', 'Reebok'],
-      'furniture': ['IKEA', 'Ashley', 'Wayfair', 'HNI'],
-      'electronics': ['Samsung', 'Acer', 'Sony', 'Panasonic'],
-      'clothes': ['Zara', 'H&M', 'Uniqlo', 'Levi’s'],
-      'cosmetics': ['Fenty', 'Maybelline', 'L\'Oréal', 'MAC'],
+      'sport': ['Nike', 'Adidas'],
+      'furniture': ['IKEA', 'Ashley'],
+      'electronics': ['Samsung', 'Acer'],
+      'clothes': ['Zara', 'H&M'],
+      'cosmetics': ['Fenty', 'Maybelline'],
     };
 
     final brandImages = {
-      'Nike': [
-        'assets/images/products/tracksuit_black.png',
-        'assets/images/products/NikeAirMax.png',
-        'assets/images/products/nike-shoes.png',
-      ],
-      'Adidas': [
-        'assets/images/products/Adidas_Football.png',
-        'assets/images/products/baseball_bat.png',
-        'assets/images/products/product-jacket.png',
-      ],
-      'IKEA': [
-        'assets/images/products/bedroom_sofa.png',
-        'assets/images/products/bedroom_lamp.png',
-        'assets/images/products/bedroom_bed_black.png',
-      ],
-      'Ashley': [
-        'assets/images/products/bedroom_sofa.png',
-        'assets/images/products/bedroom_lamp.png',
-        'assets/images/products/bedroom_bed_black.png',
-      ],
-      'Samsung': [
-        'assets/images/products/samsung_s9_mobile.png',
-        'assets/images/products/acer_laptop_var_1.png',
-        'assets/images/products/samsung_s9_mobile_withback.png',
-      ],
-      'Ashley': [
-        'assets/images/products/bedroom_sofa.png',
-        'assets/images/products/bedroom_lamp.png',
-        'assets/images/products/bedroom_bed_black.png',
-      ],
-       'Acer': [
-        'assets/images/products/acer_laptop_1.png',
-        'assets/images/products/acer_laptop_2.png',
-        'assets/images/products/acer_laptop_var_2.png',
-      ],
-      'Zara': [
-        'assets/images/products/product-shirt_blue_2.png',
-        'assets/images/products/product-shirt.png',
-        'assets/images/products/product-jeans.png',
-      ],
-      'H&M': [
-        'assets/images/products/leather_jacket_4.png',
-        'assets/images/products/tshirt_yellow_collar.png',
-        'assets/images/products/tshirt_blue_without_collar_front.png',
-      ],
-      // Add the rest similarly or reuse images
+      'Nike': ['assets/images/products/NikeAirMax.png', 'assets/images/products/nike-shoes.png'],
+      'Adidas': ['assets/images/products/Adidas_Football.png', 'assets/images/products/baseball_bat.png'],
+      'IKEA': ['assets/images/products/bedroom_sofa.png', 'assets/images/products/bedroom_bed_black.png'],
+      'Ashley': ['assets/images/products/bedroom_lamp.png', 'assets/images/products/bedroom_sofa.png'],
+      'Samsung': ['assets/images/products/samsung_s9_mobile.png', 'assets/images/products/samsung_s9_mobile_withback.png'],
+      'Acer': ['assets/images/products/acer_laptop_1.png', 'assets/images/products/acer_laptop_var_2.png'],
+      'Zara': ['assets/images/products/product-shirt_blue_2.png', 'assets/images/products/product-jeans.png'],
+      'H&M': ['assets/images/products/leather_jacket_4.png', 'assets/images/products/tshirt_blue_without_collar_front.png'],
+      'Fenty': ['assets/images/products/product-cream-pink.png', 'assets/images/products/product-lipstick.png'],
+      'Maybelline': ['assets/images/products/product-cream.png', 'assets/images/products/product-lotion-bottle.png'],
     };
 
     final brands = brandMap[category] ?? [];
 
-    return GridView.builder(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(TSizes.defaultSpace),
-      itemCount: brands.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 1,
-        mainAxisSpacing: TSizes.gridViewSpacing,
-        crossAxisSpacing: 0,
-        mainAxisExtent: 140,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GridView.builder(
+            itemCount: brands.length,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: TSizes.gridViewSpacing,
+              crossAxisSpacing: TSizes.gridViewSpacing,
+              mainAxisExtent: 160,
+            ),
+            itemBuilder: (context, index) {
+              final name = brands[index];
+              final images = brandImages[name] ?? [];
+              return _buildBrandCard(context, name, index, isDark, images);
+            },
+          ),
+          const SizedBox(height: TSizes.spaceBtwSections),
+          TSectionHeading(
+            title: 'More Products',
+            showActionButton: true,
+            onPressed: () {},
+          ),
+          const SizedBox(height: TSizes.sm),
+          GridView.builder(
+            itemCount: 4,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: TSizes.gridViewSpacing,
+              crossAxisSpacing: TSizes.gridViewSpacing,
+              mainAxisExtent: 240,
+            ),
+            itemBuilder: (context, index) {
+              final sampleImages = [
+                'assets/images/products/nike-shoes.png',
+                'assets/images/products/samsung_s9_mobile.png',
+                'assets/images/products/acer_laptop_2.png',
+                'assets/images/products/product-shirt.png',
+              ];
+              final imagePath = sampleImages[index % sampleImages.length];
+              return Container(
+                decoration: BoxDecoration(
+                  color: TColors.light,
+                  borderRadius: BorderRadius.circular(TSizes.productImageRadius),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ClipRRect(
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                      child: Image.asset(
+                        imagePath,
+                        height: 140,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(TSizes.sm),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Product $index', style: Theme.of(context).textTheme.labelLarge),
+                          const SizedBox(height: 4),
+                          Text(
+                            '₦${(index + 1) * 15000}',
+                            style: Theme.of(context).textTheme.titleSmall?.copyWith(color: TColors.primary),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
       ),
-      itemBuilder: (context, index) {
-        final name = brands[index];
-        final images = brandImages[name] ?? [];
-        return _buildBrandCard(context, name, index, isDark, images);
-      },
     );
   }
 
-  Widget _buildBrandCard(BuildContext context, String name, int index, bool isDark, [List<String> images = const []]) {
+  Widget _buildBrandCard(BuildContext context, String name, int index, bool isDark, List<String> images) {
     return Container(
       padding: const EdgeInsets.all(TSizes.sm),
       decoration: BoxDecoration(
@@ -237,18 +249,12 @@ class Store extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(width: TSizes.xs / 2),
-                        const Icon(
-                          Icons.verified,
-                          color: TColors.primary,
-                          size: 12,
-                        ),
+                        const Icon(Icons.verified, color: TColors.primary, size: 12),
                       ],
                     ),
                     Text(
                       '${(index + 1) * 25} Products',
-                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            color: TColors.darkGrey,
-                          ),
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(color: TColors.darkGrey),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
