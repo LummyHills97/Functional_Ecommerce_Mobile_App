@@ -125,7 +125,7 @@ class Store extends StatelessWidget {
     final brandMap = {
       'sport': ['Nike', 'Adidas', 'Puma', 'Reebok'],
       'furniture': ['IKEA', 'Ashley', 'Wayfair', 'HNI'],
-      'electronics': ['Samsung', 'LG', 'Sony', 'Panasonic'],
+      'electronics': ['Samsung', 'Acer', 'Sony', 'Panasonic'],
       'clothes': ['Zara', 'H&M', 'Uniqlo', 'Levi’s'],
       'cosmetics': ['Fenty', 'Maybelline', 'L\'Oréal', 'MAC'],
     };
@@ -154,12 +154,17 @@ class Store extends StatelessWidget {
       'Samsung': [
         'assets/images/products/samsung_s9_mobile.png',
         'assets/images/products/acer_laptop_var_1.png',
-        'assets/images/products/bedroom_bed_black.png',
+        'assets/images/products/samsung_s9_mobile_withback.png',
       ],
       'Ashley': [
         'assets/images/products/bedroom_sofa.png',
         'assets/images/products/bedroom_lamp.png',
         'assets/images/products/bedroom_bed_black.png',
+      ],
+       'Acer': [
+        'assets/images/products/acer_laptop_1.png',
+        'assets/images/products/acer_laptop_2.png',
+        'assets/images/products/acer_laptop_var_2.png',
       ],
       // Add the rest similarly or reuse images
     };
