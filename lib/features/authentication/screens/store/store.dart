@@ -87,11 +87,11 @@ class Store extends StatelessWidget {
           ],
           body: TabBarView(
             children: [
-              _buildBrandGrid(context, isDark, 'sport'),
-              _buildBrandGrid(context, isDark, 'furniture'),
-              _buildBrandGrid(context, isDark, 'electronics'),
-              _buildBrandGrid(context, isDark, 'clothes'),
-              _buildBrandGrid(context, isDark, 'cosmetics'),
+              _buildBrandColumn(context, isDark, 'sport'),
+              _buildBrandColumn(context, isDark, 'furniture'),
+              _buildBrandColumn(context, isDark, 'electronics'),
+              _buildBrandColumn(context, isDark, 'clothes'),
+              _buildBrandColumn(context, isDark, 'cosmetics'),
             ],
           ),
         ),
@@ -99,7 +99,7 @@ class Store extends StatelessWidget {
     );
   }
 
-  Widget _buildBrandGrid(BuildContext context, bool isDark, String category) {
+  Widget _buildBrandColumn(BuildContext context, bool isDark, String category) {
     final brandMap = {
       'sport': ['Nike', 'Adidas'],
       'furniture': ['IKEA', 'Ashley'],
@@ -109,16 +109,56 @@ class Store extends StatelessWidget {
     };
 
     final brandImages = {
-      'Nike': ['assets/images/products/NikeAirMax.png', 'assets/images/products/nike-shoes.png'],
-      'Adidas': ['assets/images/products/Adidas_Football.png', 'assets/images/products/baseball_bat.png'],
-      'IKEA': ['assets/images/products/bedroom_sofa.png', 'assets/images/products/bedroom_bed_black.png'],
-      'Ashley': ['assets/images/products/bedroom_lamp.png', 'assets/images/products/bedroom_sofa.png'],
-      'Samsung': ['assets/images/products/samsung_s9_mobile.png', 'assets/images/products/samsung_s9_mobile_withback.png'],
-      'Acer': ['assets/images/products/acer_laptop_1.png', 'assets/images/products/acer_laptop_var_2.png'],
-      'Zara': ['assets/images/products/product-shirt_blue_2.png', 'assets/images/products/product-jeans.png'],
-      'H&M': ['assets/images/products/leather_jacket_4.png', 'assets/images/products/tshirt_blue_without_collar_front.png'],
-      'Fenty': ['assets/images/products/product-cream-pink.png', 'assets/images/products/product-lipstick.png'],
-      'Maybelline': ['assets/images/products/product-cream.png', 'assets/images/products/product-lotion-bottle.png'],
+      'Nike': [
+        'assets/images/products/NikeAirMax.png',
+        'assets/images/products/nike-shoes.png',
+        'assets/images/products/nike-shoes-2.png',
+      ],
+      'Adidas': [
+        'assets/images/products/Adidas_Football.png',
+        'assets/images/products/baseball_bat.png',
+        'assets/images/products/product-jacket.png',
+      ],
+      'IKEA': [
+        'assets/images/products/bedroom_sofa.png',
+        'assets/images/products/bedroom_bed_black.png',
+        'assets/images/products/bedroom_lamp.png',
+      ],
+      'Ashley': [
+        'assets/images/products/bedroom_lamp.png',
+        'assets/images/products/bedroom_sofa.png',
+        'assets/images/products/bedroom_bed_black.png',
+      ],
+      'Samsung': [
+        'assets/images/products/samsung_s9_mobile.png',
+        'assets/images/products/samsung_s9_mobile_withback.png',
+        'assets/images/products/samsung_s9_mobile_front.png',
+      ],
+      'Acer': [
+        'assets/images/products/acer_laptop_1.png',
+        'assets/images/products/acer_laptop_var_2.png',
+        'assets/images/products/acer_laptop_3.png',
+      ],
+      'Zara': [
+        'assets/images/products/product-shirt_blue_2.png',
+        'assets/images/products/product-jeans.png',
+        'assets/images/products/product-shirt.png',
+      ],
+      'H&M': [
+        'assets/images/products/leather_jacket_4.png',
+        'assets/images/products/tshirt_blue_without_collar_front.png',
+        'assets/images/products/tshirt_yellow_collar.png',
+      ],
+      'Fenty': [
+        'assets/images/products/product-cream-pink.png',
+        'assets/images/products/product-lipstick.png',
+        'assets/images/products/product-gloss.png',
+      ],
+      'Maybelline': [
+        'assets/images/products/product-cream.png',
+        'assets/images/products/product-lotion-bottle.png',
+        'assets/images/products/product-cream-2.png',
+      ],
     };
 
     final brands = brandMap[category] ?? [];
@@ -128,21 +168,15 @@ class Store extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          GridView.builder(
-            itemCount: brands.length,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: TSizes.gridViewSpacing,
-              crossAxisSpacing: TSizes.gridViewSpacing,
-              mainAxisExtent: 160,
-            ),
-            itemBuilder: (context, index) {
-              final name = brands[index];
+          Column(
+            children: brands.map((name) {
               final images = brandImages[name] ?? [];
-              return _buildBrandCard(context, name, index, isDark, images);
-            },
+              final index = brands.indexOf(name);
+              return Padding(
+                padding: const EdgeInsets.only(bottom: TSizes.defaultSpace),
+                child: _buildBrandCard(context, name, index, isDark, images),
+              );
+            }).toList(),
           ),
           const SizedBox(height: TSizes.spaceBtwSections),
           TSectionHeading(
