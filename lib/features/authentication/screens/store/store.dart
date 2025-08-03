@@ -166,6 +166,16 @@ class Store extends StatelessWidget {
         'assets/images/products/acer_laptop_2.png',
         'assets/images/products/acer_laptop_var_2.png',
       ],
+      'Zara': [
+        'assets/images/products/product-shirt_blue_2.png',
+        'assets/images/products/product-shirt.png',
+        'assets/images/products/product-jeans.png',
+      ],
+      'H&M': [
+        'assets/images/products/leather_jacket_4.png',
+        'assets/images/products/tshirt_yellow_collar.png',
+        'assets/images/products/tshirt_blue_without_collar_front.png',
+      ],
       // Add the rest similarly or reuse images
     };
 
