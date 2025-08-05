@@ -110,7 +110,7 @@ class Store extends StatelessWidget {
       'Nike': [
         'assets/images/products/NikeAirMax.png',
         'assets/images/products/nike-shoes.png',
-        'assets/images/products/nike-shoes-2.png',
+        'assets/images/products/tracksuit_blue.png',
       ],
       'Adidas': [
         'assets/images/products/Adidas_Football.png',
@@ -130,7 +130,7 @@ class Store extends StatelessWidget {
       'Samsung': [
         'assets/images/products/samsung_s9_mobile.png',
         'assets/images/products/samsung_s9_mobile_withback.png',
-        'assets/images/products/samsung_s9_mobile_front.png',
+        'assets/images/products/samsung_s9_mobile.png',
       ],
       'Acer': [
         'assets/images/products/acer_laptop_1.png',
