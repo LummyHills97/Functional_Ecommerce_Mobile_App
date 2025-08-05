@@ -16,7 +16,7 @@ class Store extends StatelessWidget {
     final isDark = THelperFunctions.isDarkMode(context);
 
     return DefaultTabController(
-      length: 5,
+      length: 4, // ✅ FIXED: Matches 4 tabs
       child: Scaffold(
         appBar: TAppBar(
           title: Text(
@@ -103,7 +103,6 @@ class Store extends StatelessWidget {
       'furniture': ['IKEA', 'Ashley'],
       'electronics': ['Samsung', 'Acer'],
       'clothes': ['Zara', 'H&M'],
-      'cosmetics': ['Fenty', 'Maybelline'],
     };
 
     final brandImages = {
@@ -146,16 +145,6 @@ class Store extends StatelessWidget {
         'assets/images/products/leather_jacket_4.png',
         'assets/images/products/tshirt_blue_without_collar_front.png',
         'assets/images/products/tshirt_yellow_collar.png',
-      ],
-      'Fenty': [
-        'assets/images/products/product-cream-pink.png',
-        'assets/images/products/product-lipstick.png',
-        'assets/images/products/product-gloss.png',
-      ],
-      'Maybelline': [
-        'assets/images/products/product-cream.png',
-        'assets/images/products/product-lotion-bottle.png',
-        'assets/images/products/product-cream-2.png',
       ],
     };
 

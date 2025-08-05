@@ -38,11 +38,7 @@ flutter:
     - assets/images/animations/
     - assets/images/banners/
     - assets/images/products/  # Added this missing directory
-    - assets/images/products/sport/
-    - assets/images/brands/furniture/
-    - assets/images/brands/electronics/
-    - assets/images/brands/clothes/
-    - assets/images/brands/cosmetics/
+  
     
   fonts:
     - family: Poppins
