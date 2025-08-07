@@ -19,7 +19,7 @@ class NavigationMenu extends StatelessWidget {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.store), label: 'Store'),
-          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Cart'),
+          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Wishlist'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
@@ -53,7 +53,7 @@ class Cart extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Cart',
+          'Wishlist',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,
@@ -62,7 +62,7 @@ class Cart extends StatelessWidget {
       ),
       body: const Center(
         child: Text(
-          'Your cart items will be displayed here',
+          'Your favourite items will be displayed here',
           style: TextStyle(fontSize: 16, color: Colors.grey),
         ),
       ),
