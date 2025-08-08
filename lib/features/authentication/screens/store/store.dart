@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:ecommerce_store/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_store/common/widgets/custom_shapes/containers/search_container.dart';
 import 'package:ecommerce_store/common/widgets/products.cart/cart_menu_icon.dart';
@@ -66,15 +65,15 @@ class Store extends StatelessWidget {
             SliverPersistentHeader(
               pinned: true,
               delegate: _SliverAppBarDelegate(
-                TabBar(
+                const TabBar(
                   isScrollable: true,
                   indicatorColor: TColors.primary,
                   labelColor: TColors.primary,
                   unselectedLabelColor: TColors.darkerGrey,
-                  labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                  unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14),
+                  labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal, fontSize: 14),
                   indicatorWeight: 3,
-                  tabs: const [
+                  tabs: [
                     Tab(text: 'Sport'),
                     Tab(text: 'Furniture'),
                     Tab(text: 'Electronics'),

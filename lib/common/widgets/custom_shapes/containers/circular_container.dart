@@ -61,7 +61,6 @@ class TCircular extends StatelessWidget {
   }) {
     return TCircular(
       key: key,
-      child: child,
       width: size,
       height: size,
       backgroundColor: backgroundColor ?? Colors.grey,
@@ -69,6 +68,7 @@ class TCircular extends StatelessWidget {
       margin: margin ?? EdgeInsets.zero,
       padding: padding ?? EdgeInsets.zero,
       borderRadius: size / 2,
+      child: child,
     );
   }
 
@@ -83,13 +83,13 @@ class TCircular extends StatelessWidget {
   }) {
     return TCircular(
       key: key,
-      child: icon,
       width: size,
       height: size,
       backgroundColor: backgroundColor ?? Colors.white,
       onTap: onTap,
       margin: margin ?? EdgeInsets.zero,
       borderRadius: size / 2,
+      child: icon,
     );
   }
 
@@ -103,12 +103,12 @@ class TCircular extends StatelessWidget {
   }) {
     return TCircular(
       key: key,
-      child: child,
       width: size,
       height: size,
       backgroundColor: backgroundColor,
       margin: margin ?? EdgeInsets.zero,
       borderRadius: size / 2,
+      child: child,
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:ecommerce_store/app.dart';
-import 'package:ecommerce_store/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 void main() {

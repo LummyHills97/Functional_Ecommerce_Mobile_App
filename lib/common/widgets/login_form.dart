@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
 import 'package:ecommerce_store/utils/constants/text_strings.dart';
-import 'package:ecommerce_store/features/authentication/screens/signup/signup.dart';
 import 'package:ecommerce_store/features/authentication/screens/password_configuration/forget_password.dart';
 
 class LoginForm extends StatefulWidget {
@@ -21,7 +20,7 @@ class _LoginFormState extends State<LoginForm> {
   
   bool _isRememberMe = false;
   bool _isPasswordVisible = false;
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   @override
   void dispose() {

@@ -17,7 +17,7 @@ class TProductCardVertical extends StatelessWidget {
       width: 180,
       padding: const EdgeInsets.all(TSizes.sm),
       decoration: BoxDecoration(
-        boxShadow: [TShadowStyle.verticalProductShadow],
+        boxShadow: const [TShadowStyle.verticalProductShadow],
         borderRadius: BorderRadius.circular(TSizes.productImageRadius),
         color: isDark ? TColors.darkerGrey : TColors.white,
       ),
@@ -36,7 +36,7 @@ class TProductCardVertical extends StatelessWidget {
             child: Stack(
               children: [
                 // Product Image
-                TRoundedImage(
+                const TRoundedImage(
                   imageUrl: TImages.productImage1,
                   width: double.infinity,
                   height: double.infinity,
@@ -108,7 +108,7 @@ class TProductCardVertical extends StatelessWidget {
                   const SizedBox(height: TSizes.xs / 2),
                   Row(
                     children: [
-                      Icon(Icons.verified, color: TColors.primary, size: TSizes.iconXs),
+                      const Icon(Icons.verified, color: TColors.primary, size: TSizes.iconXs),
                       const SizedBox(width: TSizes.xs / 2),
                       Expanded(
                         child: Text(
@@ -182,7 +182,7 @@ class TProductCardVerticalCompact extends StatelessWidget {
       width: 180,
       padding: const EdgeInsets.all(TSizes.sm),
       decoration: BoxDecoration(
-        boxShadow: [TShadowStyle.verticalProductShadow],
+        boxShadow: const [TShadowStyle.verticalProductShadow],
         borderRadius: BorderRadius.circular(TSizes.productImageRadius),
         color: isDark ? TColors.darkerGrey : TColors.white,
       ),
@@ -199,7 +199,7 @@ class TProductCardVerticalCompact extends StatelessWidget {
             ),
             child: Stack(
               children: [
-                TRoundedImage(
+                const TRoundedImage(
                   imageUrl: TImages.productImage1,
                   width: double.infinity,
                   height: double.infinity,
@@ -264,7 +264,7 @@ class TProductCardVerticalCompact extends StatelessWidget {
                   const SizedBox(height: TSizes.xs / 4),
                   Row(
                     children: [
-                      Icon(Icons.verified, color: TColors.primary, size: 12),
+                      const Icon(Icons.verified, color: TColors.primary, size: 12),
                       const SizedBox(width: TSizes.xs / 4),
                       Expanded(
                         child: Text(
