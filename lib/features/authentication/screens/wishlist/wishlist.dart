@@ -1,6 +1,8 @@
 import 'package:ecommerce_store/common/widgets/appbar/appbar.dart';
+import 'package:ecommerce_store/features/authentication/screens/home/home.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart'; // Make sure this package is added in pubspec.yaml
+import 'package:iconsax/iconsax.dart';
+import 'package:get/get.dart'; // Make sure GetX is imported
 
 class FavouriteScreen extends StatelessWidget {
   const FavouriteScreen({super.key});
@@ -21,7 +23,7 @@ class FavouriteScreen extends StatelessWidget {
               child: IconButton(
                 icon: const Icon(Iconsax.add),
                 onPressed: () {
-                  // Add action here
+                  Get.to(() => const HomePage()); // GetX navigation
                 },
               ),
             ),
