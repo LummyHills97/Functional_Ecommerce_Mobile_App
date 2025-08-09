@@ -14,7 +14,7 @@ class FavouriteScreen extends StatelessWidget {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor, // ✅ dark mode friendly
+      backgroundColor: isDarkMode ? Colors.black : Theme.of(context).scaffoldBackgroundColor,
       appBar: TAppBar(
         title: Text(
           'Wishlist',
@@ -24,9 +24,7 @@ class FavouriteScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
             child: CircleAvatar(
-              backgroundColor: isDarkMode
-                  ? Colors.white12
-                  : Colors.grey.shade200,
+              backgroundColor: isDarkMode ? Colors.white12 : Colors.grey.shade200,
               child: IconButton(
                 icon: Icon(
                   Iconsax.add,
@@ -40,12 +38,10 @@ class FavouriteScreen extends StatelessWidget {
           ),
         ],
       ),
-
-      /// ✅ Removed SingleChildScrollView so GridView scrolls correctly
       body: Padding(
         padding: const EdgeInsets.all(TSizes.defaultSpace),
         child: TGridLayout(
-          itemCount: 4, // Replace with your wishlist count
+          itemCount: 4, // Replace with wishlist count
           itemBuilder: (_, index) => const TProductCardVertical(),
         ),
       ),
@@ -67,13 +63,12 @@ class TGridLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.builder(
       itemCount: itemCount,
-      shrinkWrap: false, // ✅ let it scroll
-      physics: const BouncingScrollPhysics(), // ✅ smoother scroll
+      physics: const BouncingScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         mainAxisSpacing: 16,
         crossAxisSpacing: 16,
-        childAspectRatio: 0.62, // ✅ taller cards to match original screenshot
+        childAspectRatio: 0.68, // ✅ Increased to avoid overflow
       ),
       itemBuilder: itemBuilder,
     );

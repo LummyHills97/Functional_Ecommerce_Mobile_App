@@ -24,7 +24,7 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
       width: 180,
       padding: const EdgeInsets.all(TSizes.sm),
       decoration: BoxDecoration(
-        boxShadow: const [TShadowStyle.verticalProductShadow],
+        boxShadow: isDark ? [] : const [TShadowStyle.verticalProductShadow],
         borderRadius: BorderRadius.circular(TSizes.productImageRadius),
         color: isDark ? Colors.black : TColors.white,
       ),
@@ -74,7 +74,7 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
                   ),
                 ),
 
-                // Toggle Favorite Button
+                // Favorite Icon Toggle
                 Positioned(
                   top: TSizes.xs,
                   right: TSizes.xs,
@@ -153,7 +153,7 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: TColors.dark,
+                          color: isDark ? Colors.white10 : TColors.dark,
                           borderRadius: BorderRadius.circular(TSizes.cardRadiusSm),
                         ),
                         child: IconButton(
