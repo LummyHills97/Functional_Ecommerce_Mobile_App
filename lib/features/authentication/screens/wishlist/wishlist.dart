@@ -14,7 +14,7 @@ class FavouriteScreen extends StatelessWidget {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor, // ✅ Dark mode friendly
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor, // ✅ dark mode friendly
       appBar: TAppBar(
         title: Text(
           'Wishlist',
@@ -24,15 +24,15 @@ class FavouriteScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
             child: CircleAvatar(
-              backgroundColor:
-                  isDarkMode ? Colors.white12 : Colors.grey.shade200,
+              backgroundColor: isDarkMode
+                  ? Colors.white12
+                  : Colors.grey.shade200,
               child: IconButton(
                 icon: Icon(
                   Iconsax.add,
                   color: isDarkMode ? Colors.white : Colors.black,
                 ),
                 onPressed: () {
-                  /// Navigate back to the home tab in NavigationMenu
                   Get.offAll(() => const NavigationMenu(initialIndex: 0));
                 },
               ),
@@ -40,22 +40,19 @@ class FavouriteScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
+
+      /// ✅ Removed SingleChildScrollView so GridView scrolls correctly
+      body: Padding(
         padding: const EdgeInsets.all(TSizes.defaultSpace),
-        child: Column(
-          children: [
-            TGridLayout(
-              itemCount: 4, // Replace with your wishlist count
-              itemBuilder: (_, index) => const TProductCardVertical(),
-            ),
-          ],
+        child: TGridLayout(
+          itemCount: 4, // Replace with your wishlist count
+          itemBuilder: (_, index) => const TProductCardVertical(),
         ),
       ),
     );
   }
 }
 
-/// Simple grid layout for products
 class TGridLayout extends StatelessWidget {
   final int itemCount;
   final IndexedWidgetBuilder itemBuilder;
@@ -70,13 +67,13 @@ class TGridLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.builder(
       itemCount: itemCount,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: false, // ✅ let it scroll
+      physics: const BouncingScrollPhysics(), // ✅ smoother scroll
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         mainAxisSpacing: 16,
         crossAxisSpacing: 16,
-        childAspectRatio: 0.75,
+        childAspectRatio: 0.62, // ✅ taller cards to match original screenshot
       ),
       itemBuilder: itemBuilder,
     );
