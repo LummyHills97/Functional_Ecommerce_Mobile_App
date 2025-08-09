@@ -21,7 +21,6 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
     final isDark = THelperFunctions.isDarkMode(context);
 
     return Container(
-      width: 180,
       padding: const EdgeInsets.all(TSizes.sm),
       decoration: BoxDecoration(
         boxShadow: isDark ? [] : const [TShadowStyle.verticalProductShadow],
@@ -30,9 +29,8 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
         children: [
-          // Product Image Section
+          // IMAGE SECTION
           Container(
             height: 140,
             width: double.infinity,
@@ -42,7 +40,6 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
             ),
             child: Stack(
               children: [
-                // Product Image
                 const TRoundedImage(
                   imageUrl: TImages.productImage1,
                   width: double.infinity,
@@ -50,8 +47,6 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
                   fit: BoxFit.cover,
                   borderRadius: TSizes.productImageRadius,
                 ),
-
-                // Sale Tag
                 Positioned(
                   top: TSizes.xs,
                   left: TSizes.xs,
@@ -73,8 +68,6 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
                     ),
                   ),
                 ),
-
-                // Favorite Icon Toggle
                 Positioned(
                   top: TSizes.xs,
                   right: TSizes.xs,
@@ -96,26 +89,31 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
 
           const SizedBox(height: TSizes.spaceBtwItems / 2),
 
-          // Product Details
-          Flexible(
+          // DETAILS SECTION (EXPANDED TO FIT GRID HEIGHT)
+          Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: TSizes.xs),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    'Green Nike Air Shoes',
-                    style: Theme.of(context).textTheme.labelLarge,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
+                  // Product Name
+                  Flexible(
+                    child: Text(
+                      'Green Nike Air Shoes',
+                      style: Theme.of(context).textTheme.labelLarge,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                    ),
                   ),
+
                   const SizedBox(height: TSizes.xs / 2),
+
+                  // Brand Row
                   Row(
                     children: [
                       const Icon(Icons.verified, color: TColors.primary, size: TSizes.iconXs),
                       const SizedBox(width: TSizes.xs / 2),
-                      Expanded(
+                      Flexible(
                         child: Text(
                           'Nike',
                           style: Theme.of(context).textTheme.labelMedium,
@@ -124,7 +122,10 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: TSizes.spaceBtwItems / 2),
+
+                  const Spacer(), // Pushes price to bottom
+
+                  // PRICE + ADD TO CART
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

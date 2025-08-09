@@ -38,11 +38,13 @@ class FavouriteScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(TSizes.defaultSpace),
-        child: TGridLayout(
-          itemCount: 4, // Replace with wishlist count
-          itemBuilder: (_, index) => const TProductCardVertical(),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(TSizes.defaultSpace),
+          child: TGridLayout(
+            itemCount: 4, // Replace with your wishlist count
+            itemBuilder: (_, index) => const TProductCardVertical(),
+          ),
         ),
       ),
     );
@@ -64,11 +66,11 @@ class TGridLayout extends StatelessWidget {
     return GridView.builder(
       itemCount: itemCount,
       physics: const BouncingScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 250, // ✅ Flexible width per card
         mainAxisSpacing: 16,
         crossAxisSpacing: 16,
-        childAspectRatio: 0.68, // ✅ Increased to avoid overflow
+        childAspectRatio: 0.70, // ✅ Slight height control but flexible
       ),
       itemBuilder: itemBuilder,
     );
