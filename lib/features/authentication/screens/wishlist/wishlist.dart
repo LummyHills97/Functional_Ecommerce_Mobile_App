@@ -14,6 +14,7 @@ class FavouriteScreen extends StatelessWidget {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor, // ✅ Dark mode friendly
       appBar: TAppBar(
         title: Text(
           'Wishlist',
