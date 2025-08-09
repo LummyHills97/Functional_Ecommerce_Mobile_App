@@ -3,8 +3,10 @@ import 'package:ecommerce_store/features/authentication/screens/store/store.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'features/authentication/screens/wishlist/wishlist.dart';
+
 class NavigationMenu extends StatelessWidget {
-  const NavigationMenu({super.key});
+  const NavigationMenu({super.key, required int initialIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class NavigationController extends GetxController {
   final List<Widget> screens = const [
     HomePage(),
     Store(), // This should use your proper Store widget from the second file
-    Cart(),
+    FavouriteScreen(),
     Profile(),
   ];
 
@@ -53,7 +55,7 @@ class Cart extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Wishlist',
+          '',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,

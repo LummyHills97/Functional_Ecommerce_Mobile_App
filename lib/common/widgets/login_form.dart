@@ -40,12 +40,10 @@ class _LoginFormState extends State<LoginForm> {
       _isRememberMe = value ?? false;
     });
   }
-
-  void _signIn() {
-    // Direct navigation without validation
-    Get.offAll(() => const NavigationMenu());
-  }
-
+void _signIn() {
+  // Direct navigation without validation
+  Get.offAll(() => const NavigationMenu(initialIndex: 0));
+}
   void _navigateToForgetPassword() {
     Get.to(() => const ForgetPassword());
   }
