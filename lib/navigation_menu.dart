@@ -1,5 +1,6 @@
 import 'package:ecommerce_store/features/authentication/screens/home/home.dart';
 import 'package:ecommerce_store/features/authentication/screens/store/store.dart';
+import 'package:ecommerce_store/features/personalization/screens/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -36,7 +37,7 @@ class NavigationController extends GetxController {
     HomePage(),
     Store(), // This should use your proper Store widget from the second file
     FavouriteScreen(),
-    Profile(),
+    SettingsScreen(),
   ];
 
   void changeIndex(int index) {
