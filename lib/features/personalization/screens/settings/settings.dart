@@ -18,21 +18,26 @@ class SettingsScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Header Section
-            TPrimaryHeaderContainer(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TAppBar(
-                    title: Text(
-                      'ACCOUNT',
-                      style: headlineStyle,
+            // Header Section with shorter height
+            SizedBox(
+              height: kToolbarHeight + 90, // AppBar height + padding
+              child: TPrimaryHeaderContainer(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+                    child: TAppBar(
+                      title: Text(
+                        'ACCOUNT',
+                        style: headlineStyle,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: TSizes.spaceBtwSections),
-                ],
+                ),
               ),
             ),
+
+            // You can add the rest of your settings content below
           ],
         ),
       ),
