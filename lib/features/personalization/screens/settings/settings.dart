@@ -9,10 +9,7 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final headlineStyle = Theme.of(context)
-        .textTheme
-        .headlineMedium
-        ?.apply(color: TColors.white);
+    final textTheme = Theme.of(context).textTheme; // Easy access to text styles
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -25,11 +22,16 @@ class SettingsScreen extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: TSizes.defaultSpace,
+                    ),
                     child: TAppBar(
                       title: Text(
                         'ACCOUNT',
-                        style: headlineStyle,
+                        style: textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: TColors.white, // Using your constants
+                        ),
                       ),
                     ),
                   ),
@@ -37,7 +39,36 @@ class SettingsScreen extends StatelessWidget {
               ),
             ),
 
-            // You can add the rest of your settings content below
+            // Example settings options
+            const SizedBox(height: TSizes.spaceBtwSections),
+            ListTile(
+              leading: const Icon(Icons.person_outline),
+              title: const Text('Profile'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                // Navigate to Profile
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.settings_outlined),
+              title: const Text('Preferences'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                // Navigate to Preferences
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.logout, color: Colors.red),
+              title: const Text(
+                'Logout',
+                style: TextStyle(color: Colors.red),
+              ),
+              onTap: () {
+                // Handle logout
+              },
+            ),
           ],
         ),
       ),
