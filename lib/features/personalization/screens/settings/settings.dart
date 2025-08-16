@@ -11,7 +11,7 @@ class SettingsScreen extends StatelessWidget {
     
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(120), // Increased height
+        preferredSize: const Size.fromHeight(140), // Increased height to prevent overflow
         child: AppBar(
           backgroundColor: TColors.primary,
           elevation: 0,
@@ -22,10 +22,11 @@ class SettingsScreen extends StatelessWidget {
             ),
           ),
           flexibleSpace: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(TSizes.defaultSpace),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // Title
                   Text(
@@ -35,7 +36,6 @@ class SettingsScreen extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                  const SizedBox(height: 16),
                   // User info row
                   Row(
                     children: [
@@ -52,7 +52,7 @@ class SettingsScreen extends StatelessWidget {
                         ),
                         child: ClipOval(
                           child: Image.asset(
-                            'assets/images/user.png', // Replace with your image path
+                            'assets/images/content/user.png',
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
                               // Fallback to icon if image fails to load
@@ -73,6 +73,7 @@ class SettingsScreen extends StatelessWidget {
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
                               'John Doe', // Replace with actual user name
@@ -80,6 +81,7 @@ class SettingsScreen extends StatelessWidget {
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,
                               ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                             const SizedBox(height: 4),
                             Text(
@@ -87,6 +89,7 @@ class SettingsScreen extends StatelessWidget {
                               style: textTheme.bodySmall?.copyWith(
                                 color: Colors.white.withOpacity(0.8),
                               ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         ),
