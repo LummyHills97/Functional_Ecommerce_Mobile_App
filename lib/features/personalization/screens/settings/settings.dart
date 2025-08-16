@@ -69,14 +69,14 @@ class SettingsScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 16),
-                      // User details (optional)
+                      // User details with edit functionality
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              'John Doe', // Replace with actual user name
+                              'LummyHills', 
                               style: textTheme.titleMedium?.copyWith(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,
@@ -85,13 +85,46 @@ class SettingsScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              'john.doe@email.com', // Replace with actual email
+                              'lummyhills97@email.com', // Replace with actual email
                               style: textTheme.bodySmall?.copyWith(
                                 color: Colors.white.withOpacity(0.8),
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ],
+                        ),
+                      ),
+                      // Beautiful Edit Icon
+                      Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.3),
+                            width: 1,
+                          ),
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(12),
+                            onTap: () {
+                              // Handle edit profile
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Edit profile functionality'),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                            },
+                            child: const Icon(
+                              Icons.edit_outlined,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                          ),
                         ),
                       ),
                     ],
