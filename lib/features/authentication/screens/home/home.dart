@@ -170,8 +170,10 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // POPULAR PRODUCTS - Using ListView horizontal approach
+  // POPULAR PRODUCTS - Now with dark mode support
   Widget _buildPopularProducts(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -180,7 +182,7 @@ class HomePage extends StatelessWidget {
         }),
         const SizedBox(height: TSizes.spaceBtwItems),
         SizedBox(
-          height: 280, // Fixed height to prevent overflow
+          height: 280,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: _popularProducts.length,
@@ -188,19 +190,21 @@ class HomePage extends StatelessWidget {
             itemBuilder: (context, index) {
               final product = _popularProducts[index];
               return SizedBox(
-                width: 160, // Fixed width for each product card
+                width: 160,
                 child: Stack(
                   children: [
-                    // Product card container
+                    // Product card container - Now theme aware
                     Container(
                       width: 160,
                       height: 280,
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(TSizes.sm),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
+                            color: isDarkMode 
+                                ? Colors.black.withOpacity(0.3)
+                                : Colors.grey.withOpacity(0.1),
                             spreadRadius: 1,
                             blurRadius: 3,
                             offset: const Offset(0, 2),
@@ -215,7 +219,9 @@ class HomePage extends StatelessWidget {
                             height: 160,
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              color: Colors.grey[100],
+                              color: isDarkMode 
+                                  ? Colors.grey[800] 
+                                  : Colors.grey[100],
                               borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(TSizes.sm),
                                 topRight: Radius.circular(TSizes.sm),
@@ -233,7 +239,9 @@ class HomePage extends StatelessWidget {
                                   return Icon(
                                     Icons.shopping_bag_outlined,
                                     size: 48,
-                                    color: Colors.grey[400],
+                                    color: isDarkMode 
+                                        ? Colors.grey[600]
+                                        : Colors.grey[400],
                                   );
                                 },
                               ),
@@ -258,7 +266,7 @@ class HomePage extends StatelessWidget {
                                   Text(
                                     product['brand'],
                                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: Colors.grey[600],
+                                      color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.7),
                                     ),
                                   ),
                                   const Spacer(),
@@ -275,7 +283,7 @@ class HomePage extends StatelessWidget {
                                       Text(
                                         '\$${product['originalPrice']}',
                                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                          color: Colors.grey[500],
+                                          color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.5),
                                           decoration: TextDecoration.lineThrough,
                                         ),
                                       ),
@@ -311,7 +319,7 @@ class HomePage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    // Transparent favorite icon overlay
+                    // Transparent favorite icon overlay - Now theme aware
                     Positioned(
                       top: 8,
                       right: 8,
@@ -319,7 +327,9 @@ class HomePage extends StatelessWidget {
                         width: 32,
                         height: 32,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.9),
+                          color: isDarkMode 
+                              ? Colors.black.withOpacity(0.7)
+                              : Colors.white.withOpacity(0.9),
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
@@ -356,7 +366,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // FEATURED PRODUCTS - Just 2 items in a row
+  // FEATURED PRODUCTS - Now with dark mode support
   Widget _buildFeaturedProducts(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -424,8 +434,10 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // DEALS
+  // DEALS - Now with dark mode support
   Widget _buildDealsSection(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -435,10 +447,24 @@ class HomePage extends StatelessWidget {
           height: 100,
           width: double.infinity,
           decoration: BoxDecoration(
-            color: Colors.grey[200],
+            color: isDarkMode 
+                ? Colors.grey[800]
+                : Colors.grey[200],
             borderRadius: BorderRadius.circular(TSizes.sm),
+            border: isDarkMode 
+                ? Border.all(color: Colors.grey[700]!, width: 1)
+                : null,
           ),
-          child: const Center(child: Text('Deals Coming Soon')),
+          child: Center(
+            child: Text(
+              'Deals Coming Soon',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: isDarkMode 
+                    ? Colors.grey[400]
+                    : Colors.grey[600],
+              ),
+            ),
+          ),
         ),
       ],
     );
