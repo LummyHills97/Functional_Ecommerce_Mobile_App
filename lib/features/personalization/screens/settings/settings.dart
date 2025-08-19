@@ -152,6 +152,7 @@ class SettingsScreen extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.location_on_outlined),
             title: const Text('My Address'),
+            subtitle: const Text('Manage your shipping and billing addresses'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               // Navigate to address management
@@ -161,6 +162,7 @@ class SettingsScreen extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.shopping_cart_outlined),
             title: const Text('My Cart'),
+            subtitle: const Text('View and manage items in your cart'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               // Navigate to cart
@@ -170,6 +172,7 @@ class SettingsScreen extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.shopping_bag_outlined),
             title: const Text('My Order'),
+            subtitle: const Text('Track your current and past orders'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               // Navigate to orders
@@ -179,6 +182,7 @@ class SettingsScreen extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.account_balance_outlined),
             title: const Text('Bank Account'),
+            subtitle: const Text('Manage your payment methods and cards'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               // Navigate to bank account settings
@@ -188,6 +192,7 @@ class SettingsScreen extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.local_offer_outlined),
             title: const Text('My Coupon'),
+            subtitle: const Text('View available coupons and discounts'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               // Navigate to coupons
@@ -197,6 +202,7 @@ class SettingsScreen extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.notifications_outlined),
             title: const Text('Notification'),
+            subtitle: const Text('Set any kind of notification message'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               // Navigate to notification settings
@@ -206,10 +212,71 @@ class SettingsScreen extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.settings_outlined),
             title: const Text('Account Settings'),
+            subtitle: const Text('Manage your account preferences'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               // Navigate to account settings
             },
+          ),
+          
+          const SizedBox(height: 24),
+          
+          // App Settings Section Header
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: Text(
+              'App Settings',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: TColors.primary,
+              ),
+            ),
+          ),
+          
+          ListTile(
+            leading: const Icon(Icons.cloud_download_outlined),
+            title: const Text('Load Data'),
+            subtitle: const Text('Automatically load content and updates'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              // Navigate to load data settings
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.location_searching_outlined),
+            title: const Text('Geolocation'),
+            subtitle: const Text('Allow app to access your location'),
+            trailing: Switch(
+              value: true, // You can manage this state with StatefulWidget
+              onChanged: (value) {
+                // Handle geolocation toggle
+              },
+            ),
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.security_outlined),
+            title: const Text('Safe Mode'),
+            subtitle: const Text('Enable additional security features'),
+            trailing: Switch(
+              value: false, // You can manage this state with StatefulWidget
+              onChanged: (value) {
+                // Handle safe mode toggle
+              },
+            ),
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.hd_outlined),
+            title: const Text('HD Image Quality'),
+            subtitle: const Text('Download and display high-definition images'),
+            trailing: Switch(
+              value: true, // You can manage this state with StatefulWidget
+              onChanged: (value) {
+                // Handle HD image quality toggle
+              },
+            ),
           ),
         ],
       ),
