@@ -138,32 +138,77 @@ class SettingsScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(TSizes.defaultSpace),
         children: [
+          // Account Settings Section Header
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: Text(
+              'Account Settings',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: TColors.primary,
+              ),
+            ),
+          ),
           ListTile(
-            leading: const Icon(Icons.person_outline),
-            title: const Text('Profile'),
+            leading: const Icon(Icons.location_on_outlined),
+            title: const Text('My Address'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
-              // Navigate to profile
+              // Navigate to address management
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.shopping_cart_outlined),
+            title: const Text('My Cart'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              // Navigate to cart
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.shopping_bag_outlined),
+            title: const Text('My Order'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              // Navigate to orders
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.account_balance_outlined),
+            title: const Text('Bank Account'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              // Navigate to bank account settings
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.local_offer_outlined),
+            title: const Text('My Coupon'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              // Navigate to coupons
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.notifications_outlined),
+            title: const Text('Notification'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              // Navigate to notification settings
             },
           ),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.settings_outlined),
-            title: const Text('Preferences'),
+            title: const Text('Account Settings'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
-              // Navigate to preferences
-            },
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.logout, color: Colors.red),
-            title: const Text(
-              'Logout',
-              style: TextStyle(color: Colors.red),
-            ),
-            onTap: () {
-              // Handle logout
+              // Navigate to account settings
             },
           ),
         ],
