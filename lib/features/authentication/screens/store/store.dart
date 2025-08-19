@@ -442,7 +442,7 @@ class Store extends StatelessWidget {
                   color: isDark ? TColors.darkGrey : TColors.light,
                   borderRadius: BorderRadius.circular(100),
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.storefront,
                   size: 20,
                   color: TColors.primary,

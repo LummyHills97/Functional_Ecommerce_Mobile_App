@@ -151,7 +151,7 @@ class SettingsScreen extends StatelessWidget {
           ),
           
           ListTile(
-            leading: Icon(Icons.location_on_outlined, color: Colors.blue),
+            leading: const Icon(Icons.location_on_outlined, color: TColors.primary),
             title: const Text('My Address'),
             subtitle: const Text('Manage your shipping and billing addresses'),
             onTap: () {
@@ -160,7 +160,7 @@ class SettingsScreen extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
-            leading: Icon(Icons.shopping_cart_outlined, color: Colors.blue),
+            leading: const Icon(Icons.shopping_cart_outlined, color: TColors.primary),
             title: const Text('My Cart'),
             subtitle: const Text('View and manage items in your cart'),
             onTap: () {
@@ -169,7 +169,7 @@ class SettingsScreen extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
-            leading: Icon(Icons.shopping_bag_outlined, color: Colors.blue),
+            leading: const Icon(Icons.shopping_bag_outlined, color: TColors.primary),
             title: const Text('My Order'),
             subtitle: const Text('Track your current and past orders'),
             onTap: () {
@@ -178,7 +178,7 @@ class SettingsScreen extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
-            leading: Icon(Icons.account_balance_outlined, color: Colors.blue),
+            leading: const Icon(Icons.account_balance_outlined, color: TColors.primary),
             title: const Text('Bank Account'),
             subtitle: const Text('Manage your payment methods and cards'),
             onTap: () {
@@ -187,7 +187,7 @@ class SettingsScreen extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
-            leading: Icon(Icons.local_offer_outlined, color: Colors.blue),
+            leading: const Icon(Icons.local_offer_outlined, color: TColors.primary),
             title: const Text('My Coupon'),
             subtitle: const Text('View available coupons and discounts'),
             onTap: () {
@@ -196,7 +196,7 @@ class SettingsScreen extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
-            leading: Icon(Icons.notifications_outlined, color: Colors.blue),
+            leading: const Icon(Icons.notifications_outlined, color: TColors.primary),
             title: const Text('Notification'),
             subtitle: const Text('Set any kind of notification message'),
             onTap: () {
@@ -205,7 +205,7 @@ class SettingsScreen extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
-            leading: Icon(Icons.settings_outlined, color: Colors.blue),
+            leading: const Icon(Icons.settings_outlined, color: TColors.primary),
             title: const Text('Account Settings'),
             subtitle: const Text('Manage your account preferences'),
             onTap: () {
@@ -228,7 +228,7 @@ class SettingsScreen extends StatelessWidget {
           ),
           
           ListTile(
-            leading: Icon(Icons.cloud_download_outlined, color: Colors.blue),
+            leading: const Icon(Icons.cloud_download_outlined, color: TColors.primary),
             title: const Text('Load Data'),
             subtitle: const Text('Automatically load content and updates'),
             onTap: () {
@@ -237,7 +237,7 @@ class SettingsScreen extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
-            leading: Icon(Icons.location_searching_outlined, color: Colors.blue),
+            leading: const Icon(Icons.location_searching_outlined, color: TColors.primary),
             title: const Text('Geolocation'),
             subtitle: const Text('Allow app to access your location'),
             trailing: Switch(
@@ -249,7 +249,7 @@ class SettingsScreen extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
-            leading: Icon(Icons.security_outlined, color: Colors.blue),
+            leading: const Icon(Icons.security_outlined, color: TColors.primary),
             title: const Text('Safe Mode'),
             subtitle: const Text('Enable additional security features'),
             trailing: Switch(
@@ -261,11 +261,11 @@ class SettingsScreen extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
-            leading: Icon(Icons.hd_outlined, color: Colors.blue),
+            leading: const Icon(Icons.hd_outlined, color: TColors.primary),
             title: const Text('HD Image Quality'),
             subtitle: const Text('Download and display high-definition images'),
             trailing: Switch(
-              value: true, // You can manage this state with StatefulWidget
+              value: false, // You can manage this state with StatefulWidget
               onChanged: (value) {
                 // Handle HD image quality toggle
               },
