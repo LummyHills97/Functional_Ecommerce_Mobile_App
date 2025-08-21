@@ -1,6 +1,8 @@
+import 'package:ecommerce_store/features/personalization/screens/profile/widgets/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
+// import your profile page
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -11,7 +13,7 @@ class SettingsScreen extends StatelessWidget {
     
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(140), // Increased height to prevent overflow
+        preferredSize: const Size.fromHeight(140), // Increased height
         child: AppBar(
           backgroundColor: TColors.primary,
           elevation: 0,
@@ -55,7 +57,6 @@ class SettingsScreen extends StatelessWidget {
                             'assets/images/content/user.png',
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
-                              // Fallback to icon if image fails to load
                               return Container(
                                 color: Colors.white.withOpacity(0.2),
                                 child: const Icon(
@@ -69,7 +70,7 @@ class SettingsScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 16),
-                      // User details with edit functionality
+                      // User details
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,7 +86,7 @@ class SettingsScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              'lummyhills97@email.com', // Replace with actual email
+                              'lummyhills97@email.com',
                               style: textTheme.bodySmall?.copyWith(
                                 color: Colors.white.withOpacity(0.8),
                               ),
@@ -94,7 +95,7 @@ class SettingsScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      // Beautiful Edit Icon
+                      // Edit Icon → Navigate to ProfileScreen
                       Container(
                         width: 36,
                         height: 36,
@@ -111,11 +112,10 @@ class SettingsScreen extends StatelessWidget {
                           child: InkWell(
                             borderRadius: BorderRadius.circular(12),
                             onTap: () {
-                              // Handle edit profile
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Edit profile functionality'),
-                                  duration: Duration(seconds: 2),
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ProfileScreen(),
                                 ),
                               );
                             },
@@ -151,66 +151,52 @@ class SettingsScreen extends StatelessWidget {
           ),
           
           ListTile(
-            leading: const Icon(Icons.location_on_outlined, color: TColors.primary),
+            leading: Icon(Icons.location_on_outlined, color: Colors.blue),
             title: const Text('My Address'),
             subtitle: const Text('Manage your shipping and billing addresses'),
-            onTap: () {
-              // Navigate to address management
-            },
+            onTap: () {},
           ),
           const Divider(),
           ListTile(
-            leading: const Icon(Icons.shopping_cart_outlined, color: TColors.primary),
+            leading: Icon(Icons.shopping_cart_outlined, color: Colors.blue),
             title: const Text('My Cart'),
             subtitle: const Text('View and manage items in your cart'),
-            onTap: () {
-              // Navigate to cart
-            },
+            onTap: () {},
           ),
           const Divider(),
           ListTile(
-            leading: const Icon(Icons.shopping_bag_outlined, color: TColors.primary),
+            leading: Icon(Icons.shopping_bag_outlined, color: Colors.blue),
             title: const Text('My Order'),
             subtitle: const Text('Track your current and past orders'),
-            onTap: () {
-              // Navigate to orders
-            },
+            onTap: () {},
           ),
           const Divider(),
           ListTile(
-            leading: const Icon(Icons.account_balance_outlined, color: TColors.primary),
+            leading: Icon(Icons.account_balance_outlined, color: Colors.blue),
             title: const Text('Bank Account'),
             subtitle: const Text('Manage your payment methods and cards'),
-            onTap: () {
-              // Navigate to bank account settings
-            },
+            onTap: () {},
           ),
           const Divider(),
           ListTile(
-            leading: const Icon(Icons.local_offer_outlined, color: TColors.primary),
+            leading: Icon(Icons.local_offer_outlined, color: Colors.blue),
             title: const Text('My Coupon'),
             subtitle: const Text('View available coupons and discounts'),
-            onTap: () {
-              // Navigate to coupons
-            },
+            onTap: () {},
           ),
           const Divider(),
           ListTile(
-            leading: const Icon(Icons.notifications_outlined, color: TColors.primary),
+            leading: Icon(Icons.notifications_outlined, color: Colors.blue),
             title: const Text('Notification'),
             subtitle: const Text('Set any kind of notification message'),
-            onTap: () {
-              // Navigate to notification settings
-            },
+            onTap: () {},
           ),
           const Divider(),
           ListTile(
-            leading: const Icon(Icons.settings_outlined, color: TColors.primary),
+            leading: Icon(Icons.settings_outlined, color: Colors.blue),
             title: const Text('Account Settings'),
             subtitle: const Text('Manage your account preferences'),
-            onTap: () {
-              // Navigate to account settings
-            },
+            onTap: () {},
           ),
           
           const SizedBox(height: 24),
@@ -228,49 +214,108 @@ class SettingsScreen extends StatelessWidget {
           ),
           
           ListTile(
-            leading: const Icon(Icons.cloud_download_outlined, color: TColors.primary),
+            leading: Icon(Icons.cloud_download_outlined, color: Colors.blue),
             title: const Text('Load Data'),
             subtitle: const Text('Automatically load content and updates'),
-            onTap: () {
-              // Navigate to load data settings
-            },
+            onTap: () {},
           ),
           const Divider(),
           ListTile(
-            leading: const Icon(Icons.location_searching_outlined, color: TColors.primary),
+            leading: Icon(Icons.location_searching_outlined, color: Colors.blue),
             title: const Text('Geolocation'),
             subtitle: const Text('Allow app to access your location'),
             trailing: Switch(
-              value: true, // You can manage this state with StatefulWidget
-              onChanged: (value) {
-                // Handle geolocation toggle
-              },
+              value: true,
+              onChanged: (value) {},
             ),
           ),
           const Divider(),
           ListTile(
-            leading: const Icon(Icons.security_outlined, color: TColors.primary),
+            leading: Icon(Icons.security_outlined, color: Colors.blue),
             title: const Text('Safe Mode'),
             subtitle: const Text('Enable additional security features'),
             trailing: Switch(
-              value: false, // You can manage this state with StatefulWidget
-              onChanged: (value) {
-                // Handle safe mode toggle
-              },
+              value: false,
+              onChanged: (value) {},
             ),
           ),
           const Divider(),
           ListTile(
-            leading: const Icon(Icons.hd_outlined, color: TColors.primary),
+            leading: Icon(Icons.hd_outlined, color: Colors.blue),
             title: const Text('HD Image Quality'),
             subtitle: const Text('Download and display high-definition images'),
             trailing: Switch(
-              value: false, // You can manage this state with StatefulWidget
-              onChanged: (value) {
-                // Handle HD image quality toggle
-              },
+              value: true,
+              onChanged: (value) {},
             ),
           ),
+          
+          const SizedBox(height: 32),
+          
+          // Logout Button
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Logout'),
+                        content: const Text('Are you sure you want to logout?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Logged out successfully'),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              'Logout',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                icon: const Icon(
+                  Icons.logout,
+                  color: Colors.white,
+                ),
+                label: const Text(
+                  'Logout',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          
+          const SizedBox(height: 16),
         ],
       ),
     );
