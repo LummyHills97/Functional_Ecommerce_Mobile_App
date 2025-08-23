@@ -19,24 +19,26 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return AppBar(
       automaticallyImplyLeading: false,
+      backgroundColor: theme.appBarTheme.backgroundColor ?? theme.colorScheme.background,
+      foregroundColor: theme.appBarTheme.foregroundColor ?? theme.colorScheme.onBackground,
       leading: showBackArrow
           ? IconButton(
               onPressed: onLeadingPressed ?? () => Get.back(),
-              icon: const Icon(Icons.arrow_back),
+              icon: Icon(Icons.arrow_back, color: theme.iconTheme.color),
             )
           : leadingIcon != null
               ? IconButton(
                   onPressed: onLeadingPressed,
-                  icon: Icon(leadingIcon),
+                  icon: Icon(leadingIcon, color: theme.iconTheme.color),
                 )
               : null,
       title: title,
       actions: actions,
       elevation: 0,
-      backgroundColor: Colors.white,
-      foregroundColor: Colors.black,
     );
   }
 
