@@ -7,55 +7,22 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    
     return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: TAppBar(
         showBackArrow: true,
-        title: Text(
-          'Profile',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: isDark ? Colors.white : Colors.black,
-          ),
-        ),
+        title: const Text('Profile'),
         onLeadingPressed: () {
           Get.back();
         },
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+      body: const SingleChildScrollView(
+        padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Profile Content Here",
-              style: theme.textTheme.bodyLarge,
-            ),
-            const SizedBox(height: 20),
-            // Add more profile content here
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: theme.cardColor,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Text(
-                "This is a sample profile card that adapts to theme changes",
-                style: theme.textTheme.bodyMedium,
-              ),
-            ),
+            Text("Profile Content Here"),
+            SizedBox(height: 20),
+            Text("The back arrow should now change color based on theme!"),
           ],
         ),
       ),
