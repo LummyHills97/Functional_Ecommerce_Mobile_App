@@ -1,5 +1,5 @@
-import 'package:ecommerce_store/utils/device/device_utility.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class TAppBar extends StatelessWidget implements PreferredSizeWidget {
   const TAppBar({
@@ -7,31 +7,39 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.title,
     this.leadingIcon,
     this.actions,
-    this.leadingOnPressed,
+    this.onLeadingPressed,
     this.showBackArrow = false,
   });
 
   final Widget? title;
   final IconData? leadingIcon;
   final List<Widget>? actions;
-  final VoidCallback? leadingOnPressed;
+  final VoidCallback? onLeadingPressed;
   final bool showBackArrow;
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
-      leading: leadingIcon != null
+      leading: showBackArrow
           ? IconButton(
-              onPressed: leadingOnPressed,
-              icon: Icon(leadingIcon),
+              onPressed: onLeadingPressed ?? () => Get.back(),
+              icon: const Icon(Icons.arrow_back),
             )
-          : null,
+          : leadingIcon != null
+              ? IconButton(
+                  onPressed: onLeadingPressed,
+                  icon: Icon(leadingIcon),
+                )
+              : null,
       title: title,
       actions: actions,
+      elevation: 0,
+      backgroundColor: Colors.white,
+      foregroundColor: Colors.black,
     );
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(TDeviceUtils.getAppBarHeight());
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
