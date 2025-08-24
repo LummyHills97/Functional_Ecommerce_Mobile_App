@@ -5,8 +5,28 @@ import 'package:ecommerce_store/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  // Controllers for editable fields
+  final TextEditingController _nameController = TextEditingController(text: 'Lummy Hills');
+  final TextEditingController _emailController = TextEditingController(text: 'lummyhills@gmail.com');
+  final TextEditingController _phoneController = TextEditingController(text: '+234 8123 456 7890');
+  final TextEditingController _dobController = TextEditingController(text: 'January 1, 1880');
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _dobController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,45 +36,50 @@ class ProfileScreen extends StatelessWidget {
         title: const Text('Profile'),
         onLeadingPressed: () => Get.back(),
       ),
-      body: const SingleChildScrollView(
-        padding: EdgeInsets.all(TSizes.defaultSpace),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(TSizes.defaultSpace),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: TSizes.spaceBtwSections),
+            const SizedBox(height: TSizes.spaceBtwSections),
             
             // Profile Picture Section
-            _ProfilePictureSection(),
+            const _ProfilePictureSection(),
             
-            SizedBox(height: TSizes.spaceBtwSections),
+            const SizedBox(height: TSizes.spaceBtwSections),
             
             // Personal Information Section Header
-            Align(
+            const Align(
               alignment: Alignment.centerLeft,
               child: _SectionHeader(
                 title: 'Personal Information',
                 icon: Icons.person_outline,
               ),
             ),
-            SizedBox(height: TSizes.spaceBtwItems),
+            const SizedBox(height: TSizes.spaceBtwItems),
             
             // Profile Information Section
-            _ProfileInfoSection(),
+            _ProfileInfoSection(
+              nameController: _nameController,
+              emailController: _emailController,
+              phoneController: _phoneController,
+              dobController: _dobController,
+            ),
             
-            SizedBox(height: TSizes.spaceBtwSections),
+            const SizedBox(height: TSizes.spaceBtwSections),
             
             // Account Settings Section Header
-            Align(
+            const Align(
               alignment: Alignment.centerLeft,
               child: _SectionHeader(
                 title: 'Account Settings',
                 icon: Icons.settings_outlined,
               ),
             ),
-            SizedBox(height: TSizes.spaceBtwItems),
+            const SizedBox(height: TSizes.spaceBtwItems),
             
             // Profile Actions Section
-            _ProfileActionsSection(),
+            const _ProfileActionsSection(),
           ],
         ),
       ),
@@ -76,23 +101,23 @@ class _SectionHeader extends StatelessWidget {
     return Row(
       children: [
         Container(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
             color: Theme.of(context).primaryColor.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(6),
           ),
           child: Icon(
             icon,
-            size: 20,
+            size: 18,
             color: Theme.of(context).primaryColor,
           ),
         ),
         const SizedBox(width: TSizes.spaceBtwItems / 2),
         Text(
           title,
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.bold,
-            fontSize: 18,
+            fontSize: 16,
           ),
         ),
         Expanded(
@@ -125,16 +150,16 @@ class _ProfilePictureSection extends StatelessWidget {
           children: [
             TCircularImage(
               image: 'assets/images/content/user.png',
-              width: 100,
-              height: 100,
+              width: 90,
+              height: 90,
               backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
             ),
             Positioned(
               bottom: 0,
               right: 0,
               child: Container(
-                width: 30,
-                height: 30,
+                width: 28,
+                height: 28,
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
                   shape: BoxShape.circle,
@@ -142,19 +167,20 @@ class _ProfilePictureSection extends StatelessWidget {
                 ),
                 child: const Icon(
                   Icons.camera_alt,
-                  size: 16,
+                  size: 14,
                   color: Colors.white,
                 ),
               ),
             ),
           ],
         ),
-        const SizedBox(height: TSizes.spaceBtwItems),
+        const SizedBox(height: TSizes.spaceBtwItems / 2),
         Text(
           'Change Profile Picture',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
             color: Theme.of(context).primaryColor,
             fontWeight: FontWeight.w500,
+            fontSize: 12,
           ),
         ),
       ],
@@ -163,7 +189,17 @@ class _ProfilePictureSection extends StatelessWidget {
 }
 
 class _ProfileInfoSection extends StatelessWidget {
-  const _ProfileInfoSection();
+  const _ProfileInfoSection({
+    required this.nameController,
+    required this.emailController,
+    required this.phoneController,
+    required this.dobController,
+  });
+
+  final TextEditingController nameController;
+  final TextEditingController emailController;
+  final TextEditingController phoneController;
+  final TextEditingController dobController;
 
   @override
   Widget build(BuildContext context) {
@@ -173,10 +209,8 @@ class _ProfileInfoSection extends StatelessWidget {
         _ProfileInfoTile(
           icon: Icons.person_outline,
           title: 'Full Name',
-          subtitle: 'John Doe',
-          onTap: () {
-            // Navigate to edit name
-          },
+          controller: nameController,
+          onTap: () => _showEditDialog(context, 'Full Name', nameController),
         ),
         
         const SizedBox(height: TSizes.spaceBtwItems),
@@ -185,10 +219,9 @@ class _ProfileInfoSection extends StatelessWidget {
         _ProfileInfoTile(
           icon: Icons.email_outlined,
           title: 'Email',
-          subtitle: 'john.doe@example.com',
-          onTap: () {
-            // Navigate to edit email
-          },
+          controller: emailController,
+          keyboardType: TextInputType.emailAddress,
+          onTap: () => _showEditDialog(context, 'Email', emailController, TextInputType.emailAddress),
         ),
         
         const SizedBox(height: TSizes.spaceBtwItems),
@@ -197,10 +230,9 @@ class _ProfileInfoSection extends StatelessWidget {
         _ProfileInfoTile(
           icon: Icons.phone_outlined,
           title: 'Phone Number',
-          subtitle: '+1 234 567 8900',
-          onTap: () {
-            // Navigate to edit phone
-          },
+          controller: phoneController,
+          keyboardType: TextInputType.phone,
+          onTap: () => _showEditDialog(context, 'Phone Number', phoneController, TextInputType.phone),
         ),
         
         const SizedBox(height: TSizes.spaceBtwItems),
@@ -209,13 +241,84 @@ class _ProfileInfoSection extends StatelessWidget {
         _ProfileInfoTile(
           icon: Icons.calendar_today_outlined,
           title: 'Date of Birth',
-          subtitle: 'January 1, 1990',
-          onTap: () {
-            // Navigate to edit DOB
-          },
+          controller: dobController,
+          onTap: () => _showDatePicker(context, dobController),
         ),
       ],
     );
+  }
+
+  void _showEditDialog(BuildContext context, String title, TextEditingController controller, [TextInputType? keyboardType]) {
+    final tempController = TextEditingController(text: controller.text);
+    
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Edit $title',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          content: TextField(
+            controller: tempController,
+            keyboardType: keyboardType,
+            style: const TextStyle(fontSize: 14),
+            decoration: InputDecoration(
+              labelText: title,
+              labelStyle: const TextStyle(fontSize: 12),
+              border: const OutlineInputBorder(),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel', style: TextStyle(fontSize: 12)),
+            ),
+            TextButton(
+              onPressed: () {
+                controller.text = tempController.text;
+                Navigator.of(context).pop();
+                Get.snackbar(
+                  'Updated',
+                  '$title has been updated successfully',
+                  snackPosition: SnackPosition.BOTTOM,
+                  backgroundColor: Colors.green,
+                  colorText: Colors.white,
+                  duration: const Duration(seconds: 2),
+                );
+              },
+              child: const Text('Save', style: TextStyle(fontSize: 12)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showDatePicker(BuildContext context, TextEditingController controller) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime(1990, 1, 1),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    
+    if (picked != null) {
+      final months = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+      ];
+      controller.text = '${months[picked.month - 1]} ${picked.day}, ${picked.year}';
+      Get.snackbar(
+        'Updated',
+        'Date of Birth has been updated successfully',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 2),
+      );
+    }
   }
 }
 
@@ -223,32 +326,35 @@ class _ProfileInfoTile extends StatelessWidget {
   const _ProfileInfoTile({
     required this.icon,
     required this.title,
-    required this.subtitle,
+    required this.controller,
     required this.onTap,
+    this.keyboardType,
   });
 
   final IconData icon;
   final String title;
-  final String subtitle;
+  final TextEditingController controller;
   final VoidCallback onTap;
+  final TextInputType? keyboardType;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 3,
+            offset: const Offset(0, 1),
           ),
         ],
       ),
       child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         leading: Container(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
             color: Theme.of(context).primaryColor.withOpacity(0.1),
             shape: BoxShape.circle,
@@ -256,26 +362,32 @@ class _ProfileInfoTile extends StatelessWidget {
           child: Icon(
             icon,
             color: Theme.of(context).primaryColor,
-            size: 20,
+            size: 18,
           ),
         ),
         title: Text(
           title,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
             color: Colors.grey[600],
-            fontSize: 12,
+            fontSize: 10,
           ),
         ),
-        subtitle: Text(
-          subtitle,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
+        subtitle: AnimatedBuilder(
+          animation: controller,
+          builder: (context, child) {
+            return Text(
+              controller.text,
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.w600,
+                fontSize: 13,
+              ),
+            );
+          },
         ),
         trailing: Icon(
           Icons.edit_outlined,
           color: Colors.grey[400],
-          size: 20,
+          size: 18,
         ),
         onTap: onTap,
       ),
@@ -355,14 +467,15 @@ class _ProfileActionsSection extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
         border: isDestructive 
             ? Border.all(color: Colors.red.withOpacity(0.2))
             : null,
       ),
       child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         leading: Container(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
             color: isDestructive 
                 ? Colors.red.withOpacity(0.1)
@@ -374,25 +487,28 @@ class _ProfileActionsSection extends StatelessWidget {
             color: isDestructive 
                 ? Colors.red
                 : Theme.of(context).primaryColor,
-            size: 20,
+            size: 18,
           ),
         ),
         title: Text(
           title,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.w600,
             color: isDestructive ? Colors.red : null,
+            fontSize: 13,
           ),
         ),
         subtitle: Text(
           subtitle,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
             color: Colors.grey[600],
+            fontSize: 11,
           ),
         ),
         trailing: Icon(
           Icons.chevron_right,
           color: Colors.grey[400],
+          size: 16,
         ),
         onTap: onTap,
       ),
@@ -404,14 +520,18 @@ class _ProfileActionsSection extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Delete Account'),
+          title: const Text(
+            'Delete Account',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
           content: const Text(
             'Are you sure you want to delete your account? This action cannot be undone.',
+            style: TextStyle(fontSize: 13),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
+              child: const Text('Cancel', style: TextStyle(fontSize: 12)),
             ),
             TextButton(
               onPressed: () {
@@ -427,7 +547,7 @@ class _ProfileActionsSection extends StatelessWidget {
               },
               child: const Text(
                 'Delete',
-                style: TextStyle(color: Colors.red),
+                style: TextStyle(color: Colors.red, fontSize: 12),
               ),
             ),
           ],
