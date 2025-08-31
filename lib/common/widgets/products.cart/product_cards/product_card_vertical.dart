@@ -8,7 +8,12 @@ import 'package:ecommerce_store/utils/helpers/helpers_functions.dart';
 import 'package:flutter/material.dart';
 
 class TProductCardVertical extends StatefulWidget {
-  const TProductCardVertical({super.key});
+  final Map<String, dynamic>? product; // Add product parameter
+  
+  const TProductCardVertical({
+    super.key,
+    this.product,
+  });
 
   @override
   State<TProductCardVertical> createState() => _TProductCardVerticalState();
@@ -20,13 +25,23 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
   void _navigateToProductDetails(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => const ProductDetailScreen()),
+      MaterialPageRoute(
+        builder: (_) => ProductDetailScreen(product: widget.product),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);
+    
+    // Use product data if available, otherwise use default values
+    final productName = widget.product?['name'] ?? 'Green Nike Air Shoes';
+    final brandName = widget.product?['brand'] ?? 'Nike';
+    final price = widget.product?['price'] ?? 25.00;
+    final originalPrice = widget.product?['originalPrice'] ?? 35.00;
+    final discount = widget.product?['discount'] ?? 25;
+    final imageUrl = widget.product?['image'] ?? TImages.productImage1;
 
     return GestureDetector(
       onTap: () => _navigateToProductDetails(context),
@@ -50,8 +65,8 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
               ),
               child: Stack(
                 children: [
-                  const TRoundedImage(
-                    imageUrl: TImages.productImage1,
+                  TRoundedImage(
+                    imageUrl: imageUrl,
                     width: double.infinity,
                     height: double.infinity,
                     fit: BoxFit.cover,
@@ -72,7 +87,7 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
                         borderRadius: BorderRadius.circular(TSizes.xs),
                       ),
                       child: Text(
-                        '25%',
+                        '$discount%',
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
                               color: TColors.white,
                               fontWeight: FontWeight.bold,
@@ -113,7 +128,7 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
                     /// Product Name
                     Flexible(
                       child: Text(
-                        'Green Nike Air Shoes',
+                        productName,
                         style: Theme.of(context).textTheme.labelLarge,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
@@ -130,7 +145,7 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
                         const SizedBox(width: TSizes.xs / 2),
                         Flexible(
                           child: Text(
-                            'Nike',
+                            brandName,
                             style: Theme.of(context).textTheme.labelMedium,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -149,7 +164,7 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '\$35.00',
+                                '\$${originalPrice.toStringAsFixed(2)}',
                                 style: Theme.of(context)
                                     .textTheme
                                     .labelMedium
@@ -159,7 +174,7 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
                                     ),
                               ),
                               Text(
-                                '\$25.00',
+                                '\$${price.toStringAsFixed(2)}',
                                 style: Theme.of(context)
                                     .textTheme
                                     .headlineSmall
@@ -185,7 +200,7 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
                             padding: EdgeInsets.zero,
                             constraints: const BoxConstraints(),
                             onPressed: () =>
-                                debugPrint('Added to cart: Green Nike Air Shoes'),
+                                debugPrint('Added to cart: $productName'),
                             icon: const Icon(Icons.add,
                                 color: TColors.white, size: 20),
                           ),

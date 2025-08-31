@@ -1,8 +1,8 @@
+import 'package:ecommerce_store/common/widgets/products.cart/product_cards/product_card_vertical.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:ecommerce_store/common/widgets/custom_shapes/containers/primary_header_container.dart';
 import 'package:ecommerce_store/common/widgets/custom_shapes/containers/search_container.dart';
-import 'package:ecommerce_store/common/widgets/home_appbar.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';
 
@@ -48,7 +48,6 @@ class HomePage extends StatelessWidget {
       description: 'On orders above \$50',
       imageUrl: 'assets/images/banners/banner_3.jpg',
     ),
-    
   ];
 
   // Mock product data
@@ -63,11 +62,19 @@ class HomePage extends StatelessWidget {
     },
     {
       'name': 'Nike Air Max',
-      'brand': 'Nike',
+      'brand': 'Nike', 
       'image': 'assets/images/products/nike-shoes.png',
       'price': 89.99,
       'originalPrice': 119.99,
       'discount': 25,
+    },
+    {
+      'name': 'Adidas Ultraboost',
+      'brand': 'Adidas',
+      'image': 'assets/images/products/adidas-shoes.png',
+      'price': 149.99,
+      'originalPrice': 179.99,
+      'discount': 17,
     },
   ];
 
@@ -86,24 +93,89 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // HEADER
+  // HEADER - Fixed app bar positioning
   Widget _buildHeader(BuildContext context) {
     return TPrimaryHeaderContainer(
       height: 420,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const THomeAppBar(),
-            const SizedBox(height: TSizes.spaceBtwItems),
-            TSearchContainer(
+      child: Column(
+        children: [
+          // Custom App Bar - Fixed positioning
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Good day for shopping',
+                        style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                          color: TColors.grey,
+                        ),
+                      ),
+                      Text(
+                        'Taimoor Sikander',
+                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          color: TColors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Stack(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.shopping_bag_outlined, color: TColors.white),
+                        onPressed: () => debugPrint('Cart pressed'),
+                      ),
+                      Positioned(
+                        right: 6,
+                        top: 6,
+                        child: Container(
+                          width: 18,
+                          height: 18,
+                          decoration: BoxDecoration(
+                            color: TColors.black,
+                            borderRadius: BorderRadius.circular(9),
+                          ),
+                          child: Center(
+                            child: Text(
+                              '2',
+                              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                color: TColors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          
+          const SizedBox(height: TSizes.spaceBtwItems),
+          
+          // Search Container - Properly positioned
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+            child: TSearchContainer(
               onTap: () => debugPrint('Search tapped'),
             ),
-            const SizedBox(height: TSizes.spaceBtwSections),
-            _buildPopularCategories(context),
-          ],
-        ),
+          ),
+          
+          const SizedBox(height: TSizes.spaceBtwSections),
+          
+          // Popular Categories
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+            child: _buildPopularCategories(context),
+          ),
+        ],
       ),
     );
   }
@@ -170,10 +242,8 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // POPULAR PRODUCTS - Now with dark mode support
+  // POPULAR PRODUCTS - Updated to use TProductCardVertical with product data
   Widget _buildPopularProducts(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -182,7 +252,7 @@ class HomePage extends StatelessWidget {
         }),
         const SizedBox(height: TSizes.spaceBtwItems),
         SizedBox(
-          height: 280,
+          height: 300,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: _popularProducts.length,
@@ -190,174 +260,8 @@ class HomePage extends StatelessWidget {
             itemBuilder: (context, index) {
               final product = _popularProducts[index];
               return SizedBox(
-                width: 160,
-                child: Stack(
-                  children: [
-                    // Product card container - Now theme aware
-                    Container(
-                      width: 160,
-                      height: 280,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.circular(TSizes.sm),
-                        boxShadow: [
-                          BoxShadow(
-                            color: isDarkMode 
-                                ? Colors.black.withOpacity(0.3)
-                                : Colors.grey.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 3,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Product image
-                          Container(
-                            height: 160,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: isDarkMode 
-                                  ? Colors.grey[800] 
-                                  : Colors.grey[100],
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(TSizes.sm),
-                                topRight: Radius.circular(TSizes.sm),
-                              ),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(TSizes.sm),
-                                topRight: Radius.circular(TSizes.sm),
-                              ),
-                              child: Image.asset(
-                                product['image'],
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Icon(
-                                    Icons.shopping_bag_outlined,
-                                    size: 48,
-                                    color: isDarkMode 
-                                        ? Colors.grey[600]
-                                        : Colors.grey[400],
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                          // Product details
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    product['name'],
-                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    product['brand'],
-                                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.7),
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '\$${product['price']}',
-                                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        '\$${product['originalPrice']}',
-                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                          color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.5),
-                                          decoration: TextDecoration.lineThrough,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // Discount badge
-                    Positioned(
-                      top: 8,
-                      left: 8,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          '${product['discount']}% OFF',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    // Transparent favorite icon overlay - Now theme aware
-                    Positioned(
-                      top: 8,
-                      right: 8,
-                      child: Container(
-                        width: 32,
-                        height: 32,
-                        decoration: BoxDecoration(
-                          color: isDarkMode 
-                              ? Colors.black.withOpacity(0.7)
-                              : Colors.white.withOpacity(0.9),
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              spreadRadius: 1,
-                              blurRadius: 2,
-                              offset: const Offset(0, 1),
-                            ),
-                          ],
-                        ),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(16),
-                            onTap: () {
-                              debugPrint('Favorite pressed for ${product['name']}');
-                            },
-                            child: const Icon(
-                              Icons.favorite_border,
-                              size: 18,
-                              color: Colors.red,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                width: 180,
+                child: TProductCardVertical(product: product),
               );
             },
           ),
@@ -366,66 +270,130 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // FEATURED PRODUCTS - Now with dark mode support
+  // FEATURED PRODUCTS - Enhanced with better dark mode support
   Widget _buildFeaturedProducts(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionTitle(context, 'Featured Products', () {
+        _buildSectionTitle(context, 'Featured Categories', () {
           debugPrint('View all featured');
         }),
         const SizedBox(height: TSizes.spaceBtwItems),
         Row(
           children: [
             Expanded(
-              child: Column(
-                children: [
-                  _CircularContainer(
-                    width: 70,
-                    height: 70,
-                    backgroundColor: Colors.orange[100]!,
-                    borderRadius: 35,
-                    child: Icon(
-                      Icons.laptop_mac,
-                      size: 32,
-                      color: Colors.orange[700],
+              child: GestureDetector(
+                onTap: () => debugPrint('Electronics category tapped'),
+                child: Column(
+                  children: [
+                    Container(
+                      width: 70,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        color: isDarkMode 
+                            ? Colors.orange[800]?.withOpacity(0.3)
+                            : Colors.orange[100],
+                        shape: BoxShape.circle,
+                        border: isDarkMode
+                            ? Border.all(color: Colors.orange[600]!, width: 1)
+                            : null,
+                      ),
+                      child: Icon(
+                        Icons.laptop_mac,
+                        size: 32,
+                        color: isDarkMode 
+                            ? Colors.orange[400]
+                            : Colors.orange[700],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Electronics',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.w500,
+                    const SizedBox(height: 8),
+                    Text(
+                      'Electronics',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             const SizedBox(width: TSizes.spaceBtwItems),
             Expanded(
-              child: Column(
-                children: [
-                  _CircularContainer(
-                    width: 70,
-                    height: 70,
-                    backgroundColor: Colors.pink[100]!,
-                    borderRadius: 35,
-                    child: Icon(
-                      Icons.checkroom,
-                      size: 32,
-                      color: Colors.pink[700],
+              child: GestureDetector(
+                onTap: () => debugPrint('Fashion category tapped'),
+                child: Column(
+                  children: [
+                    Container(
+                      width: 70,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        color: isDarkMode 
+                            ? Colors.pink[800]?.withOpacity(0.3)
+                            : Colors.pink[100],
+                        shape: BoxShape.circle,
+                        border: isDarkMode
+                            ? Border.all(color: Colors.pink[600]!, width: 1)
+                            : null,
+                      ),
+                      child: Icon(
+                        Icons.checkroom,
+                        size: 32,
+                        color: isDarkMode 
+                            ? Colors.pink[400]
+                            : Colors.pink[700],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Fashion',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.w500,
+                    const SizedBox(height: 8),
+                    Text(
+                      'Fashion',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(width: TSizes.spaceBtwItems),
+            Expanded(
+              child: GestureDetector(
+                onTap: () => debugPrint('Sports category tapped'),
+                child: Column(
+                  children: [
+                    Container(
+                      width: 70,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        color: isDarkMode 
+                            ? Colors.green[800]?.withOpacity(0.3)
+                            : Colors.green[100],
+                        shape: BoxShape.circle,
+                        border: isDarkMode
+                            ? Border.all(color: Colors.green[600]!, width: 1)
+                            : null,
+                      ),
+                      child: Icon(
+                        Icons.sports_soccer,
+                        size: 32,
+                        color: isDarkMode 
+                            ? Colors.green[400]
+                            : Colors.green[700],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Sports',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -434,35 +402,85 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // DEALS - Now with dark mode support
+  // DEALS - Enhanced design
   Widget _buildDealsSection(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Today\'s Deals', style: Theme.of(context).textTheme.headlineSmall),
+        _buildSectionTitle(context, 'Today\'s Deals', () {
+          debugPrint('View all deals');
+        }),
         const SizedBox(height: TSizes.spaceBtwItems),
         Container(
-          height: 100,
+          height: 120,
           width: double.infinity,
           decoration: BoxDecoration(
-            color: isDarkMode 
-                ? Colors.grey[800]
-                : Colors.grey[200],
-            borderRadius: BorderRadius.circular(TSizes.sm),
+            gradient: LinearGradient(
+              colors: isDarkMode 
+                  ? [Colors.grey[800]!, Colors.grey[700]!]
+                  : [Colors.blue[50]!, Colors.blue[100]!],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(TSizes.md),
             border: isDarkMode 
-                ? Border.all(color: Colors.grey[700]!, width: 1)
+                ? Border.all(color: Colors.grey[600]!, width: 1)
                 : null,
           ),
-          child: Center(
-            child: Text(
-              'Deals Coming Soon',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: isDarkMode 
-                    ? Colors.grey[400]
-                    : Colors.grey[600],
-              ),
+          child: Padding(
+            padding: const EdgeInsets.all(TSizes.md),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Flash Sale',
+                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: isDarkMode ? Colors.white : TColors.primary,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Limited time offers',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: isDarkMode 
+                              ? Colors.grey[300]
+                              : Colors.grey[600],
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: TColors.primary,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          'Shop Now',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  Icons.local_fire_department,
+                  size: 48,
+                  color: Colors.red[400],
+                ),
+              ],
             ),
           ),
         ),
@@ -478,7 +496,10 @@ class HomePage extends StatelessWidget {
         Text(title, style: Theme.of(context).textTheme.headlineSmall),
         TextButton(
           onPressed: onViewAll,
-          child: Text('View All', style: TextStyle(color: Theme.of(context).primaryColor)),
+          child: Text(
+            'View All', 
+            style: TextStyle(color: Theme.of(context).primaryColor),
+          ),
         ),
       ],
     );
@@ -561,7 +582,7 @@ class _BannerCarouselState extends State<_BannerCarousel> {
   }
 
   void _startAutoScroll() {
-    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
       if (_currentIndex < widget.banners.length - 1) {
         _currentIndex++;
       } else {
@@ -569,7 +590,7 @@ class _BannerCarouselState extends State<_BannerCarousel> {
       }
       _pageController.animateToPage(
         _currentIndex,
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 350),
         curve: Curves.easeInOut,
       );
     });
@@ -604,14 +625,22 @@ class _BannerCarouselState extends State<_BannerCarousel> {
                   margin: const EdgeInsets.symmetric(horizontal: 4),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(TSizes.md),
-                    image: DecorationImage(
-                      image: AssetImage(banner.imageUrl),
-                      fit: BoxFit.cover,
-                      colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.3),
-                        BlendMode.darken,
-                      ),
+                    gradient: LinearGradient(
+                      colors: [
+                        TColors.primary.withOpacity(0.8),
+                        TColors.primary.withOpacity(0.6),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        spreadRadius: 1,
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(TSizes.defaultSpace),
@@ -638,9 +667,19 @@ class _BannerCarouselState extends State<_BannerCarousel> {
                           onPressed: () => widget.onBannerTap(banner),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
-                            foregroundColor: Colors.blue,
+                            foregroundColor: TColors.primary,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 8,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
                           ),
-                          child: const Text('Shop Now'),
+                          child: const Text(
+                            'Shop Now',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
                         ),
                       ],
                     ),
@@ -656,11 +695,11 @@ class _BannerCarouselState extends State<_BannerCarousel> {
           children: List.generate(
             widget.banners.length,
             (index) => Container(
-              width: 8,
+              width: _currentIndex == index ? 20 : 8,
               height: 8,
               margin: const EdgeInsets.symmetric(horizontal: 2),
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
+                borderRadius: BorderRadius.circular(4),
                 color: _currentIndex == index
                     ? Theme.of(context).primaryColor
                     : Colors.grey.withOpacity(0.3),
@@ -669,36 +708,6 @@ class _BannerCarouselState extends State<_BannerCarousel> {
           ),
         ),
       ],
-    );
-  }
-}
-
-// Custom CircularContainer widget
-class _CircularContainer extends StatelessWidget {
-  final double width;
-  final double height;
-  final Color backgroundColor;
-  final double borderRadius;
-  final Widget? child;
-
-  const _CircularContainer({
-    required this.width,
-    required this.height,
-    required this.backgroundColor,
-    required this.borderRadius,
-    this.child,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(borderRadius),
-      ),
-      child: child,
     );
   }
 }
