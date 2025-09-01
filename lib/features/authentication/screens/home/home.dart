@@ -69,9 +69,9 @@ class HomePage extends StatelessWidget {
       'discount': 25,
     },
     {
-      'name': 'Adidas Ultraboost',
-      'brand': 'Adidas',
-      'image': 'assets/images/products/adidas-shoes.png',
+      'name': 'Nike Bennasi',
+      'brand': 'Nike',
+      'image': 'assets/images/products/product-slippers.png',
       'price': 149.99,
       'originalPrice': 179.99,
       'discount': 17,
