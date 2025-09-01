@@ -1,4 +1,5 @@
 import 'package:ecommerce_store/common/widgets/curved_edges_widget.dart';
+import 'package:ecommerce_store/features/shop/screens/product_reviews/product_review.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:ecommerce_store/utils/constants/image_strings.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
@@ -704,61 +705,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  // Show All Reviews
   void _showAllReviews(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(TSizes.lg)),
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => ProductReviewScreen(
+        productName: widget.product?['name'] ?? 'Green Nike Air Shoes',
+        rating: widget.product?['rating'] ?? 4.5,
+        reviewCount: widget.product?['reviewCount'] ?? 128,
       ),
-      builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.7,
-        maxChildSize: 0.9,
-        minChildSize: 0.5,
-        builder: (context, scrollController) => Container(
-          padding: const EdgeInsets.all(TSizes.defaultSpace),
-          child: Column(
-            children: [
-              Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              const SizedBox(height: TSizes.spaceBtwItems),
-              Text(
-                'Customer Reviews',
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              const SizedBox(height: TSizes.spaceBtwSections),
-              Expanded(
-                child: ListView.separated(
-                  controller: scrollController,
-                  itemCount: 5, // Mock reviews
-                  separatorBuilder: (context, index) => const Divider(),
-                  itemBuilder: (context, index) => _ReviewItem(
-                    rating: [5, 4, 5, 3, 4][index],
-                    userName: ['John D.', 'Sarah M.', 'Mike R.', 'Lisa K.', 'Tom W.'][index],
-                    comment: [
-                      'Excellent quality! Very comfortable and stylish.',
-                      'Good shoes but sizing runs a bit small.',
-                      'Love these! Perfect for my morning runs.',
-                      'Decent quality for the price.',
-                      'Great customer service and fast delivery.'
-                    ][index],
-                    date: '${index + 1} days ago',
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+    ),
+  );
+}
 
   // Helper Functions
   void _addToCart(BuildContext context, String productName, int quantity) {
