@@ -33,6 +33,11 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
       'date': '2 days ago',
       'verified': true,
       'helpful': 12,
+      'storeResponse': {
+        'comment': 'Thank you so much for your wonderful review, John! We\'re thrilled that you\'re loving your new shoes. Your satisfaction is our top priority!',
+        'date': '1 day ago',
+        'responderName': 'Customer Care Team'
+      }
     },
     {
       'rating': 4,
@@ -41,6 +46,11 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
       'date': '1 week ago',
       'verified': true,
       'helpful': 8,
+      'storeResponse': {
+        'comment': 'Hi Sarah! Thanks for the feedback about sizing. We\'ve updated our size guide to help future customers. We\'re glad the exchange process was smooth and you\'re happy with the quality!',
+        'date': '6 days ago',
+        'responderName': 'Customer Care Team'
+      }
     },
     {
       'rating': 5,
@@ -57,6 +67,11 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
       'date': '3 weeks ago',
       'verified': true,
       'helpful': 3,
+      'storeResponse': {
+        'comment': 'Hello Lisa, thank you for your honest feedback. We appreciate all reviews as they help us improve. We\'d love to learn more about your experience - please reach out to our support team if you\'d like to discuss further.',
+        'date': '3 weeks ago',
+        'responderName': 'Customer Care Team'
+      }
     },
     {
       'rating': 4,
@@ -81,6 +96,11 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
       'date': '2 months ago',
       'verified': true,
       'helpful': 4,
+      'storeResponse': {
+        'comment': 'Hi David, we\'re sorry to hear about your experience. This doesn\'t meet our quality standards. Please contact our support team with your order details so we can make this right for you.',
+        'date': '2 months ago',
+        'responderName': 'Customer Care Team'
+      }
     },
     {
       'rating': 4,
@@ -253,6 +273,7 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
                               date: review['date'],
                               isVerified: review['verified'],
                               helpfulCount: review['helpful'],
+                              storeResponse: review['storeResponse'],
                               onHelpful: () => _markHelpful(reviews.indexOf(review)),
                             ),
                             if (index < filteredReviews.length - 1)
@@ -480,6 +501,7 @@ class _ReviewCard extends StatelessWidget {
   final String date;
   final bool isVerified;
   final int helpfulCount;
+  final Map<String, dynamic>? storeResponse;
   final VoidCallback onHelpful;
 
   const _ReviewCard({
@@ -489,6 +511,7 @@ class _ReviewCard extends StatelessWidget {
     required this.date,
     required this.isVerified,
     required this.helpfulCount,
+    this.storeResponse,
     required this.onHelpful,
   });
 
@@ -656,6 +679,67 @@ class _ReviewCard extends StatelessWidget {
               ),
             ],
           ),
+
+          // Store Response Section
+          if (storeResponse != null) ...[
+            const SizedBox(height: TSizes.spaceBtwItems),
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(left: TSizes.lg),
+              padding: const EdgeInsets.all(TSizes.sm),
+              decoration: BoxDecoration(
+                color: TColors.primary.withOpacity(0.05),
+                borderRadius: BorderRadius.circular(TSizes.sm),
+                border: Border.all(
+                  color: TColors.primary.withOpacity(0.2),
+                  width: 1,
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: TColors.primary,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: const Icon(
+                          Icons.store,
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                      ),
+                      const SizedBox(width: TSizes.xs),
+                      Text(
+                        storeResponse!['responderName'],
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: TColors.primary,
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        storeResponse!['date'],
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: TSizes.xs),
+                  Text(
+                    storeResponse!['comment'],
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      height: 1.4,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     );
