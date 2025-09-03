@@ -1,7 +1,10 @@
+import 'package:ecommerce_store/features/personalization/screens/address/widgets/address.dart';
 import 'package:ecommerce_store/features/personalization/screens/profile/widgets/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 // import your profile page
 
 class SettingsScreen extends StatelessWidget {
@@ -152,11 +155,11 @@ class SettingsScreen extends StatelessWidget {
           
           ListTile(
             leading: Icon(Icons.location_on_outlined, color: Colors.blue),
-            title: const Text('My Address'),
-            subtitle: const Text('Manage your shipping and billing addresses'),
-            onTap: () {},
+            title: Text('My Address'),
+            subtitle: Text('Manage your shipping and billing addresses'),
+            onTap: () => Get.to(() => UserAddressScreen()),
           ),
-          const Divider(),
+          Divider(),
           ListTile(
             leading: Icon(Icons.shopping_cart_outlined, color: Colors.blue),
             title: const Text('My Cart'),
