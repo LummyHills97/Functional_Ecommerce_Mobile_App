@@ -553,10 +553,13 @@ class _ReviewCard extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Text(
-                          userName,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
+                        Flexible(
+                          child: Text(
+                            userName,
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         if (isVerified) ...[
@@ -592,10 +595,13 @@ class _ReviewCard extends StatelessWidget {
                           );
                         }),
                         const SizedBox(width: TSizes.xs),
-                        Text(
-                          date,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6),
+                        Flexible(
+                          child: Text(
+                            date,
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6),
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
@@ -713,14 +719,17 @@ class _ReviewCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: TSizes.xs),
-                      Text(
-                        storeResponse!['responderName'],
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: TColors.primary,
+                      Expanded(
+                        child: Text(
+                          storeResponse!['responderName'],
+                          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: TColors.primary,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      const Spacer(),
+                      const SizedBox(width: TSizes.xs),
                       Text(
                         storeResponse!['date'],
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
