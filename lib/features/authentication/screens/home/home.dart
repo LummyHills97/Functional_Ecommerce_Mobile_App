@@ -1,4 +1,5 @@
 import 'package:ecommerce_store/common/widgets/products.cart/product_cards/product_card_vertical.dart';
+import 'package:ecommerce_store/common/widgets/appbar/home_appbar.dart'; // Import the new widget
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:ecommerce_store/common/widgets/custom_shapes/containers/primary_header_container.dart';
@@ -23,8 +24,16 @@ class Banner {
   Banner({required this.title, required this.description, required this.imageUrl});
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  // Cart item count for demonstration
+  int cartItemCount = 2;
 
   // Mock categories data
   static final List<Category> _categories = [
@@ -93,74 +102,22 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // HEADER - Fixed app bar positioning
+  // HEADER - Now using the extracted THomeAppBar widget
   Widget _buildHeader(BuildContext context) {
     return TPrimaryHeaderContainer(
       height: 420,
       child: Column(
         children: [
-          // Custom App Bar - Fixed positioning
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Good day for shopping',
-                        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: TColors.grey,
-                        ),
-                      ),
-                      Text(
-                        'Taimoor Sikander',
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          color: TColors.white,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Stack(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.shopping_bag_outlined, color: TColors.white),
-                        onPressed: () => debugPrint('Cart pressed'),
-                      ),
-                      Positioned(
-                        right: 6,
-                        top: 6,
-                        child: Container(
-                          width: 18,
-                          height: 18,
-                          decoration: BoxDecoration(
-                            color: TColors.black,
-                            borderRadius: BorderRadius.circular(9),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '2',
-                              style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                color: TColors.white,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+          // Use the new THomeAppBar widget
+          THomeAppBar(
+            userName: 'Taimoor Sikander',
+            cartItemCount: cartItemCount,
+            onCartPressed: () => _navigateToCart(context),
           ),
           
           const SizedBox(height: TSizes.spaceBtwItems),
           
-          // Search Container - Properly positioned
+          // Search Container
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
             child: TSearchContainer(
@@ -176,6 +133,26 @@ class HomePage extends StatelessWidget {
             child: _buildPopularCategories(context),
           ),
         ],
+      ),
+    );
+  }
+
+  // Cart navigation handler
+  void _navigateToCart(BuildContext context) {
+    debugPrint('Navigating to cart with $cartItemCount items');
+    // Add your cart navigation logic here
+    // Navigator.pushNamed(context, '/cart');
+    
+    // For demo, let's update the cart count
+    setState(() {
+      cartItemCount = cartItemCount == 0 ? 2 : cartItemCount + 1;
+    });
+    
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Cart has $cartItemCount items'),
+        duration: const Duration(seconds: 1),
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }
@@ -242,7 +219,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // POPULAR PRODUCTS - Updated to use TProductCardVertical with product data
+  // POPULAR PRODUCTS
   Widget _buildPopularProducts(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -270,7 +247,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // FEATURED PRODUCTS - Enhanced with better dark mode support
+  // FEATURED PRODUCTS
   Widget _buildFeaturedProducts(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     
@@ -402,7 +379,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // DEALS - Enhanced design
+  // DEALS
   Widget _buildDealsSection(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     
