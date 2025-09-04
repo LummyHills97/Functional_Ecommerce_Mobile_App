@@ -1,10 +1,12 @@
 import 'package:ecommerce_store/common/widgets/appbar/appbar.dart';
+import 'package:ecommerce_store/features/personalization/controllers/address%20Controller/address_controller.dart';
+import 'package:ecommerce_store/features/personalization/screens/address/widgets/address_model.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
-import 'package:ecommerce_store/utils/helpers/helpers_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+
 
 class AddNewAddressScreen extends StatefulWidget {
   const AddNewAddressScreen({super.key});
@@ -25,6 +27,9 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
   final _stateController = TextEditingController();
   final _countryController = TextEditingController();
   
+  // Get the address controller
+  final controller = Get.put(AddressController());
+  
   @override
   void dispose() {
     _nameController.dispose();
@@ -39,8 +44,6 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final dark = THelperFunctions.isDarkMode(context);
-    
     return Scaffold(
       appBar: const TAppBar(
         showBackArrow: true,
@@ -182,12 +185,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        // Save address logic here
-                        _saveAddress();
-                      }
-                    },
+                    onPressed: () => _saveAddress(),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: TColors.primary,
                       foregroundColor: Colors.white,
@@ -214,19 +212,21 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
   }
   
   void _saveAddress() {
-    // Here you would typically save to database or state management
-    // For now, we'll just show a success message and go back
-    
-    // Show success message
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Address saved successfully!'),
-        backgroundColor: Colors.green,
-        duration: Duration(seconds: 2),
-      ),
-    );
-    
-    // Go back to previous screen
-    Get.back();
+    if (_formKey.currentState!.validate()) {
+      // Create new address object
+      final newAddress = Address(
+        id: '', // Will be generated in controller
+        name: _nameController.text.trim(),
+        phoneNumber: _phoneController.text.trim(),
+        street: _streetController.text.trim(),
+        city: _cityController.text.trim(),
+        state: _stateController.text.trim(),
+        postalCode: _postalCodeController.text.trim(),
+        country: _countryController.text.trim(),
+      );
+      
+      // Save through controller
+      controller.addNewAddress(newAddress);
+    }
   }
 }
