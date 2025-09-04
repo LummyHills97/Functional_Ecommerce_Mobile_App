@@ -30,8 +30,8 @@ class UserAddressScreen extends StatelessWidget {
           padding: EdgeInsets.all(TSizes.defaultSpace),
           child: Column(
             children: [
-              TSingleAddress(selectedAddress: true),
               TSingleAddress(selectedAddress: false),
+              TSingleAddress(selectedAddress: true),
             ],
           ),
         ),
