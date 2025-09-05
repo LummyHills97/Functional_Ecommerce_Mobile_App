@@ -1,0 +1,131 @@
+import 'package:flutter/material.dart';
+import 'package:ecommerce_store/utils/constants/colors.dart';
+import 'package:ecommerce_store/utils/constants/sizes.dart';
+
+class THomeAppBar extends StatelessWidget {
+  const THomeAppBar({
+    super.key,
+    this.userName = 'User',
+    this.cartItemCount = 0,
+    this.onCartPressed,
+  });
+
+  final String userName;
+  final int cartItemCount;
+  final VoidCallback? onCartPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Welcome Text Section
+            _buildWelcomeSection(context),
+            
+            // Cart Icon with Badge
+            _buildCartIcon(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Welcome section with greeting and user name
+  Widget _buildWelcomeSection(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          _getGreeting(),
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+            color: TColors.grey,
+          ),
+        ),
+        Text(
+          userName,
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            color: TColors.white,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Cart icon with animated badge
+  Widget _buildCartIcon(BuildContext context) {
+    return Stack(
+      children: [
+        IconButton(
+          icon: const Icon(
+            Icons.shopping_bag_outlined,
+            color: TColors.white,
+            size: 28,
+          ),
+          onPressed: onCartPressed ?? () => _defaultCartAction(context),
+        ),
+        
+        // Cart Badge
+        if (cartItemCount > 0)
+          Positioned(
+            right: 6,
+            top: 6,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.elasticOut,
+              width: cartItemCount > 99 ? 24 : 18,
+              height: 18,
+              decoration: BoxDecoration(
+                color: TColors.black,
+                borderRadius: BorderRadius.circular(9),
+                border: Border.all(
+                  color: TColors.white,
+                  width: 1.5,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Center(
+                child: Text(
+                  cartItemCount > 99 ? '99+' : cartItemCount.toString(),
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    color: TColors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: cartItemCount > 99 ? 10 : 11,
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  /// Get appropriate greeting based on time of day
+  String _getGreeting() {
+    final hour = DateTime.now().hour;
+    
+    if (hour < 12) {
+      return 'Good morning for shopping';
+    } else if (hour < 17) {
+      return 'Good afternoon for shopping';
+    } else {
+      return 'Good evening for shopping';
+    }
+  }
+
+  /// Default cart action when no callback is provided
+  void _defaultCartAction(BuildContext context) {
+    debugPrint('Cart pressed - navigating to cart screen');
+    // You can add default navigation here
+    // Navigator.pushNamed(context, '/cart');
+  }
+}
