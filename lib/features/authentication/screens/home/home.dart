@@ -142,18 +142,7 @@ class _HomePageState extends State<HomePage> {
     debugPrint('Navigating to cart with $cartItemCount items');
     
     // Navigate to cart screen - Choose one of these options:
-    
-    // Option A: If you have named routes set up
     Navigator.pushNamed(context, '/cart');
-    
-    // Option B: If you want to import and navigate directly
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => const CartScreen()),
-    // );
-    
-    // Option C: If you want to use a more advanced navigation
-    // Get.to(() => const CartScreen()); // If using GetX
   }
 
   // CATEGORIES
@@ -389,9 +378,12 @@ class _HomePageState extends State<HomePage> {
           debugPrint('View all deals');
         }),
         const SizedBox(height: TSizes.spaceBtwItems),
+
+        // ---------- FIXED Flash Sale Container ----------
         Container(
           height: 120,
           width: double.infinity,
+          clipBehavior: Clip.hardEdge, // prevents tiny overflow pixels
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: isDarkMode 
@@ -408,8 +400,10 @@ class _HomePageState extends State<HomePage> {
           child: Padding(
             padding: const EdgeInsets.all(TSizes.md),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Expanded(
+                // Make the text area flexible so it never forces overflow
+                Flexible(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -451,10 +445,19 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                Icon(
-                  Icons.local_fire_department,
-                  size: 48,
-                  color: Colors.red[400],
+
+                // Fixed-width slot for the icon to avoid pushing layout
+                const SizedBox(width: TSizes.spaceBtwItems),
+                SizedBox(
+                  width: 64, // gives the icon a max width so it can't expand the row
+                  height: 64,
+                  child: Center(
+                    child: Icon(
+                      Icons.local_fire_department,
+                      size: 44, // slightly reduced to be safe on small screens
+                      color: Colors.red[400],
+                    ),
+                  ),
                 ),
               ],
             ),
