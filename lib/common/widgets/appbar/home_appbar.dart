@@ -1,3 +1,4 @@
+import 'package:ecommerce_store/common/widgets/products.cart/cart_menu_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
@@ -57,55 +58,10 @@ class THomeAppBar extends StatelessWidget {
 
   /// Cart icon with animated badge
   Widget _buildCartIcon(BuildContext context) {
-    return Stack(
-      children: [
-        IconButton(
-          icon: const Icon(
-            Icons.shopping_bag_outlined,
-            color: TColors.white,
-            size: 28,
-          ),
-          onPressed: onCartPressed ?? () => _defaultCartAction(context),
-        ),
-        
-        // Cart Badge
-        if (cartItemCount > 0)
-          Positioned(
-            right: 6,
-            top: 6,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.elasticOut,
-              width: cartItemCount > 99 ? 24 : 18,
-              height: 18,
-              decoration: BoxDecoration(
-                color: TColors.black,
-                borderRadius: BorderRadius.circular(9),
-                border: Border.all(
-                  color: TColors.white,
-                  width: 1.5,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Center(
-                child: Text(
-                  cartItemCount > 99 ? '99+' : cartItemCount.toString(),
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: TColors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: cartItemCount > 99 ? 10 : 11,
-                  ),
-                ),
-              ),
-            ),
-          ),
-      ],
+    return TCartCounterIcon(
+      onPressed: onCartPressed ?? () => _defaultCartAction(context),
+      itemCount: cartItemCount,
+      iconColor: TColors.white,
     );
   }
 
