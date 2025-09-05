@@ -1,4 +1,5 @@
 import 'package:ecommerce_store/features/personalization/screens/address/widgets/address.dart';
+import 'package:ecommerce_store/features/personalization/screens/cart/widgets/cart.dart';
 import 'package:ecommerce_store/features/personalization/screens/profile/widgets/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';

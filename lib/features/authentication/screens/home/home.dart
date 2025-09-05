@@ -1,5 +1,5 @@
 import 'package:ecommerce_store/common/widgets/products.cart/product_cards/product_card_vertical.dart';
-import 'package:ecommerce_store/common/widgets/appbar/home_appbar.dart'; // Import the new widget
+import 'package:ecommerce_store/common/widgets/appbar/home_appbar.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:ecommerce_store/common/widgets/custom_shapes/containers/primary_header_container.dart';
@@ -140,21 +140,20 @@ class _HomePageState extends State<HomePage> {
   // Cart navigation handler
   void _navigateToCart(BuildContext context) {
     debugPrint('Navigating to cart with $cartItemCount items');
-    // Add your cart navigation logic here
-    // Navigator.pushNamed(context, '/cart');
     
-    // For demo, let's update the cart count
-    setState(() {
-      cartItemCount = cartItemCount == 0 ? 2 : cartItemCount + 1;
-    });
+    // Navigate to cart screen - Choose one of these options:
     
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Cart has $cartItemCount items'),
-        duration: const Duration(seconds: 1),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+    // Option A: If you have named routes set up
+    Navigator.pushNamed(context, '/cart');
+    
+    // Option B: If you want to import and navigate directly
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => const CartScreen()),
+    // );
+    
+    // Option C: If you want to use a more advanced navigation
+    // Get.to(() => const CartScreen()); // If using GetX
   }
 
   // CATEGORIES

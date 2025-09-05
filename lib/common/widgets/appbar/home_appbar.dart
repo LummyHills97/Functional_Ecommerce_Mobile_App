@@ -1,4 +1,5 @@
 import 'package:ecommerce_store/common/widgets/products.cart/cart_menu_icon.dart';
+import 'package:ecommerce_store/features/personalization/screens/cart/widgets/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
@@ -81,7 +82,16 @@ class THomeAppBar extends StatelessWidget {
   /// Default cart action when no callback is provided
   void _defaultCartAction(BuildContext context) {
     debugPrint('Cart pressed - navigating to cart screen');
-    // You can add default navigation here
-    // Navigator.pushNamed(context, '/cart');
+    
+    Navigator.push(
+  context,
+  MaterialPageRoute(builder: (context) => const CartScreen()),
+);
+    
+    // Alternative: Direct navigation if you import CartScreen
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => const CartScreen()),
+    // );
   }
 }
