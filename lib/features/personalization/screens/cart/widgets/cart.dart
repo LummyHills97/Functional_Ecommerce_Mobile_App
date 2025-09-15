@@ -1,6 +1,10 @@
 import 'package:ecommerce_store/common/widgets/appbar/appbar.dart';
+import 'package:ecommerce_store/features/personalization/controllers/card_controller.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+// Import your CartController here
+// import 'package:ecommerce_store/controllers/cart_controller.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -14,8 +18,8 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
 
-  // Start with an empty cart
-  List<CartItem> cartItems = [];
+  // Get the cart controller
+  final CartController cartController = Get.find<CartController>();
 
   @override
   void initState() {
@@ -45,40 +49,6 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  double get subtotal =>
-      cartItems.fold(0.0, (sum, item) => sum + (item.price * item.quantity));
-  double get shipping => subtotal > 500 ? 0.0 : 15.0;
-  double get tax => subtotal * 0.08;
-  double get total => subtotal + shipping + tax;
-
-  void _updateQuantity(String id, int newQuantity) {
-    setState(() {
-      if (newQuantity <= 0) {
-        cartItems.removeWhere((item) => item.id == id);
-      } else {
-        final index = cartItems.indexWhere((item) => item.id == id);
-        if (index != -1) {
-          cartItems[index].quantity = newQuantity;
-        }
-      }
-    });
-  }
-
-  void _removeItem(String id) {
-    setState(() {
-      cartItems.removeWhere((item) => item.id == id);
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text('Item removed from cart'),
-        backgroundColor: Theme.of(context).colorScheme.error,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
@@ -87,17 +57,23 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: TAppBar(
-        title: Text(
-          'My Cart (${cartItems.length})',
+        title: Obx(() => Text(
+          'My Cart (${cartController.itemCount})',
           style: tt.headlineSmall?.copyWith(
             fontWeight: FontWeight.bold,
             color: cs.onSurface,
           ),
-        ),
+        )),
       ),
-      body: cartItems.isEmpty ? _buildEmptyCart(cs, tt) : _buildCartContent(cs, tt),
-      bottomNavigationBar:
-          cartItems.isNotEmpty ? _buildCheckoutSection(cs, tt) : null,
+      body: Obx(() => cartController.cartItems.isEmpty 
+          ? _buildEmptyCart(cs, tt) 
+          : _buildCartContent(cs, tt)),
+     bottomNavigationBar: Obx(() => 
+  cartController.cartItems.isNotEmpty 
+      ? _buildCheckoutSection(cs, tt) 
+      : const SizedBox.shrink(),
+),
+
     );
   }
 
@@ -138,14 +114,13 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
             ),
             const SizedBox(height: 32),
             ElevatedButton.icon(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => Get.back(),
               icon: const Icon(Icons.shopping_bag),
               label: const Text('Start Shopping'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: cs.primary,
                 foregroundColor: cs.onPrimary,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),
               ),
@@ -166,21 +141,21 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
           opacity: _fadeAnimation,
           child: SlideTransition(
             position: _slideAnimation,
-            child: ListView.separated(
+            child: Obx(() => ListView.separated(
               padding: EdgeInsets.fromLTRB(
                 TSizes.defaultSpace,
                 TSizes.defaultSpace,
                 TSizes.defaultSpace,
                 bottomPadding,
               ),
-              itemCount: cartItems.length,
+              itemCount: cartController.cartItems.length,
               separatorBuilder: (_, __) =>
                   const SizedBox(height: TSizes.spaceBtwSections),
               itemBuilder: (context, index) {
-                final item = cartItems[index];
+                final item = cartController.cartItems[index];
                 return _buildCartItem(item, index, cs, tt);
               },
-            ),
+            )),
           ),
         );
       },
@@ -278,7 +253,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                                 children: [
                                   _buildQuantityButton(
                                     Icons.remove,
-                                    () => _updateQuantity(
+                                    () => cartController.updateQuantity(
                                         item.id, item.quantity - 1),
                                     cs,
                                   ),
@@ -301,7 +276,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                                   ),
                                   _buildQuantityButton(
                                     Icons.add,
-                                    () => _updateQuantity(
+                                    () => cartController.updateQuantity(
                                         item.id, item.quantity + 1),
                                     cs,
                                   ),
@@ -314,7 +289,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                     ),
                     // Remove Button
                     IconButton(
-                      onPressed: () => _removeItem(item.id),
+                      onPressed: () => cartController.removeFromCart(item.id),
                       icon: Icon(Icons.close, color: cs.onSurfaceVariant),
                       style: IconButton.styleFrom(
                         backgroundColor: cs.surfaceVariant,
@@ -373,33 +348,32 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                   color: cs.surfaceVariant,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Column(
+                child: Obx(() => Column(
                   children: [
-                    _buildSummaryRow('Subtotal', subtotal, cs, tt),
+                    _buildSummaryRow('Subtotal', cartController.subtotal, cs, tt),
                     const SizedBox(height: 8),
-                    _buildSummaryRow('Shipping', shipping, cs, tt),
+                    _buildSummaryRow('Shipping', cartController.shipping, cs, tt),
                     const SizedBox(height: 8),
-                    _buildSummaryRow('Tax', tax, cs, tt),
+                    _buildSummaryRow('Tax', cartController.tax, cs, tt),
                     const Divider(height: 24),
-                    _buildSummaryRow('Total', total, cs, tt, isTotal: true),
+                    _buildSummaryRow('Total', cartController.total, cs, tt, isTotal: true),
                   ],
-                ),
+                )),
               ),
               const SizedBox(height: 16),
               // Checkout Button
               SizedBox(
                 width: double.infinity,
                 height: 56,
-                child: ElevatedButton(
+                child: Obx(() => ElevatedButton(
                   onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Text('Proceeding to checkout...'),
-                        backgroundColor: cs.primary,
-                        behavior: SnackBarBehavior.floating,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                      ),
+                    // Here you can navigate to checkout screen
+                    Get.snackbar(
+                      'Proceeding to Checkout',
+                      'Total: \$${cartController.total.toStringAsFixed(2)}',
+                      snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: cs.primary,
+                      colorText: cs.onPrimary,
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -415,7 +389,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                       const Icon(Icons.shopping_bag_outlined),
                       const SizedBox(width: 8),
                       Text(
-                        'Checkout • \$${total.toStringAsFixed(2)}',
+                        'Checkout • \$${cartController.total.toStringAsFixed(2)}',
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -423,7 +397,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                       ),
                     ],
                   ),
-                ),
+                )),
               ),
             ],
           ),
@@ -455,24 +429,4 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
       ],
     );
   }
-}
-
-class CartItem {
-  final String id;
-  final String name;
-  final double price;
-  final String image;
-  int quantity;
-  final String size;
-  final String color;
-
-  CartItem({
-    required this.id,
-    required this.name,
-    required this.price,
-    required this.image,
-    required this.quantity,
-    required this.size,
-    required this.color,
-  });
 }
