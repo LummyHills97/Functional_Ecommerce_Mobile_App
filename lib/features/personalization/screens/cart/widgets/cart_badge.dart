@@ -2,12 +2,11 @@ import 'package:ecommerce_store/features/personalization/controllers/card_contro
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 class CartBadgeWidget extends StatelessWidget {
   final VoidCallback? onPressed;
   final Color? iconColor;
   final double iconSize;
-  
+
   const CartBadgeWidget({
     super.key,
     this.onPressed,
@@ -18,10 +17,10 @@ class CartBadgeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CartController cartController = Get.find<CartController>();
-    
+
     return Obx(() {
       final itemCount = cartController.totalQuantity;
-      
+
       return Stack(
         clipBehavior: Clip.none,
         children: [
@@ -33,7 +32,6 @@ class CartBadgeWidget extends StatelessWidget {
               size: iconSize,
             ),
           ),
-          // Only show badge if there are items in cart
           if (itemCount > 0)
             Positioned(
               right: 6,
@@ -69,12 +67,11 @@ class CartBadgeWidget extends StatelessWidget {
   }
 }
 
-// Alternative simpler version that just shows count (not quantity)
 class SimpleCartBadge extends StatelessWidget {
   final VoidCallback? onPressed;
   final Color? iconColor;
   final double iconSize;
-  
+
   const SimpleCartBadge({
     super.key,
     this.onPressed,
@@ -85,10 +82,10 @@ class SimpleCartBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CartController cartController = Get.find<CartController>();
-    
+
     return Obx(() {
-      final itemCount = cartController.itemCount; // This shows unique items, not total quantity
-      
+      final itemCount = cartController.itemCount;
+
       return Stack(
         clipBehavior: Clip.none,
         children: [

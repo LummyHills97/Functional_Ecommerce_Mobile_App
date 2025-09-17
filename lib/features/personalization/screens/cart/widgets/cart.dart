@@ -3,8 +3,6 @@ import 'package:ecommerce_store/features/personalization/controllers/card_contro
 import 'package:ecommerce_store/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// Import your CartController here
-// import 'package:ecommerce_store/controllers/cart_controller.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -13,12 +11,12 @@ class CartScreen extends StatefulWidget {
   State<CartScreen> createState() => _CartScreenState();
 }
 
-class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
+class _CartScreenState extends State<CartScreen>
+    with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
 
-  // Get the cart controller
   final CartController cartController = Get.find<CartController>();
 
   @override
@@ -58,22 +56,20 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: TAppBar(
         title: Obx(() => Text(
-          'My Cart (${cartController.itemCount})',
-          style: tt.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: cs.onSurface,
-          ),
-        )),
+              'My Cart (${cartController.totalQuantity})',
+              style: tt.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: cs.onSurface,
+              ),
+            )),
       ),
-      body: Obx(() => cartController.cartItems.isEmpty 
-          ? _buildEmptyCart(cs, tt) 
+      body: Obx(() => cartController.cartItems.isEmpty
+          ? _buildEmptyCart(cs, tt)
           : _buildCartContent(cs, tt)),
-     bottomNavigationBar: Obx(() => 
-  cartController.cartItems.isNotEmpty 
-      ? _buildCheckoutSection(cs, tt) 
-      : const SizedBox.shrink(),
-),
-
+      bottomNavigationBar: Obx(() =>
+          cartController.cartItems.isNotEmpty
+              ? _buildCheckoutSection(cs, tt)
+              : const SizedBox.shrink()),
     );
   }
 
@@ -120,7 +116,8 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
               style: ElevatedButton.styleFrom(
                 backgroundColor: cs.primary,
                 foregroundColor: cs.onPrimary,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),
               ),
@@ -132,7 +129,8 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildCartContent(ColorScheme cs, TextTheme tt) {
-    final bottomPadding = kBottomNavigationBarHeight + TSizes.defaultSpace * 4;
+    final bottomPadding =
+        kBottomNavigationBarHeight + TSizes.defaultSpace * 4;
 
     return AnimatedBuilder(
       animation: _animationController,
@@ -142,27 +140,28 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
           child: SlideTransition(
             position: _slideAnimation,
             child: Obx(() => ListView.separated(
-              padding: EdgeInsets.fromLTRB(
-                TSizes.defaultSpace,
-                TSizes.defaultSpace,
-                TSizes.defaultSpace,
-                bottomPadding,
-              ),
-              itemCount: cartController.cartItems.length,
-              separatorBuilder: (_, __) =>
-                  const SizedBox(height: TSizes.spaceBtwSections),
-              itemBuilder: (context, index) {
-                final item = cartController.cartItems[index];
-                return _buildCartItem(item, index, cs, tt);
-              },
-            )),
+                  padding: EdgeInsets.fromLTRB(
+                    TSizes.defaultSpace,
+                    TSizes.defaultSpace,
+                    TSizes.defaultSpace,
+                    bottomPadding,
+                  ),
+                  itemCount: cartController.cartItems.length,
+                  separatorBuilder: (_, __) =>
+                      const SizedBox(height: TSizes.spaceBtwSections),
+                  itemBuilder: (context, index) {
+                    final item = cartController.cartItems[index];
+                    return _buildCartItem(item, index, cs, tt);
+                  },
+                )),
           ),
         );
       },
     );
   }
 
-  Widget _buildCartItem(CartItem item, int index, ColorScheme cs, TextTheme tt) {
+  Widget _buildCartItem(
+      CartItem item, int index, ColorScheme cs, TextTheme tt) {
     return TweenAnimationBuilder(
       duration: Duration(milliseconds: 300 + (index * 100)),
       tween: Tween<double>(begin: 0.0, end: 1.0),
@@ -253,8 +252,8 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                                 children: [
                                   _buildQuantityButton(
                                     Icons.remove,
-                                    () => cartController.updateQuantity(
-                                        item.id, item.quantity - 1),
+                                    () => cartController
+                                        .decrementQuantity(item.id),
                                     cs,
                                   ),
                                   Container(
@@ -276,8 +275,8 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                                   ),
                                   _buildQuantityButton(
                                     Icons.add,
-                                    () => cartController.updateQuantity(
-                                        item.id, item.quantity + 1),
+                                    () => cartController
+                                        .incrementQuantity(item.id),
                                     cs,
                                   ),
                                 ],
@@ -289,7 +288,8 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                     ),
                     // Remove Button
                     IconButton(
-                      onPressed: () => cartController.removeFromCart(item.id),
+                      onPressed: () =>
+                          cartController.removeFromCart(item.id),
                       icon: Icon(Icons.close, color: cs.onSurfaceVariant),
                       style: IconButton.styleFrom(
                         backgroundColor: cs.surfaceVariant,
@@ -317,7 +317,8 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
         onPressed: onPressed,
         icon: Icon(icon, size: 16),
         color: cs.primary,
-        constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+        constraints:
+            const BoxConstraints(minWidth: 32, minHeight: 32),
       ),
     );
   }
@@ -349,16 +350,25 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Obx(() => Column(
-                  children: [
-                    _buildSummaryRow('Subtotal', cartController.subtotal, cs, tt),
-                    const SizedBox(height: 8),
-                    _buildSummaryRow('Shipping', cartController.shipping, cs, tt),
-                    const SizedBox(height: 8),
-                    _buildSummaryRow('Tax', cartController.tax, cs, tt),
-                    const Divider(height: 24),
-                    _buildSummaryRow('Total', cartController.total, cs, tt, isTotal: true),
-                  ],
-                )),
+                      children: [
+                        _buildSummaryRow(
+                            'Subtotal', cartController.subtotal, cs, tt),
+                        const SizedBox(height: 8),
+                        _buildSummaryRow(
+                            'Shipping', cartController.shipping, cs, tt),
+                        const SizedBox(height: 8),
+                        _buildSummaryRow(
+                            'Tax', cartController.tax, cs, tt),
+                        const Divider(height: 24),
+                        _buildSummaryRow(
+                          'Total',
+                          cartController.total,
+                          cs,
+                          tt,
+                          isTotal: true,
+                        ),
+                      ],
+                    )),
               ),
               const SizedBox(height: 16),
               // Checkout Button
@@ -366,38 +376,37 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                 width: double.infinity,
                 height: 56,
                 child: Obx(() => ElevatedButton(
-                  onPressed: () {
-                    // Here you can navigate to checkout screen
-                    Get.snackbar(
-                      'Proceeding to Checkout',
-                      'Total: \$${cartController.total.toStringAsFixed(2)}',
-                      snackPosition: SnackPosition.BOTTOM,
-                      backgroundColor: cs.primary,
-                      colorText: cs.onPrimary,
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: cs.primary,
-                    foregroundColor: cs.onPrimary,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16)),
-                    elevation: 2,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.shopping_bag_outlined),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Checkout • \$${cartController.total.toStringAsFixed(2)}',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      onPressed: () {
+                        Get.snackbar(
+                          'Proceeding to Checkout',
+                          'Total: \$${cartController.total.toStringAsFixed(2)}',
+                          snackPosition: SnackPosition.BOTTOM,
+                          backgroundColor: cs.primary,
+                          colorText: cs.onPrimary,
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: cs.primary,
+                        foregroundColor: cs.onPrimary,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16)),
+                        elevation: 2,
                       ),
-                    ],
-                  ),
-                )),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.shopping_bag_outlined),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Checkout • \$${cartController.total.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
               ),
             ],
           ),
@@ -406,9 +415,13 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildSummaryRow(String label, double amount, ColorScheme cs,
-      TextTheme tt,
-      {bool isTotal = false}) {
+  Widget _buildSummaryRow(
+    String label,
+    double amount,
+    ColorScheme cs,
+    TextTheme tt, {
+    bool isTotal = false,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
