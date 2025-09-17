@@ -1,37 +1,26 @@
 import 'package:get/get.dart';
-
-class CartItem {
-  final String id;
-  final String name;
-  final double price;
-  final String image;
-  int quantity;
-
-  CartItem({
-    required this.id,
-    required this.name,
-    required this.price,
-    required this.image,
-    this.quantity = 1,
-  });
-}
+import 'package:ecommerce_store/features/personalization/models/cart_item.dart';
 
 class CartController extends GetxController {
   var cartItems = <CartItem>[].obs;
 
   int get itemCount => cartItems.length;
+  int get totalQuantity => cartItems.fold(0, (sum, item) => sum + item.quantity);
 
-  int get totalQuantity =>
-      cartItems.fold(0, (sum, item) => sum + item.quantity);
+  // ✅ Check if a product is already in the cart
+  bool isInCart(String productId) {
+    return cartItems.any((item) => item.id == productId);
+  }
 
   void quickAddToCart({
     required String productId,
     required String productName,
     required double productPrice,
     required String productImage,
+    String productSize = "Default",
+    String productColor = "Default",
   }) {
-    final existingIndex =
-        cartItems.indexWhere((item) => item.id == productId);
+    final existingIndex = cartItems.indexWhere((item) => item.id == productId);
 
     if (existingIndex >= 0) {
       cartItems[existingIndex].quantity++;
@@ -42,11 +31,37 @@ class CartController extends GetxController {
         name: productName,
         price: productPrice,
         image: productImage,
+        size: productSize,
+        color: productColor,
       ));
     }
   }
 
-  bool isInCart(String productId) {
-    return cartItems.any((item) => item.id == productId);
+  void incrementQuantity(String id) {
+    final index = cartItems.indexWhere((item) => item.id == id);
+    if (index >= 0) {
+      cartItems[index].quantity++;
+      cartItems.refresh();
+    }
   }
+
+  void decrementQuantity(String id) {
+    final index = cartItems.indexWhere((item) => item.id == id);
+    if (index >= 0 && cartItems[index].quantity > 1) {
+      cartItems[index].quantity--;
+      cartItems.refresh();
+    }
+  }
+
+  void removeFromCart(String id) {
+    cartItems.removeWhere((item) => item.id == id);
+    update();
+  }
+
+  double get subtotal =>
+      cartItems.fold(0, (sum, item) => sum + (item.price * item.quantity));
+
+  double get shipping => cartItems.isEmpty ? 0 : 10.0;
+  double get tax => subtotal * 0.05;
+  double get total => subtotal + shipping + tax;
 }
