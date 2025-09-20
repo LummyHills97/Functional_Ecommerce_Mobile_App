@@ -1,7 +1,9 @@
 import 'package:ecommerce_store/common/widgets/products.cart/product_cards/product_card_vertical.dart';
 import 'package:ecommerce_store/common/widgets/appbar/home_appbar.dart';
+import 'package:ecommerce_store/features/personalization/controllers/card_controller.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:get/get.dart';
 import 'package:ecommerce_store/common/widgets/custom_shapes/containers/primary_header_container.dart';
 import 'package:ecommerce_store/common/widgets/custom_shapes/containers/search_container.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
@@ -32,8 +34,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // Cart item count for demonstration
-  int cartItemCount = 2;
+  // Get CartController instance
+  final CartController cartController = Get.find<CartController>();
 
   // Mock categories data
   static final List<Category> _categories = [
@@ -59,9 +61,10 @@ class _HomePageState extends State<HomePage> {
     ),
   ];
 
-  // Mock product data
+  // Mock product data - Added IDs for cart functionality
   static final List<Map<String, dynamic>> _popularProducts = [
     {
+      'id': 'nike_wildhorse_1',
       'name': 'Nike Wildhorse Trail',
       'brand': 'Nike',
       'image': 'assets/images/products/NikeWildhorse.png',
@@ -70,6 +73,7 @@ class _HomePageState extends State<HomePage> {
       'discount': 19,
     },
     {
+      'id': 'nike_air_max_1',
       'name': 'Nike Air Max',
       'brand': 'Nike', 
       'image': 'assets/images/products/nike-shoes.png',
@@ -78,6 +82,7 @@ class _HomePageState extends State<HomePage> {
       'discount': 25,
     },
     {
+      'id': 'nike_bennasi_1',
       'name': 'Nike Bennasi',
       'brand': 'Nike',
       'image': 'assets/images/products/product-slippers.png',
@@ -102,18 +107,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // HEADER - Now using the extracted THomeAppBar widget
+  // HEADER - Updated to show real cart count
   Widget _buildHeader(BuildContext context) {
     return TPrimaryHeaderContainer(
       height: 420,
       child: Column(
         children: [
-          // Use the new THomeAppBar widget
-          THomeAppBar(
+          // Use the new THomeAppBar widget with real cart count
+          Obx(() => THomeAppBar(
             userName: 'Taimoor Sikander',
-            cartItemCount: cartItemCount,
+            cartItemCount: cartController.cartItems.length,
             onCartPressed: () => _navigateToCart(context),
-          ),
+          )),
           
           const SizedBox(height: TSizes.spaceBtwItems),
           
@@ -139,10 +144,10 @@ class _HomePageState extends State<HomePage> {
 
   // Cart navigation handler
   void _navigateToCart(BuildContext context) {
-    debugPrint('Navigating to cart with $cartItemCount items');
+    debugPrint('Navigating to cart with ${cartController.cartItems.length} items');
     
-    // Navigate to cart screen - Choose one of these options:
-    Navigator.pushNamed(context, '/cart');
+    // Navigate to cart screen
+    Get.toNamed('/cart');
   }
 
   // CATEGORIES
@@ -207,7 +212,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // POPULAR PRODUCTS
+  // POPULAR PRODUCTS - Now properly integrated with cart
   Widget _buildPopularProducts(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -379,11 +384,10 @@ class _HomePageState extends State<HomePage> {
         }),
         const SizedBox(height: TSizes.spaceBtwItems),
 
-        // ---------- FIXED Flash Sale Container ----------
         Container(
           height: 120,
           width: double.infinity,
-          clipBehavior: Clip.hardEdge, // prevents tiny overflow pixels
+          clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: isDarkMode 
@@ -449,12 +453,12 @@ class _HomePageState extends State<HomePage> {
                 // Fixed-width slot for the icon to avoid pushing layout
                 const SizedBox(width: TSizes.spaceBtwItems),
                 SizedBox(
-                  width: 64, // gives the icon a max width so it can't expand the row
+                  width: 64,
                   height: 64,
                   child: Center(
                     child: Icon(
                       Icons.local_fire_department,
-                      size: 44, // slightly reduced to be safe on small screens
+                      size: 44,
                       color: Colors.red[400],
                     ),
                   ),

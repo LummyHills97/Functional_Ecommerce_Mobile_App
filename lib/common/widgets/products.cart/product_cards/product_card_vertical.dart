@@ -1,218 +1,228 @@
-import 'package:ecommerce_store/common/styles/shadow_styles.dart';
-import 'package:ecommerce_store/common/widgets/t_rounded_image.dart';
-import 'package:ecommerce_store/features/shop/screens/product_details/widgets/product_detail.dart';
-import 'package:ecommerce_store/utils/constants/image_strings.dart';
-import 'package:ecommerce_store/utils/constants/sizes.dart';
-import 'package:ecommerce_store/utils/constants/colors.dart';
-import 'package:ecommerce_store/utils/helpers/helpers_functions.dart';
+import 'package:ecommerce_store/features/personalization/controllers/card_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:ecommerce_store/utils/constants/colors.dart';
+import 'package:ecommerce_store/utils/constants/sizes.dart';
 
-class TProductCardVertical extends StatefulWidget {
-  final Map<String, dynamic>? product; // Add product parameter
-  
+class TProductCardVertical extends StatelessWidget {
+  final Map<String, dynamic> product;
+
   const TProductCardVertical({
     super.key,
-    this.product,
+    required this.product,
   });
 
   @override
-  State<TProductCardVertical> createState() => _TProductCardVerticalState();
-}
-
-class _TProductCardVerticalState extends State<TProductCardVertical> {
-  bool isFavorited = false;
-
-  void _navigateToProductDetails(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => ProductDetailScreen(product: widget.product),
-      ),
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final isDark = THelperFunctions.isDarkMode(context);
-    
-    // Use product data if available, otherwise use default values
-    final productName = widget.product?['name'] ?? 'Green Nike Air Shoes';
-    final brandName = widget.product?['brand'] ?? 'Nike';
-    final price = widget.product?['price'] ?? 25.00;
-    final originalPrice = widget.product?['originalPrice'] ?? 35.00;
-    final discount = widget.product?['discount'] ?? 25;
-    final imageUrl = widget.product?['image'] ?? TImages.productImage1;
+    final CartController cartController = Get.find<CartController>();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return GestureDetector(
-      onTap: () => _navigateToProductDetails(context),
-      child: Container(
-        padding: const EdgeInsets.all(TSizes.sm),
-        decoration: BoxDecoration(
-          boxShadow: isDark ? [] : const [TShadowStyle.verticalProductShadow],
-          borderRadius: BorderRadius.circular(TSizes.productImageRadius),
-          color: isDark ? Colors.black : TColors.white,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            /// IMAGE SECTION
-            Container(
-              height: 140,
+    return Container(
+      width: 180,
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(TSizes.productImageRadius),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Image Container
+          Expanded(
+            flex: 4,
+            child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(TSizes.productImageRadius),
-                color: isDark ? Colors.black : TColors.light,
+                color: isDark ? TColors.dark : TColors.light,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(TSizes.productImageRadius),
+                  topRight: Radius.circular(TSizes.productImageRadius),
+                ),
               ),
               child: Stack(
                 children: [
-                  TRoundedImage(
-                    imageUrl: imageUrl,
-                    width: double.infinity,
-                    height: double.infinity,
-                    fit: BoxFit.cover,
-                    borderRadius: TSizes.productImageRadius,
-                  ),
-
-                  /// Discount Label
-                  Positioned(
-                    top: TSizes.xs,
-                    left: TSizes.xs,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: TSizes.xs,
-                        vertical: TSizes.xs / 2,
+                  // Product Image
+                  Center(
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(TSizes.productImageRadius),
+                        topRight: Radius.circular(TSizes.productImageRadius),
                       ),
-                      decoration: BoxDecoration(
-                        color: TColors.secondary,
-                        borderRadius: BorderRadius.circular(TSizes.xs),
-                      ),
-                      child: Text(
-                        '$discount%',
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: TColors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+                      child: Image.asset(
+                        product['image'],
+                        height: double.infinity,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
-
-                  /// Favorite Button
-                  Positioned(
-                    top: TSizes.xs,
-                    right: TSizes.xs,
-                    child: IconButton(
-                      icon: Icon(
-                        isFavorited ? Icons.favorite : Icons.favorite_border,
-                        color: Colors.red,
+                  
+                  // Discount Badge
+                  if (product['discount'] != null)
+                    Positioned(
+                      top: 8,
+                      left: 8,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: TColors.secondary.withOpacity(0.8),
+                          borderRadius: BorderRadius.circular(TSizes.sm),
+                        ),
+                        child: Text(
+                          '${product['discount']}%',
+                          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            color: TColors.white,
+                          ),
+                        ),
                       ),
-                      onPressed: () {
-                        setState(() {
-                          isFavorited = !isFavorited;
-                        });
-                      },
+                    ),
+                  
+                  // Favourite Icon
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: isDark ? TColors.black.withOpacity(0.6) : TColors.white.withOpacity(0.9),
+                        shape: BoxShape.circle,
+                      ),
+                      child: IconButton(
+                        onPressed: () {
+                          // Add to wishlist functionality
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Added to wishlist')),
+                          );
+                        },
+                        icon: const Icon(
+                          Iconsax.heart,
+                          size: 20,
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-
-            const SizedBox(height: TSizes.spaceBtwItems / 2),
-
-            /// DETAILS SECTION
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: TSizes.xs),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    /// Product Name
-                    Flexible(
-                      child: Text(
-                        productName,
+          ),
+          
+          // Product Details
+          Expanded(
+            flex: 3,
+            child: Padding(
+              padding: const EdgeInsets.all(TSizes.sm),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Product Name
+                      Text(
+                        product['name'],
                         style: Theme.of(context).textTheme.labelLarge,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                       ),
-                    ),
-
-                    const SizedBox(height: TSizes.xs / 2),
-
-                    /// Brand Row
-                    Row(
-                      children: [
-                        const Icon(Icons.verified,
-                            color: TColors.primary, size: TSizes.iconXs),
-                        const SizedBox(width: TSizes.xs / 2),
-                        Flexible(
-                          child: Text(
-                            brandName,
-                            style: Theme.of(context).textTheme.labelMedium,
-                            overflow: TextOverflow.ellipsis,
+                      
+                      const SizedBox(height: TSizes.xs),
+                      
+                      // Brand Name
+                      Text(
+                        product['brand'],
+                        style: Theme.of(context).textTheme.labelMedium,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                  
+                  // Price and Add to Cart
+                  Column(
+                    children: [
+                      // Price Row
+                      Row(
+                        children: [
+                          // Current Price
+                          Text(
+                            '\$${product['price']}',
+                            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                              color: TColors.primary,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-
-                    const Spacer(),
-
-                    /// Price + Add to Cart
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '\$${originalPrice.toStringAsFixed(2)}',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelMedium
-                                    ?.copyWith(
-                                      decoration: TextDecoration.lineThrough,
-                                      color: TColors.darkGrey,
-                                    ),
+                          
+                          const SizedBox(width: TSizes.xs),
+                          
+                          // Original Price (if exists)
+                          if (product['originalPrice'] != null)
+                            Text(
+                              '\$${product['originalPrice']}',
+                              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                                decoration: TextDecoration.lineThrough,
+                                color: TColors.darkGrey,
                               ),
-                              Text(
-                                '\$${price.toStringAsFixed(2)}',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineSmall
-                                    ?.copyWith(
-                                      color: TColors.primary,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                            ),
+                        ],
+                      ),
+                      
+                      const SizedBox(height: TSizes.xs),
+                      
+                      // Add to Cart Button
+                      SizedBox(
+                        width: double.infinity,
+                        child: Obx(
+                          () {
+                            final productId = product['id']?.toString() ?? 
+                                             product['name'].toString();
+                            final isInCart = cartController.isInCart(productId);
+                            
+                            return ElevatedButton(
+                              onPressed: () {
+                                cartController.quickAddToCart(
+                                  productId: productId,
+                                  productName: product['name'],
+                                  productPrice: product['price'].toDouble(),
+                                  productImage: product['image'],
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: isInCart ? Colors.green : TColors.primary,
+                                foregroundColor: TColors.white,
+                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                textStyle: const TextStyle(fontSize: 12),
                               ),
-                            ],
-                          ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    isInCart ? Iconsax.tick_circle : Iconsax.add,
+                                    size: 16,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    isInCart ? 'Added' : 'Add to Cart',
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
-
-                        /// Add to Cart Button
-                        Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: isDark ? Colors.white10 : TColors.dark,
-                            borderRadius:
-                                BorderRadius.circular(TSizes.cardRadiusSm),
-                          ),
-                          child: IconButton(
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(),
-                            onPressed: () =>
-                                debugPrint('Added to cart: $productName'),
-                            icon: const Icon(Icons.add,
-                                color: TColors.white, size: 20),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
