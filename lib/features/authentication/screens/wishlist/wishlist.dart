@@ -215,33 +215,55 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                   SizedBox(
                     width: double.infinity,
                     height: 32, // Fixed height for button
-                    child: Obx(() => ElevatedButton(
-                          onPressed: () {
+                    child: Obx(() {
+                      final isInCart = cartController.isInCart(item['id'].toString());
+                      return ElevatedButton(
+                        onPressed: () {
+                          if (!isInCart) {
+                            // Add to cart
                             cartController.quickAddToCart(
                               productId: item['id'].toString(),
                               productName: item['name'],
                               productPrice: item['price'],
                               productImage: item['image'],
                             );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                cartController.isInCart(item['id'].toString())
-                                    ? Colors.green
-                                    : TColors.primary,
-                            padding: EdgeInsets.zero,
-                            textStyle: const TextStyle(fontSize: 12),
+                            
+                            // Show success message
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('${item['name']} added to cart'),
+                                duration: const Duration(seconds: 2),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          } else {
+                            // Remove from cart
+                            cartController.removeFromCart(item['id'].toString());
+                            
+                            // Show removal message
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('${item['name']} removed from cart'),
+                                duration: const Duration(seconds: 2),
+                                backgroundColor: Colors.orange,
+                              ),
+                            );
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: isInCart ? Colors.green : TColors.primary,
+                          padding: EdgeInsets.zero,
+                          textStyle: const TextStyle(fontSize: 12),
+                        ),
+                        child: Text(
+                          isInCart ? 'In Cart ✓' : 'Add to Cart',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
                           ),
-                          child: Text(
-                            cartController.isInCart(item['id'].toString())
-                                ? 'Added ✓'
-                                : 'Add to Cart',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 11,
-                            ),
-                          ),
-                        )),
+                        ),
+                      );
+                    }),
                   ),
                 ],
               ),
