@@ -1,5 +1,6 @@
 import 'package:ecommerce_store/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_store/features/personalization/controllers/card_controller.dart';
+import 'package:ecommerce_store/features/personalization/models/cart_item.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

@@ -12,6 +12,8 @@ class FavouriteScreen extends StatefulWidget {
 }
 
 class _FavouriteScreenState extends State<FavouriteScreen> {
+  final CartController cartController = Get.put(CartController());
+
   final List<Map<String, dynamic>> wishlistItems = [
     {
       'id': 1,
@@ -44,55 +46,176 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
     );
   }
 
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("My Wishlist"),
+        actions: [
+          IconButton(
+            icon: const Icon(Iconsax.trash),
+            onPressed: () {
+              setState(() {
+                wishlistItems.clear();
+              });
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Wishlist cleared')),
+              );
+            },
+          ),
+        ],
+      ),
+      body: wishlistItems.isEmpty
+          ? const Center(child: Text("Your wishlist is empty"))
+          : GridView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: wishlistItems.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 0.65, // Changed from 0.75 to 0.65 for more height
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+              ),
+              itemBuilder: (context, index) {
+                return _buildWishlistCard(
+                  context,
+                  wishlistItems[index],
+                  index,
+                  isDark,
+                );
+              },
+            ),
+    );
+  }
+
   Widget _buildWishlistCard(
       BuildContext context, Map<String, dynamic> item, int index, bool isDark) {
-    final CartController cartController = Get.find<CartController>();
-
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
-      child: Stack(
+      child: Column(
         children: [
-          Column(
-            children: [
-              Expanded(
-                flex: 5,
-                child: ClipRRect(
+          // Image section - Fixed height
+          Expanded(
+            flex: 4,
+            child: Stack(
+              children: [
+                ClipRRect(
                   borderRadius:
                       const BorderRadius.vertical(top: Radius.circular(12)),
-                  child: Image.asset(item['image'], fit: BoxFit.cover),
+                  child: Container(
+                    width: double.infinity,
+                    child: Image.asset(
+                      item['image'], 
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
-              ),
-              Expanded(
-                flex: 4,
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(item['name'],
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodyMedium),
-                      Text(item['brand'],
-                          style: Theme.of(context).textTheme.bodySmall),
-                      Row(
-                        children: [
-                          Text('\$${item['price']}',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: TColors.primary)),
-                          if (item['originalPrice'] != null)
-                            Text('\$${item['originalPrice']}',
-                                style: const TextStyle(
-                                    decoration: TextDecoration.lineThrough)),
+                // Heart icon positioned on top-right of image
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: GestureDetector(
+                    onTap: () => _removeFromWishlist(index),
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            spreadRadius: 1,
+                            blurRadius: 2,
+                          ),
                         ],
                       ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
+                      child: const Icon(
+                        Iconsax.heart5, 
+                        color: Colors.red, 
+                        size: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          
+          // Content section
+          Expanded(
+            flex: 3,
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Product name - limit to 2 lines
+                  Text(
+                    item['name'],
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 2),
+                  
+                  // Brand
+                  Text(
+                    item['brand'],
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 4),
+                  
+                  // Price section
+                  Row(
+                    children: [
+                      Text(
+                        '\$${item['price']}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: TColors.primary,
+                          fontSize: 14,
+                        ),
+                      ),
+                      if (item['originalPrice'] != null) ...[
+                        const SizedBox(width: 4),
+                        Text(
+                          '\$${item['originalPrice']}',
+                          style: TextStyle(
+                            decoration: TextDecoration.lineThrough,
+                            color: Colors.grey[500],
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                  
+                  const Spacer(),
+                  
+                  // Add to cart button
+                  SizedBox(
+                    width: double.infinity,
+                    height: 32, // Fixed height for button
+                    child: Obx(() => ElevatedButton(
                           onPressed: () {
                             cartController.quickAddToCart(
                               productId: item['id'].toString(),
@@ -106,45 +229,25 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                 cartController.isInCart(item['id'].toString())
                                     ? Colors.green
                                     : TColors.primary,
+                            padding: EdgeInsets.zero,
+                            textStyle: const TextStyle(fontSize: 12),
                           ),
-                          child: Obx(() => Text(
-                                cartController.isInCart(item['id'].toString())
-                                    ? 'Added ✓'
-                                    : 'Add to Cart',
-                              )),
-                        ),
-                      )
-                    ],
+                          child: Text(
+                            cartController.isInCart(item['id'].toString())
+                                ? 'Added ✓'
+                                : 'Add to Cart',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 11,
+                            ),
+                          ),
+                        )),
                   ),
-                ),
-              )
-            ],
-          ),
-          Positioned(
-            top: 8,
-            right: 8,
-            child: IconButton(
-              onPressed: () => _removeFromWishlist(index),
-              icon: const Icon(Iconsax.heart5, color: Colors.red),
+                ],
+              ),
             ),
-          )
+          ),
         ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Scaffold(
-      appBar: AppBar(title: const Text('Wishlist')),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(8),
-        gridDelegate:
-            const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-        itemCount: wishlistItems.length,
-        itemBuilder: (ctx, i) =>
-            _buildWishlistCard(ctx, wishlistItems[i], i, isDark),
       ),
     );
   }
