@@ -56,6 +56,7 @@ class _CartScreenState extends State<CartScreen>
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: TAppBar(
+         showBackArrow: true,
         title: Obx(() => Text(
               'My Cart (${cartController.totalQuantity})',
               style: tt.headlineSmall?.copyWith(
