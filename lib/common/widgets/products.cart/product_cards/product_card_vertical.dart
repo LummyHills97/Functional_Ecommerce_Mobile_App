@@ -111,59 +111,75 @@ class TProductCardVertical extends StatelessWidget {
             ),
           ),
 
-          /// 📃 Product Details Section
+          /// 📃 Product Details Section - FIXED
           Expanded(
             flex: 3,
             child: Padding(
               padding: const EdgeInsets.all(TSizes.sm),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min, // Added this
                 children: [
-                  /// Product Name & Brand
-                  Text(
-                    product['name'],
-                    style: Theme.of(context).textTheme.labelLarge,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                  ),
-                  const SizedBox(height: TSizes.xs),
-                  Text(
-                    product['brand'],
-                    style: Theme.of(context).textTheme.labelMedium,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+                  /// Product Name & Brand - Made flexible
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          product['name'],
+                          style: Theme.of(context).textTheme.labelLarge,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        ),
+                        const SizedBox(height: TSizes.xs),
+                        Text(
+                          product['brand'],
+                          style: Theme.of(context).textTheme.labelMedium,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      ],
+                    ),
                   ),
 
-                  const Spacer(),
+                  const SizedBox(height: TSizes.xs), // Small fixed spacing
 
-                  /// Price + Add to Cart
+                  /// Price + Add to Cart - Keep at bottom
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       /// Price Row
                       Row(
                         children: [
-                          Text(
-                            '\$${product['price']}',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineSmall
-                                ?.copyWith(
-                                  color: TColors.primary,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                          Flexible(
+                            child: Text(
+                              '\$${product['price']}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall
+                                  ?.copyWith(
+                                    color: TColors.primary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                           const SizedBox(width: TSizes.xs),
                           if (product['originalPrice'] != null)
-                            Text(
-                              '\$${product['originalPrice']}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelMedium
-                                  ?.copyWith(
-                                    decoration: TextDecoration.lineThrough,
-                                    color: TColors.darkGrey,
-                                  ),
+                            Flexible(
+                              child: Text(
+                                '\$${product['originalPrice']}',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelMedium
+                                    ?.copyWith(
+                                      decoration: TextDecoration.lineThrough,
+                                      color: TColors.darkGrey,
+                                    ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                         ],
                       ),
@@ -172,6 +188,7 @@ class TProductCardVertical extends StatelessWidget {
                       /// Add to Cart Button
                       SizedBox(
                         width: double.infinity,
+                        height: 36, // Fixed height for button
                         child: Obx(() {
                           final productId = product['id']?.toString() ??
                               product['name'].toString();
@@ -192,15 +209,22 @@ class TProductCardVertical extends StatelessWidget {
                                   ? Colors.green
                                   : TColors.primary,
                               foregroundColor: TColors.white,
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 6,
+                              ),
                               textStyle: const TextStyle(fontSize: 12),
+                              minimumSize: const Size(0, 36),
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             ),
                             icon: Icon(
                               isInCart ? Iconsax.tick_circle : Iconsax.add,
                               size: 16,
                             ),
-                            label: Text(isInCart ? 'Added' : 'Add to Cart'),
+                            label: Text(
+                              isInCart ? 'Added' : 'Add to Cart',
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           );
                         }),
                       ),
