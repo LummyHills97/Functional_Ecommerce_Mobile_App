@@ -220,34 +220,16 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                       return ElevatedButton(
                         onPressed: () {
                           if (!isInCart) {
-                            // Add to cart
+                            // Add to cart silently
                             cartController.quickAddToCart(
                               productId: item['id'].toString(),
                               productName: item['name'],
                               productPrice: item['price'],
                               productImage: item['image'],
                             );
-                            
-                            // Show success message
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('${item['name']} added to cart'),
-                                duration: const Duration(seconds: 2),
-                                backgroundColor: Colors.green,
-                              ),
-                            );
                           } else {
-                            // Remove from cart
+                            // Remove from cart silently
                             cartController.removeFromCart(item['id'].toString());
-                            
-                            // Show removal message
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('${item['name']} removed from cart'),
-                                duration: const Duration(seconds: 2),
-                                backgroundColor: Colors.orange,
-                              ),
-                            );
                           }
                         },
                         style: ElevatedButton.styleFrom(
