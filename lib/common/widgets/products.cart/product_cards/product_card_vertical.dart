@@ -35,7 +35,7 @@ class TProductCardVertical extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /// 🖼 Product Image Section
+          // Image Container
           Expanded(
             flex: 4,
             child: Container(
@@ -49,60 +49,62 @@ class TProductCardVertical extends StatelessWidget {
               ),
               child: Stack(
                 children: [
-                  /// Product Image
-                  ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(TSizes.productImageRadius),
-                      topRight: Radius.circular(TSizes.productImageRadius),
-                    ),
-                    child: Image.asset(
-                      product['image'],
-                      height: double.infinity,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
+                  // Product Image
+                  Center(
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(TSizes.productImageRadius),
+                        topRight: Radius.circular(TSizes.productImageRadius),
+                      ),
+                      child: Image.asset(
+                        product['image'],
+                        height: double.infinity,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-
-                  /// Discount Badge
+                  
+                  // Discount Badge
                   if (product['discount'] != null)
                     Positioned(
                       top: 8,
                       left: 8,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 2,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
                           color: TColors.secondary.withOpacity(0.8),
                           borderRadius: BorderRadius.circular(TSizes.sm),
                         ),
                         child: Text(
                           '${product['discount']}%',
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelSmall
-                              ?.copyWith(color: TColors.white),
+                          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            color: TColors.white,
+                          ),
                         ),
                       ),
                     ),
-
-                  /// Favourite Button
+                  
+                  // Favourite Icon
                   Positioned(
                     top: 8,
                     right: 8,
-                    child: CircleAvatar(
-                      backgroundColor: isDark
-                          ? TColors.black.withOpacity(0.6)
-                          : TColors.white.withOpacity(0.9),
-                      radius: 18,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: isDark ? TColors.black.withOpacity(0.6) : TColors.white.withOpacity(0.9),
+                        shape: BoxShape.circle,
+                      ),
                       child: IconButton(
                         onPressed: () {
+                          // Add to wishlist functionality
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Added to wishlist')),
                           );
                         },
-                        icon: const Icon(Iconsax.heart, size: 18),
+                        icon: const Icon(
+                          Iconsax.heart,
+                          size: 20,
+                        ),
                       ),
                     ),
                   ),
@@ -110,123 +112,115 @@ class TProductCardVertical extends StatelessWidget {
               ),
             ),
           ),
-
-          /// 📃 Product Details Section - FIXED
+          
+          // Product Details
           Expanded(
             flex: 3,
             child: Padding(
               padding: const EdgeInsets.all(TSizes.sm),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min, // Added this
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  /// Product Name & Brand - Made flexible
-                  Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          product['name'],
-                          style: Theme.of(context).textTheme.labelLarge,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                        ),
-                        const SizedBox(height: TSizes.xs),
-                        Text(
-                          product['brand'],
-                          style: Theme.of(context).textTheme.labelMedium,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: TSizes.xs), // Small fixed spacing
-
-                  /// Price + Add to Cart - Keep at bottom
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      /// Price Row
+                      // Product Name
+                      Text(
+                        product['name'],
+                        style: Theme.of(context).textTheme.labelLarge,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      ),
+                      
+                      const SizedBox(height: TSizes.xs),
+                      
+                      // Brand Name
+                      Text(
+                        product['brand'],
+                        style: Theme.of(context).textTheme.labelMedium,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                  
+                  // Price and Add to Cart
+                  Column(
+                    children: [
+                      // Price Row
                       Row(
                         children: [
-                          Flexible(
-                            child: Text(
-                              '\$${product['price']}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall
-                                  ?.copyWith(
-                                    color: TColors.primary,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                              overflow: TextOverflow.ellipsis,
+                          // Current Price
+                          Text(
+                            '\$${product['price']}',
+                            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                              color: TColors.primary,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
+                          
                           const SizedBox(width: TSizes.xs),
+                          
+                          // Original Price (if exists)
                           if (product['originalPrice'] != null)
-                            Flexible(
-                              child: Text(
-                                '\$${product['originalPrice']}',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelMedium
-                                    ?.copyWith(
-                                      decoration: TextDecoration.lineThrough,
-                                      color: TColors.darkGrey,
-                                    ),
-                                overflow: TextOverflow.ellipsis,
+                            Text(
+                              '\$${product['originalPrice']}',
+                              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                                decoration: TextDecoration.lineThrough,
+                                color: TColors.darkGrey,
                               ),
                             ),
                         ],
                       ),
+                      
                       const SizedBox(height: TSizes.xs),
-
-                      /// Add to Cart Button
+                      
+                      // Add to Cart Button
                       SizedBox(
                         width: double.infinity,
-                        height: 36, // Fixed height for button
-                        child: Obx(() {
-                          final productId = product['id']?.toString() ??
-                              product['name'].toString();
-                          final isInCart =
-                              cartController.isInCart(productId);
-
-                          return ElevatedButton.icon(
-                            onPressed: () {
-                              cartController.quickAddToCart(
-                                productId: productId,
-                                productName: product['name'],
-                                productPrice: product['price'].toDouble(),
-                                productImage: product['image'],
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: isInCart
-                                  ? Colors.green
-                                  : TColors.primary,
-                              foregroundColor: TColors.white,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 6,
+                        child: Obx(
+                          () {
+                            final productId = product['id']?.toString() ?? 
+                                             product['name'].toString();
+                            final isInCart = cartController.isInCart(productId);
+                            
+                            return ElevatedButton(
+                              onPressed: () {
+                                if (!isInCart) {
+                                  // Add to cart silently
+                                  cartController.quickAddToCart(
+                                    productId: productId,
+                                    productName: product['name'],
+                                    productPrice: product['price'].toDouble(),
+                                    productImage: product['image'],
+                                  );
+                                } else {
+                                  // Remove from cart silently
+                                  cartController.removeFromCart(productId);
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: isInCart ? Colors.green : TColors.primary,
+                                foregroundColor: TColors.white,
+                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                textStyle: const TextStyle(fontSize: 12),
                               ),
-                              textStyle: const TextStyle(fontSize: 12),
-                              minimumSize: const Size(0, 36),
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            ),
-                            icon: Icon(
-                              isInCart ? Iconsax.tick_circle : Iconsax.add,
-                              size: 16,
-                            ),
-                            label: Text(
-                              isInCart ? 'Added' : 'Add to Cart',
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          );
-                        }),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    isInCart ? Iconsax.tick_circle : Iconsax.add,
+                                    size: 16,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    isInCart ? 'In Cart' : 'Add to Cart',
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ],
                   ),
