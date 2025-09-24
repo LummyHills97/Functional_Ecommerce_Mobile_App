@@ -2,6 +2,7 @@ import 'package:ecommerce_store/features/personalization/controllers/card_contro
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:ecommerce_store/common/widgets/animated_cart_button.dart'; // Add this import
 import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
 
@@ -175,52 +176,12 @@ class TProductCardVertical extends StatelessWidget {
                       
                       const SizedBox(height: TSizes.xs),
                       
-                      // Add to Cart Button
-                      SizedBox(
-                        width: double.infinity,
-                        child: Obx(
-                          () {
-                            final productId = product['id']?.toString() ?? 
-                                             product['name'].toString();
-                            final isInCart = cartController.isInCart(productId);
-                            
-                            return ElevatedButton(
-                              onPressed: () {
-                                if (!isInCart) {
-                                  // Add to cart silently
-                                  cartController.quickAddToCart(
-                                    productId: productId,
-                                    productName: product['name'],
-                                    productPrice: product['price'].toDouble(),
-                                    productImage: product['image'],
-                                  );
-                                } else {
-                                  // Remove from cart silently
-                                  cartController.removeFromCart(productId);
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: isInCart ? Colors.green : TColors.primary,
-                                foregroundColor: TColors.white,
-                                padding: const EdgeInsets.symmetric(vertical: 8),
-                                textStyle: const TextStyle(fontSize: 12),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    isInCart ? Iconsax.tick_circle : Iconsax.add,
-                                    size: 16,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    isInCart ? 'In Cart' : 'Add to Cart',
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
+                      // Add to Cart Button with Animation
+                      AnimatedCartButton(
+                        productId: product['id']?.toString() ?? product['name'].toString(),
+                        productName: product['name'],
+                        productPrice: product['price'].toDouble(),
+                        productImage: product['image'],
                       ),
                     ],
                   ),
