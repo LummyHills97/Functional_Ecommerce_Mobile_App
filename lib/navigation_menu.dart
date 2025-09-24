@@ -1,29 +1,86 @@
 import 'package:ecommerce_store/features/authentication/screens/home/home.dart';
 import 'package:ecommerce_store/features/authentication/screens/store/store.dart';
 import 'package:ecommerce_store/features/personalization/screens/settings/settings.dart';
+import 'package:ecommerce_store/features/authentication/screens/wishlist/wishlist.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'features/authentication/screens/wishlist/wishlist.dart';
+import 'package:iconsax/iconsax.dart';
 
 class NavigationMenu extends StatelessWidget {
-  const NavigationMenu({super.key, required int initialIndex});
+  final int initialIndex;
+  
+  const NavigationMenu({super.key, this.initialIndex = 0});
 
   @override
   Widget build(BuildContext context) {
     final NavigationController controller = Get.put(NavigationController());
+    
+    // Set initial index if provided
+    if (initialIndex != 0) {
+      controller.selectedIndex.value = initialIndex;
+    }
+
     return Obx(() => Scaffold(
       body: controller.screens[controller.selectedIndex.value],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: controller.selectedIndex.value,
-        selectedItemColor: Colors.red,
-        unselectedItemColor: Colors.grey,
-        onTap: controller.changeIndex,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.store), label: 'Store'),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Wishlist'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: controller.selectedIndex.value,
+        onDestinationSelected: controller.changeIndex,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        indicatorColor: Theme.of(context).primaryColor.withOpacity(0.1),
+        surfaceTintColor: Colors.transparent,
+        destinations: [
+          NavigationDestination(
+            icon: Icon(
+              Iconsax.home_2,
+              color: controller.selectedIndex.value == 0 
+                  ? Theme.of(context).primaryColor 
+                  : Colors.grey,
+            ),
+            selectedIcon: Icon(
+              Iconsax.home_25,
+              color: Theme.of(context).primaryColor,
+            ),
+            label: 'Home',
+          ),
+          NavigationDestination(
+            icon: Icon(
+              Iconsax.shop,
+              color: controller.selectedIndex.value == 1 
+                  ? Theme.of(context).primaryColor 
+                  : Colors.grey,
+            ),
+            selectedIcon: Icon(
+              Iconsax.shop5,
+              color: Theme.of(context).primaryColor,
+            ),
+            label: 'Store',
+          ),
+          NavigationDestination(
+            icon: Icon(
+              Iconsax.heart,
+              color: controller.selectedIndex.value == 2 
+                  ? Theme.of(context).primaryColor 
+                  : Colors.grey,
+            ),
+            selectedIcon: Icon(
+              Iconsax.heart5,
+              color: Theme.of(context).primaryColor,
+            ),
+            label: 'Wishlist',
+          ),
+          NavigationDestination(
+            icon: Icon(
+              Iconsax.user,
+              color: controller.selectedIndex.value == 3 
+                  ? Theme.of(context).primaryColor 
+                  : Colors.grey,
+            ),
+            selectedIcon: Icon(
+              Iconsax.user5,
+              color: Theme.of(context).primaryColor,
+            ),
+            label: 'Profile',
+          ),
         ],
       ),
     ));
@@ -32,10 +89,10 @@ class NavigationMenu extends StatelessWidget {
 
 class NavigationController extends GetxController {
   final Rx<int> selectedIndex = 0.obs;
-  
+
   final List<Widget> screens = const [
     HomePage(),
-    Store(), // This should use your proper Store widget from the second file
+    Store(),
     FavouriteScreen(),
     SettingsScreen(),
   ];
@@ -43,57 +100,16 @@ class NavigationController extends GetxController {
   void changeIndex(int index) {
     selectedIndex.value = index;
   }
-}
 
-// Remove the purple Store widget completely and use the one from your second file
-// Make sure to import the correct Store widget from your store file
-
-class Cart extends StatelessWidget {
-  const Cart({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          '',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
-      ),
-      body: const Center(
-        child: Text(
-          'Your favourite items will be displayed here',
-          style: TextStyle(fontSize: 16, color: Colors.grey),
-        ),
-      ),
-    );
+  // Navigate to specific screen programmatically
+  void navigateToScreen(int index) {
+    if (index >= 0 && index < screens.length) {
+      selectedIndex.value = index;
+    }
   }
-}
 
-class Profile extends StatelessWidget {
-  const Profile({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Profile',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
-      ),
-      body: const Center(
-        child: Text(
-          'Profile settings will be displayed here',
-          style: TextStyle(fontSize: 16, color: Colors.grey),
-        ),
-      ),
-    );
+  // Navigate to cart (you can call this from anywhere)
+  void navigateToCart() {
+    Get.toNamed('/cart');
   }
 }

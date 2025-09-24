@@ -2,7 +2,6 @@ import 'package:ecommerce_store/features/personalization/controllers/card_contro
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:ecommerce_store/common/widgets/animated_cart_button.dart'; // Add this import
 import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
 
@@ -65,7 +64,6 @@ class TProductCardVertical extends StatelessWidget {
                       ),
                     ),
                   ),
-                  
                   // Discount Badge
                   if (product['discount'] != null)
                     Positioned(
@@ -85,19 +83,19 @@ class TProductCardVertical extends StatelessWidget {
                         ),
                       ),
                     ),
-                  
                   // Favourite Icon
                   Positioned(
                     top: 8,
                     right: 8,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: isDark ? TColors.black.withOpacity(0.6) : TColors.white.withOpacity(0.9),
+                        color: isDark 
+                            ? TColors.black.withOpacity(0.6) 
+                            : TColors.white.withOpacity(0.9),
                         shape: BoxShape.circle,
                       ),
                       child: IconButton(
                         onPressed: () {
-                          // Add to wishlist functionality
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Added to wishlist')),
                           );
@@ -113,7 +111,6 @@ class TProductCardVertical extends StatelessWidget {
               ),
             ),
           ),
-          
           // Product Details
           Expanded(
             flex: 3,
@@ -133,9 +130,7 @@ class TProductCardVertical extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                       ),
-                      
                       const SizedBox(height: TSizes.xs),
-                      
                       // Brand Name
                       Text(
                         product['brand'],
@@ -144,7 +139,6 @@ class TProductCardVertical extends StatelessWidget {
                       ),
                     ],
                   ),
-                  
                   // Price and Add to Cart
                   Column(
                     children: [
@@ -159,9 +153,7 @@ class TProductCardVertical extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          
                           const SizedBox(width: TSizes.xs),
-                          
                           // Original Price (if exists)
                           if (product['originalPrice'] != null)
                             Text(
@@ -173,15 +165,46 @@ class TProductCardVertical extends StatelessWidget {
                             ),
                         ],
                       ),
-                      
                       const SizedBox(height: TSizes.xs),
-                      
-                      // Add to Cart Button with Animation
-                      AnimatedCartButton(
-                        productId: product['id']?.toString() ?? product['name'].toString(),
-                        productName: product['name'],
-                        productPrice: product['price'].toDouble(),
-                        productImage: product['image'],
+                      // Fixed Add to Cart Button
+                      SizedBox(
+                        width: double.infinity,
+                        height: 36,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            cartController.quickAddToCart(
+                              productId: product['id']?.toString() ?? product['name'].toString(),
+                              productName: product['name'],
+                              productPrice: product['price'].toDouble(),
+                              productImage: product['image'],
+                            );
+                            
+                            // Show success message
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('${product['name']} added to cart'),
+                                duration: const Duration(seconds: 1),
+                                backgroundColor: TColors.primary,
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: TColors.primary,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(TSizes.sm),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            elevation: 2,
+                          ),
+                          child: const Text(
+                            'Add to Cart',
+                            style: TextStyle(
+                              fontSize: 12, 
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
