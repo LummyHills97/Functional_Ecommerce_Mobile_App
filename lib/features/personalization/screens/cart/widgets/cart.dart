@@ -198,20 +198,30 @@ class _CartScreenState extends State<CartScreen>
                         borderRadius: BorderRadius.circular(12),
                         color: cs.surfaceVariant,
                       ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.network(
-                          item.image,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              color: cs.surfaceVariant,
-                              child: Icon(Icons.image,
-                                  color: cs.onSurfaceVariant, size: 32),
-                            );
-                          },
-                        ),
-                      ),
+                     child: ClipRRect(
+  borderRadius: BorderRadius.circular(12),
+  child: item.image.startsWith('assets/') 
+      ? Image.asset(  // Use Image.asset for local assets
+          item.image,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return Container(
+              color: cs.surfaceVariant,
+              child: Icon(Icons.image, color: cs.onSurfaceVariant, size: 32),
+            );
+          },
+        )
+      : Image.network(  // Use Image.network for URLs
+          item.image,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return Container(
+              color: cs.surfaceVariant,
+              child: Icon(Icons.image, color: cs.onSurfaceVariant, size: 32),
+            );
+          },
+        ),
+),
                     ),
                     const SizedBox(width: 16),
                     // Product Details
