@@ -1,8 +1,11 @@
+import 'package:ecommerce_store/features/authentication/screens/wishlist/wishlist_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:ecommerce_store/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_store/common/widgets/custom_shapes/containers/search_container.dart';
 import 'package:ecommerce_store/common/widgets/products.cart/cart_menu_icon.dart';
 import 'package:ecommerce_store/common/widgets/texts/section_heading.dart';
+import 'package:ecommerce_store/features/personalization/controllers/card_controller.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
 import 'package:ecommerce_store/utils/helpers/helpers_functions.dart';
@@ -34,7 +37,7 @@ class Store extends StatelessWidget {
               ),
             ),
             TCartCounterIcon(
-              onPressed: () {},
+              onPressed: () => Get.toNamed('/cart'),
               iconColor: isDark ? TColors.white : TColors.dark,
             ),
           ],
@@ -97,6 +100,9 @@ class Store extends StatelessWidget {
   }
 
   Widget _buildBrandColumn(BuildContext context, bool isDark, String category) {
+    final CartController cartController = Get.find<CartController>();
+    final WishlistController wishlistController = Get.find<WishlistController>();
+
     final brandMap = {
       'sport': ['Nike', 'Adidas'],
       'furniture': ['IKEA', 'Ashley'],
@@ -147,7 +153,164 @@ class Store extends StatelessWidget {
       ],
     };
 
+    // FIXED: Dynamic product data with unique IDs based on category
+    final categoryProducts = {
+      'sport': [
+        {
+          'id': 'sport_nike_airmax_1',
+          'name': 'Nike Air Max Pro',
+          'brand': 'Nike',
+          'price': 120.99,
+          'originalPrice': 150.99,
+          'discount': 20,
+          'image': 'assets/images/products/nike-shoes.png',
+        },
+        {
+          'id': 'sport_adidas_football_1',
+          'name': 'Adidas Football',
+          'brand': 'Adidas',
+          'price': 45.99,
+          'originalPrice': 55.99,
+          'discount': 18,
+          'image': 'assets/images/products/Adidas_Football.png',
+        },
+        {
+          'id': 'sport_nike_tracksuit_1',
+          'name': 'Nike Tracksuit Blue',
+          'brand': 'Nike',
+          'price': 89.99,
+          'originalPrice': 110.99,
+          'discount': 19,
+          'image': 'assets/images/products/tracksuit_blue.png',
+        },
+        {
+          'id': 'sport_baseball_bat_1',
+          'name': 'Professional Baseball Bat',
+          'brand': 'Adidas',
+          'price': 75.99,
+          'originalPrice': 95.99,
+          'discount': 21,
+          'image': 'assets/images/products/baseball_bat.png',
+        },
+      ],
+      'furniture': [
+        {
+          'id': 'furniture_sofa_1',
+          'name': 'Modern Bedroom Sofa',
+          'brand': 'IKEA',
+          'price': 299.99,
+          'originalPrice': 399.99,
+          'discount': 25,
+          'image': 'assets/images/products/bedroom_sofa.png',
+        },
+        {
+          'id': 'furniture_bed_1',
+          'name': 'Black Bedroom Set',
+          'brand': 'Ashley',
+          'price': 599.99,
+          'originalPrice': 799.99,
+          'discount': 25,
+          'image': 'assets/images/products/bedroom_bed_black.png',
+        },
+        {
+          'id': 'furniture_lamp_1',
+          'name': 'Modern Bedroom Lamp',
+          'brand': 'IKEA',
+          'price': 49.99,
+          'originalPrice': 69.99,
+          'discount': 29,
+          'image': 'assets/images/products/bedroom_lamp.png',
+        },
+        {
+          'id': 'furniture_lamp_2',
+          'name': 'Designer Table Lamp',
+          'brand': 'Ashley',
+          'price': 79.99,
+          'originalPrice': 99.99,
+          'discount': 20,
+          'image': 'assets/images/products/bedroom_lamp.png',
+        },
+      ],
+      'electronics': [
+        {
+          'id': 'electronics_samsung_s9_1',
+          'name': 'Samsung Galaxy S9',
+          'brand': 'Samsung',
+          'price': 299.99,
+          'originalPrice': 399.99,
+          'discount': 25,
+          'image': 'assets/images/products/samsung_s9_mobile.png',
+        },
+        {
+          'id': 'electronics_acer_laptop_1',
+          'name': 'Acer Gaming Laptop',
+          'brand': 'Acer',
+          'price': 799.99,
+          'originalPrice': 999.99,
+          'discount': 20,
+          'image': 'assets/images/products/acer_laptop_1.png',
+        },
+        {
+          'id': 'electronics_samsung_s9_back_1',
+          'name': 'Samsung S9 Special Edition',
+          'brand': 'Samsung',
+          'price': 349.99,
+          'originalPrice': 449.99,
+          'discount': 22,
+          'image': 'assets/images/products/samsung_s9_mobile_withback.png',
+        },
+        {
+          'id': 'electronics_acer_laptop_2',
+          'name': 'Acer Professional Laptop',
+          'brand': 'Acer',
+          'price': 899.99,
+          'originalPrice': 1199.99,
+          'discount': 25,
+          'image': 'assets/images/products/acer_laptop_var_2.png',
+        },
+      ],
+      'clothes': [
+        {
+          'id': 'clothes_blue_shirt_1',
+          'name': 'Blue Cotton Shirt',
+          'brand': 'Zara',
+          'price': 39.99,
+          'originalPrice': 59.99,
+          'discount': 33,
+          'image': 'assets/images/products/product-shirt_blue_2.png',
+        },
+        {
+          'id': 'clothes_leather_jacket_1',
+          'name': 'Premium Leather Jacket',
+          'brand': 'H&M',
+          'price': 149.99,
+          'originalPrice': 199.99,
+          'discount': 25,
+          'image': 'assets/images/products/leather_jacket_4.png',
+        },
+        {
+          'id': 'clothes_jeans_1',
+          'name': 'Classic Blue Jeans',
+          'brand': 'Zara',
+          'price': 79.99,
+          'originalPrice': 99.99,
+          'discount': 20,
+          'image': 'assets/images/products/product-jeans.png',
+        },
+        {
+          'id': 'clothes_tshirt_blue_1',
+          'name': 'Blue T-Shirt',
+          'brand': 'H&M',
+          'price': 24.99,
+          'originalPrice': 34.99,
+          'discount': 29,
+          'image': 'assets/images/products/tshirt_blue_without_collar_front.png',
+        },
+      ],
+    };
+
     final brands = brandMap[category] ?? [];
+    final products = categoryProducts[category] ?? [];
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(TSizes.defaultSpace),
@@ -176,52 +339,20 @@ class Store extends StatelessWidget {
           ),
           const SizedBox(height: TSizes.spaceBtwItems),
           
-          // Properly aligned grid with dark mode support
+          // FIXED: Dynamic grid with proper cart and wishlist integration
           GridView.builder(
-            itemCount: 4,
+            itemCount: products.length,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               mainAxisSpacing: TSizes.gridViewSpacing,
               crossAxisSpacing: TSizes.gridViewSpacing,
-              mainAxisExtent: 260, // Increased height for better proportions
+              mainAxisExtent: 260,
             ),
             itemBuilder: (context, index) {
-              final sampleProducts = [
-                {
-                  'name': 'Nike Air Max',
-                  'price': 15000,
-                  'originalPrice': 20000,
-                  'discount': 25,
-                  'image': 'assets/images/products/nike-shoes.png',
-                },
-                {
-                  'name': 'Samsung Galaxy S9',
-                  'price': 30000,
-                  'originalPrice': 35000,
-                  'discount': 14,
-                  'image': 'assets/images/products/samsung_s9_mobile.png',
-                },
-                {
-                  'name': 'Acer Laptop',
-                  'price': 45000,
-                  'originalPrice': 50000,
-                  'discount': 10,
-                  'image': 'assets/images/products/acer_laptop_2.png',
-                },
-                {
-                  'name': 'Blue Shirt',
-                  'price': 60000,
-                  'originalPrice': 75000,
-                  'discount': 20,
-                  'image': 'assets/images/products/product-shirt.png',
-                },
-              ];
-              
-              final product = sampleProducts[index % sampleProducts.length];
-              
-              return _buildProductCard(context, product, isDark);
+              final product = products[index];
+              return _buildProductCard(context, product, isDark, cartController, wishlistController);
             },
           ),
         ],
@@ -229,11 +360,17 @@ class Store extends StatelessWidget {
     );
   }
 
-  // New method for product cards with dark mode support
-  Widget _buildProductCard(BuildContext context, Map<String, dynamic> product, bool isDark) {
+  // FIXED: Updated product card with proper cart and wishlist functionality
+  Widget _buildProductCard(
+    BuildContext context, 
+    Map<String, dynamic> product, 
+    bool isDark,
+    CartController cartController,
+    WishlistController wishlistController
+  ) {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor, // Theme-aware card color
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(TSizes.productImageRadius),
         boxShadow: [
           BoxShadow(
@@ -294,37 +431,61 @@ class Store extends StatelessWidget {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
+                      const SizedBox(height: 2),
+                      
+                      Text(
+                        product['brand'],
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.grey[600],
+                        ),
+                      ),
                       const SizedBox(height: 4),
                       
                       // Price Row
                       Row(
                         children: [
                           Text(
-                            '₦${product['price']}',
+                            '\$${product['price']}',
                             style: Theme.of(context).textTheme.titleSmall?.copyWith(
                               color: TColors.primary,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           const SizedBox(width: 6),
-                          Text(
-                            '₦${product['originalPrice']}',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6),
-                              decoration: TextDecoration.lineThrough,
+                          if (product['originalPrice'] != null)
+                            Text(
+                              '\$${product['originalPrice']}',
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6),
+                                decoration: TextDecoration.lineThrough,
+                              ),
                             ),
-                          ),
                         ],
                       ),
                       
                       const Spacer(),
                       
-                      // Add to Cart Button
+                      // FIXED: Add to Cart Button with proper functionality
                       SizedBox(
                         width: double.infinity,
                         height: 32,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            cartController.quickAddToCart(
+                              productId: product['id'],
+                              productName: product['name'],
+                              productPrice: product['price'].toDouble(),
+                              productImage: product['image'],
+                            );
+                            
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('${product['name']} added to cart'),
+                                duration: const Duration(seconds: 1),
+                                backgroundColor: TColors.primary,
+                              ),
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: TColors.primary,
                             foregroundColor: Colors.white,
@@ -368,11 +529,11 @@ class Store extends StatelessWidget {
               ),
             ),
           
-          // Favorite Button
+          // FIXED: Wishlist Heart Button with real functionality
           Positioned(
             top: 8,
             right: 8,
-            child: Container(
+            child: Obx(() => Container(
               width: 28,
               height: 28,
               decoration: BoxDecoration(
@@ -393,15 +554,21 @@ class Store extends StatelessWidget {
                 color: Colors.transparent,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(14),
-                  onTap: () {},
-                  child: const Icon(
-                    Icons.favorite_border,
+                  onTap: () {
+                    wishlistController.toggleWishlist(product);
+                  },
+                  child: Icon(
+                    wishlistController.isInWishlist(product['id'])
+                        ? Icons.favorite
+                        : Icons.favorite_border,
                     size: 16,
-                    color: Colors.red,
+                    color: wishlistController.isInWishlist(product['id'])
+                        ? Colors.red
+                        : Colors.grey,
                   ),
                 ),
               ),
-            ),
+            )),
           ),
         ],
       ),
@@ -412,7 +579,7 @@ class Store extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(TSizes.sm),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor, // Theme-aware background
+        color: Theme.of(context).cardColor,
         border: Border.all(
           color: isDark ? TColors.darkGrey : TColors.grey,
         ),
@@ -483,11 +650,11 @@ class Store extends StatelessWidget {
             ],
           ),
           
-          // Brand Products Images - Better aligned with proper spacing
+          // Brand Products Images
           if (images.isNotEmpty) ...[
             const SizedBox(height: TSizes.spaceBtwItems),
             SizedBox(
-              height: 70, // Fixed height for consistency
+              height: 70,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: images.length,
@@ -540,9 +707,8 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    final isDark = THelperFunctions.isDarkMode(context);
     return Container(
-      color: Theme.of(context).scaffoldBackgroundColor, // Theme-aware background
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: tabBar,
     );
   }
