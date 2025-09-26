@@ -1,5 +1,6 @@
 import 'package:ecommerce_store/features/authentication/screens/home/home.dart';
 import 'package:ecommerce_store/features/authentication/screens/store/store.dart';
+import 'package:ecommerce_store/features/authentication/screens/wishlist/wishlist_controller.dart';
 import 'package:ecommerce_store/features/personalization/screens/settings/settings.dart';
 import 'package:ecommerce_store/features/authentication/screens/wishlist/wishlist.dart';
 import 'package:flutter/material.dart';
@@ -20,70 +21,111 @@ class NavigationMenu extends StatelessWidget {
       controller.selectedIndex.value = initialIndex;
     }
 
-    return Obx(() => Scaffold(
-      body: controller.screens[controller.selectedIndex.value],
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: controller.selectedIndex.value,
-        onDestinationSelected: controller.changeIndex,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        indicatorColor: Theme.of(context).primaryColor.withOpacity(0.1),
-        surfaceTintColor: Colors.transparent,
-        destinations: [
-          NavigationDestination(
-            icon: Icon(
-              Iconsax.home_2,
-              color: controller.selectedIndex.value == 0 
-                  ? Theme.of(context).primaryColor 
-                  : Colors.grey,
+    return Scaffold(
+      body: Obx(() => AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return FadeTransition(
+            opacity: animation,
+            child: SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0.1, 0),
+                end: Offset.zero,
+              ).animate(CurvedAnimation(
+                parent: animation,
+                curve: Curves.easeInOut,
+              )),
+              child: child,
             ),
-            selectedIcon: Icon(
-              Iconsax.home_25,
-              color: Theme.of(context).primaryColor,
+          );
+        },
+        child: IndexedStack(
+          key: ValueKey<int>(controller.selectedIndex.value),
+          index: controller.selectedIndex.value,
+          children: controller.screens,
+        ),
+      )),
+      bottomNavigationBar: Obx(() => Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, -2),
             ),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            icon: Icon(
-              Iconsax.shop,
-              color: controller.selectedIndex.value == 1 
-                  ? Theme.of(context).primaryColor 
-                  : Colors.grey,
+          ],
+        ),
+        child: NavigationBar(
+          selectedIndex: controller.selectedIndex.value,
+          onDestinationSelected: controller.changeIndex,
+          backgroundColor: Colors.transparent,
+          indicatorColor: Theme.of(context).primaryColor.withOpacity(0.15),
+          surfaceTintColor: Colors.transparent,
+          elevation: 0,
+          animationDuration: const Duration(milliseconds: 300),
+          labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+          destinations: [
+            NavigationDestination(
+              icon: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: EdgeInsets.all(controller.selectedIndex.value == 0 ? 4 : 0),
+                child: Icon(
+                  controller.selectedIndex.value == 0 ? Iconsax.home_25 : Iconsax.home_2,
+                  color: controller.selectedIndex.value == 0
+                      ? Theme.of(context).primaryColor
+                      : Colors.grey[600],
+                  size: controller.selectedIndex.value == 0 ? 24 : 22,
+                ),
+              ),
+              label: 'Home',
             ),
-            selectedIcon: Icon(
-              Iconsax.shop5,
-              color: Theme.of(context).primaryColor,
+            NavigationDestination(
+              icon: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: EdgeInsets.all(controller.selectedIndex.value == 1 ? 4 : 0),
+                child: Icon(
+                  controller.selectedIndex.value == 1 ? Iconsax.shop5 : Iconsax.shop,
+                  color: controller.selectedIndex.value == 1
+                      ? Theme.of(context).primaryColor
+                      : Colors.grey[600],
+                  size: controller.selectedIndex.value == 1 ? 24 : 22,
+                ),
+              ),
+              label: 'Store',
             ),
-            label: 'Store',
-          ),
-          NavigationDestination(
-            icon: Icon(
-              Iconsax.heart,
-              color: controller.selectedIndex.value == 2 
-                  ? Theme.of(context).primaryColor 
-                  : Colors.grey,
+            NavigationDestination(
+              icon: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: EdgeInsets.all(controller.selectedIndex.value == 2 ? 4 : 0),
+                child: Icon(
+                  controller.selectedIndex.value == 2 ? Iconsax.heart5 : Iconsax.heart,
+                  color: controller.selectedIndex.value == 2
+                      ? Theme.of(context).primaryColor
+                      : Colors.grey[600],
+                  size: controller.selectedIndex.value == 2 ? 24 : 22,
+                ),
+              ),
+              label: 'Wishlist',
             ),
-            selectedIcon: Icon(
-              Iconsax.heart5,
-              color: Theme.of(context).primaryColor,
+            NavigationDestination(
+              icon: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: EdgeInsets.all(controller.selectedIndex.value == 3 ? 4 : 0),
+                child: Icon(
+                  controller.selectedIndex.value == 3 ? Iconsax.user5 : Iconsax.user,
+                  color: controller.selectedIndex.value == 3
+                      ? Theme.of(context).primaryColor
+                      : Colors.grey[600],
+                  size: controller.selectedIndex.value == 3 ? 24 : 22,
+                ),
+              ),
+              label: 'Profile',
             ),
-            label: 'Wishlist',
-          ),
-          NavigationDestination(
-            icon: Icon(
-              Iconsax.user,
-              color: controller.selectedIndex.value == 3 
-                  ? Theme.of(context).primaryColor 
-                  : Colors.grey,
-            ),
-            selectedIcon: Icon(
-              Iconsax.user5,
-              color: Theme.of(context).primaryColor,
-            ),
-            label: 'Profile',
-          ),
-        ],
-      ),
-    ));
+          ],
+        ),
+      )),
+    );
   }
 }
 
@@ -98,7 +140,14 @@ class NavigationController extends GetxController {
   ];
 
   void changeIndex(int index) {
-    selectedIndex.value = index;
+    if (index != selectedIndex.value) {
+      selectedIndex.value = index;
+      
+      // Add haptic feedback for better UX
+      if (GetPlatform.isAndroid || GetPlatform.isIOS) {
+        _triggerHapticFeedback();
+      }
+    }
   }
 
   // Navigate to specific screen programmatically
@@ -111,5 +160,30 @@ class NavigationController extends GetxController {
   // Navigate to cart (you can call this from anywhere)
   void navigateToCart() {
     Get.toNamed('/cart');
+  }
+
+  // Private method for haptic feedback
+  void _triggerHapticFeedback() {
+    try {
+      // You can add haptic feedback package here if needed
+      // HapticFeedback.lightImpact();
+    } catch (e) {
+      // Handle gracefully if haptic feedback fails
+      debugPrint('Haptic feedback not available: $e');
+    }
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    // Initialize required controllers
+    Get.put(WishlistController()); // Add this line to initialize WishlistController
+    debugPrint('NavigationController initialized');
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+    debugPrint('NavigationController disposed');
   }
 }

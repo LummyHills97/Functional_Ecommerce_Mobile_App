@@ -1,0 +1,24 @@
+<script>start("/Users/mac/ecommerce_store/");</script>
+<script>onHasParentDirectory();</script>
+<script>addRow(".dart_tool",".dart_tool",1,288,"288 B",1750967167,"6/26/25, 8:46:07 PM");</script>
+<script>addRow(".git",".git",1,448,"448 B",1758899118,"9/26/25, 4:05:18 PM");</script>
+<script>addRow(".idea",".idea",1,192,"192 B",1746876022,"5/10/25, 12:20:22 PM");</script>
+<script>addRow("android","android",1,416,"416 B",1746876251,"5/10/25, 12:24:11 PM");</script>
+<script>addRow("assets","assets",1,192,"192 B",1746877763,"5/10/25, 12:49:23 PM");</script>
+<script>addRow("build","build",1,224,"224 B",1758418268,"9/21/25, 2:31:08 AM");</script>
+<script>addRow("ios","ios",1,416,"416 B",1750829413,"6/25/25, 6:30:13 AM");</script>
+<script>addRow("lib","lib",1,384,"384 B",1757008781,"9/4/25, 6:59:41 PM");</script>
+<script>addRow("linux","linux",1,192,"192 B",1746876022,"5/10/25, 12:20:22 PM");</script>
+<script>addRow("macos","macos",1,288,"288 B",1747168554,"5/13/25, 9:35:54 PM");</script>
+<script>addRow("web","web",1,192,"192 B",1746876022,"5/10/25, 12:20:22 PM");</script>
+<script>addRow("windows","windows",1,192,"192 B",1746876022,"5/10/25, 12:20:22 PM");</script>
+<script>addRow(".flutter-plugins-dependencies",".flutter-plugins-dependencies",0,3502,"3.4 kB",1750650771,"6/23/25, 4:52:51 AM");</script>
+<script>addRow(".gitignore",".gitignore",0,709,"709 B",1747077567,"5/12/25, 8:19:27 PM");</script>
+<script>addRow(".metadata",".metadata",0,964,"964 B",1747332681,"5/15/25, 7:11:21 PM");</script>
+<script>addRow("analysis_options.yaml","analysis_options.yaml",0,1420,"1.4 kB",1746876022,"5/10/25, 12:20:22 PM");</script>
+<script>addRow("ecommerce_store.code-workspace","ecommerce_store.code-workspace",0,60,"60 B",1746878840,"5/10/25, 1:07:20 PM");</script>
+<script>addRow("ecommerce_store.iml","ecommerce_store.iml",0,842,"842 B",1746876022,"5/10/25, 12:20:22 PM");</script>
+<script>addRow("pubspec.lock","pubspec.lock",0,16089,"15.7 kB",1755306657,"8/16/25, 2:10:57 AM");</script>
+<script>addRow("pubspec.yaml","pubspec.yaml",0,2018,"2.0 kB",1755306652,"8/16/25, 2:10:52 AM");</script>
+<script>addRow("README.md","README.md",0,558,"558 B",1746876022,"5/10/25, 12:20:22 PM");</script>
+<script>addRow("splash.yaml","splash.yaml",0,0,"0 B",1747252169,"5/14/25, 8:49:29 PM");</script>
