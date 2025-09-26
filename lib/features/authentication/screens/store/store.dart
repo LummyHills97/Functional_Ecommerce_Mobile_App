@@ -348,7 +348,7 @@ class Store extends StatelessWidget {
               crossAxisCount: 2,
               mainAxisSpacing: TSizes.gridViewSpacing,
               crossAxisSpacing: TSizes.gridViewSpacing,
-              mainAxisExtent: 260,
+              mainAxisExtent: 280, // Increased from 260 to 280 for more space
             ),
             itemBuilder: (context, index) {
               final product = products[index];
@@ -390,7 +390,7 @@ class Store extends StatelessWidget {
             children: [
               // Product Image
               Container(
-                height: 150,
+                height: 140, // Reduced from 150 to give more space for content
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: isDark ? Colors.grey[800] : Colors.grey[100],
@@ -419,14 +419,16 @@ class Store extends StatelessWidget {
               // Product Details
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(TSizes.sm),
+                  padding: const EdgeInsets.all(8), // Reduced padding from TSizes.sm
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min, // Added this to minimize space usage
                     children: [
                       Text(
                         product['name'],
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
                           fontWeight: FontWeight.w600,
+                          fontSize: 13, // Slightly smaller font
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -437,6 +439,7 @@ class Store extends StatelessWidget {
                         product['brand'],
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Colors.grey[600],
+                          fontSize: 11, // Smaller font
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -445,30 +448,35 @@ class Store extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            '\$${product['price']}',
+                            "${product['price']}",
                             style: Theme.of(context).textTheme.titleSmall?.copyWith(
                               color: TColors.primary,
                               fontWeight: FontWeight.bold,
+                              fontSize: 13, // Adjusted font size
                             ),
                           ),
-                          const SizedBox(width: 6),
+                          const SizedBox(width: 4),
                           if (product['originalPrice'] != null)
-                            Text(
-                              '\$${product['originalPrice']}',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6),
-                                decoration: TextDecoration.lineThrough,
+                            Flexible(
+                              child: Text(
+                                "${product['originalPrice']}",
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6),
+                                  decoration: TextDecoration.lineThrough,
+                                  fontSize: 10,
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                         ],
                       ),
                       
-                      const Spacer(),
+                      const SizedBox(height: 6), // Fixed spacing instead of Spacer
                       
                       // FIXED: Add to Cart Button with proper functionality
                       SizedBox(
                         width: double.infinity,
-                        height: 32,
+                        height: 28, // Reduced height from 32
                         child: ElevatedButton(
                           onPressed: () {
                             cartController.quickAddToCart(
@@ -489,14 +497,16 @@ class Store extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: TColors.primary,
                             foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                            padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(6),
                             ),
+                            minimumSize: Size.zero, // Allow button to be smaller
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap, // Reduce tap target
                           ),
                           child: const Text(
                             'Add to Cart',
-                            style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+                            style: TextStyle(fontSize: 9, fontWeight: FontWeight.w600),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                           ),
