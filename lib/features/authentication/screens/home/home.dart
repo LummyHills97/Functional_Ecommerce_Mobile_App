@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           // Use the new THomeAppBar widget with real cart count
           Obx(() => THomeAppBar(
-            userName: 'Taimoor Sikander',
+            userName: 'Olumide Akinnuli',
             cartItemCount: cartController.cartItems.length,
             onCartPressed: () => _navigateToCart(context),
           )),
