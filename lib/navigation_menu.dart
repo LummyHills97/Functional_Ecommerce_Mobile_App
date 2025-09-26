@@ -113,7 +113,7 @@ class NavigationMenu extends StatelessWidget {
                 duration: const Duration(milliseconds: 200),
                 padding: EdgeInsets.all(controller.selectedIndex.value == 3 ? 4 : 0),
                 child: Icon(
-                  controller.selectedIndex.value == 3 ? Iconsax.user5 : Iconsax.user,
+                  controller.selectedIndex.value == 3 ? Iconsax.profile_circle5 : Iconsax.profile_circle,
                   color: controller.selectedIndex.value == 3
                       ? Theme.of(context).primaryColor
                       : Colors.grey[600],
