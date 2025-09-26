@@ -14,7 +14,6 @@ class Category {
   final String name;
   final IconData icon;
   final Color color;
-
   Category({required this.name, required this.icon, required this.color});
 }
 
@@ -22,22 +21,18 @@ class Banner {
   final String title;
   final String description;
   final String imageUrl;
-
   Banner({required this.title, required this.description, required this.imageUrl});
 }
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  // Get CartController instance
   final CartController cartController = Get.find<CartController>();
 
-  // Mock categories data
   static final List<Category> _categories = [
     Category(name: 'Electronics', icon: Icons.phone_android, color: Colors.blue),
     Category(name: 'Fashion', icon: Icons.shopping_bag, color: Colors.pink),
@@ -47,7 +42,6 @@ class _HomePageState extends State<HomePage> {
     Category(name: 'Beauty', icon: Icons.face, color: Colors.purple),
   ];
 
-  // Mock banners data
   static final List<Banner> _banners = [
     Banner(
       title: 'Summer Sale',
@@ -61,7 +55,6 @@ class _HomePageState extends State<HomePage> {
     ),
   ];
 
-  // Mock product data - Added IDs for cart functionality
   static final List<Map<String, dynamic>> _popularProducts = [
     {
       'id': 'nike_wildhorse_1',
@@ -95,44 +88,52 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            _buildHeader(context),
-            _buildBodyContent(context),
-          ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            children: [
+              _buildHeader(context),
+              Padding(
+                padding: const EdgeInsets.all(TSizes.defaultSpace),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildBannerCarousel(),
+                    const SizedBox(height: TSizes.spaceBtwSections),
+                    _buildPopularProducts(context),
+                    const SizedBox(height: TSizes.spaceBtwSections),
+                    _buildFeaturedProducts(context),
+                    const SizedBox(height: TSizes.spaceBtwSections),
+                    _buildDealsSection(context),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  // HEADER - Updated to show real cart count
   Widget _buildHeader(BuildContext context) {
     return TPrimaryHeaderContainer(
       height: 420,
       child: Column(
         children: [
-          // Use the new THomeAppBar widget with real cart count
           Obx(() => THomeAppBar(
             userName: 'Olumide Akinnuli',
             cartItemCount: cartController.cartItems.length,
-            onCartPressed: () => _navigateToCart(context),
+            onCartPressed: () => Get.toNamed('/cart'),
           )),
-          
           const SizedBox(height: TSizes.spaceBtwItems),
-          
-          // Search Container
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
             child: TSearchContainer(
               onTap: () => debugPrint('Search tapped'),
             ),
           ),
-          
           const SizedBox(height: TSizes.spaceBtwSections),
-          
-          // Popular Categories
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
             child: _buildPopularCategories(context),
@@ -142,15 +143,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Cart navigation handler
-  void _navigateToCart(BuildContext context) {
-    debugPrint('Navigating to cart with ${cartController.cartItems.length} items');
-    
-    // Navigate to cart screen
-    Get.toNamed('/cart');
-  }
-
-  // CATEGORIES
   Widget _buildPopularCategories(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,9 +150,9 @@ class _HomePageState extends State<HomePage> {
         Text(
           'Popular Categories',
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: TColors.textWhite,
-                fontWeight: FontWeight.w600,
-              ),
+            color: TColors.textWhite,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         const SizedBox(height: TSizes.spaceBtwItems),
         SizedBox(
@@ -182,37 +174,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // BODY
-  Widget _buildBodyContent(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(TSizes.defaultSpace),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildBannerCarousel(),
-          const SizedBox(height: TSizes.spaceBtwSections),
-          _buildPopularProducts(context),
-          const SizedBox(height: TSizes.spaceBtwSections),
-          _buildFeaturedProducts(context),
-          const SizedBox(height: TSizes.spaceBtwSections),
-          _buildDealsSection(context),
-        ],
-      ),
-    );
-  }
-
-  // BANNER
   Widget _buildBannerCarousel() {
     return _BannerCarousel(
       banners: _banners,
       height: 190,
-      onBannerTap: (banner) {
-        debugPrint('Tapped on banner: ${banner.title}');
-      },
+      onBannerTap: (banner) => debugPrint('Tapped on banner: ${banner.title}'),
     );
   }
 
-  // POPULAR PRODUCTS - Now properly integrated with cart
   Widget _buildPopularProducts(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -240,10 +209,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // FEATURED PRODUCTS
   Widget _buildFeaturedProducts(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -253,118 +220,37 @@ class _HomePageState extends State<HomePage> {
         const SizedBox(height: TSizes.spaceBtwItems),
         Row(
           children: [
-            Expanded(
-              child: GestureDetector(
-                onTap: () => debugPrint('Electronics category tapped'),
-                child: Column(
-                  children: [
-                    Container(
-                      width: 70,
-                      height: 70,
-                      decoration: BoxDecoration(
-                        color: isDarkMode 
-                            ? Colors.orange[800]?.withOpacity(0.3)
-                            : Colors.orange[100],
-                        shape: BoxShape.circle,
-                        border: isDarkMode
-                            ? Border.all(color: Colors.orange[600]!, width: 1)
-                            : null,
-                      ),
-                      child: Icon(
-                        Icons.laptop_mac,
-                        size: 32,
-                        color: isDarkMode 
-                            ? Colors.orange[400]
-                            : Colors.orange[700],
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Electronics',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
+            _buildFeaturedCategory(
+              context,
+              'Electronics',
+              Icons.laptop_mac,
+              isDarkMode ? Colors.orange[800]! : Colors.orange[100]!,
+              isDarkMode ? Colors.orange[400]! : Colors.orange[700]!,
+              isDarkMode ? Colors.orange[600]! : Colors.transparent,
+              isDarkMode,
+              () => debugPrint('Electronics category tapped'),
             ),
             const SizedBox(width: TSizes.spaceBtwItems),
-            Expanded(
-              child: GestureDetector(
-                onTap: () => debugPrint('Fashion category tapped'),
-                child: Column(
-                  children: [
-                    Container(
-                      width: 70,
-                      height: 70,
-                      decoration: BoxDecoration(
-                        color: isDarkMode 
-                            ? Colors.pink[800]?.withOpacity(0.3)
-                            : Colors.pink[100],
-                        shape: BoxShape.circle,
-                        border: isDarkMode
-                            ? Border.all(color: Colors.pink[600]!, width: 1)
-                            : null,
-                      ),
-                      child: Icon(
-                        Icons.checkroom,
-                        size: 32,
-                        color: isDarkMode 
-                            ? Colors.pink[400]
-                            : Colors.pink[700],
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Fashion',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
+            _buildFeaturedCategory(
+              context,
+              'Fashion',
+              Icons.checkroom,
+              isDarkMode ? Colors.pink[800]! : Colors.pink[100]!,
+              isDarkMode ? Colors.pink[400]! : Colors.pink[700]!,
+              isDarkMode ? Colors.pink[600]! : Colors.transparent,
+              isDarkMode,
+              () => debugPrint('Fashion category tapped'),
             ),
             const SizedBox(width: TSizes.spaceBtwItems),
-            Expanded(
-              child: GestureDetector(
-                onTap: () => debugPrint('Sports category tapped'),
-                child: Column(
-                  children: [
-                    Container(
-                      width: 70,
-                      height: 70,
-                      decoration: BoxDecoration(
-                        color: isDarkMode 
-                            ? Colors.green[800]?.withOpacity(0.3)
-                            : Colors.green[100],
-                        shape: BoxShape.circle,
-                        border: isDarkMode
-                            ? Border.all(color: Colors.green[600]!, width: 1)
-                            : null,
-                      ),
-                      child: Icon(
-                        Icons.sports_soccer,
-                        size: 32,
-                        color: isDarkMode 
-                            ? Colors.green[400]
-                            : Colors.green[700],
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Sports',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
+            _buildFeaturedCategory(
+              context,
+              'Sports',
+              Icons.sports_soccer,
+              isDarkMode ? Colors.green[800]! : Colors.green[100]!,
+              isDarkMode ? Colors.green[400]! : Colors.green[700]!,
+              isDarkMode ? Colors.green[600]! : Colors.transparent,
+              isDarkMode,
+              () => debugPrint('Sports category tapped'),
             ),
           ],
         ),
@@ -372,32 +258,75 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // DEALS
+  Widget _buildFeaturedCategory(
+    BuildContext context,
+    String label,
+    IconData icon,
+    Color bgColor,
+    Color iconColor,
+    Color borderColor,
+    bool isDarkMode,
+    VoidCallback onTap,
+  ) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Column(
+          children: [
+            Container(
+              width: 70,
+              height: 70,
+              decoration: BoxDecoration(
+                color: bgColor,
+                shape: BoxShape.circle,
+                border: isDarkMode
+                    ? Border.all(color: borderColor, width: 1)
+                    : null,
+              ),
+              child: Icon(icon, size: 32, color: iconColor),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // FIXED: Today's Deal section with proper spacing for dark mode
   Widget _buildDealsSection(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionTitle(context, 'Today\'s Deals', () {
-          debugPrint('View all deals');
-        }),
+        Text(
+          "Today's Deal",
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: isDarkMode ? Colors.white : TColors.primary,
+          ),
+        ),
         const SizedBox(height: TSizes.spaceBtwItems),
-
         Container(
-          height: 120,
+          height: 125, // Increased from 120 to fix overflow
           width: double.infinity,
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: isDarkMode 
+              colors: isDarkMode
                   ? [Colors.grey[800]!, Colors.grey[700]!]
                   : [Colors.blue[50]!, Colors.blue[100]!],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
             borderRadius: BorderRadius.circular(TSizes.md),
-            border: isDarkMode 
+            border: isDarkMode
                 ? Border.all(color: Colors.grey[600]!, width: 1)
                 : null,
           ),
@@ -406,33 +335,35 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Make the text area flexible so it never forces overflow
-                Flexible(
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         'Flash Sale',
                         style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: isDarkMode ? Colors.white : TColors.primary,
+                          height: 1.2,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 3),
                       Text(
                         'Limited time offers',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: isDarkMode 
+                          color: isDarkMode
                               ? Colors.grey[300]
                               : Colors.grey[600],
+                          height: 1.3,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 6),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
+                          horizontal: 10,
+                          vertical: 5,
                         ),
                         decoration: BoxDecoration(
                           color: TColors.primary,
@@ -443,15 +374,13 @@ class _HomePageState extends State<HomePage> {
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,
+                            height: 1.0,
                           ),
                         ),
                       ),
                     ],
                   ),
                 ),
-
-                // Fixed-width slot for the icon to avoid pushing layout
-                const SizedBox(width: TSizes.spaceBtwItems),
                 SizedBox(
                   width: 64,
                   height: 64,
@@ -471,7 +400,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // REUSABLE TITLE + BUTTON
   Widget _buildSectionTitle(BuildContext context, String title, VoidCallback onViewAll) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -489,16 +417,10 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-// Custom CategoryItem widget
 class _CategoryItem extends StatelessWidget {
   final Category category;
   final VoidCallback onTap;
-
-  const _CategoryItem({
-    required this.category,
-    required this.onTap,
-  });
-
+  const _CategoryItem({required this.category, required this.onTap});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -526,9 +448,9 @@ class _CategoryItem extends StatelessWidget {
           Text(
             category.name,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: TColors.textWhite,
-                  fontSize: 12,
-                ),
+              color: TColors.textWhite,
+              fontSize: 12,
+            ),
             overflow: TextOverflow.ellipsis,
           ),
         ],
@@ -537,18 +459,15 @@ class _CategoryItem extends StatelessWidget {
   }
 }
 
-// Custom BannerCarousel widget
 class _BannerCarousel extends StatefulWidget {
   final List<Banner> banners;
   final double height;
   final Function(Banner) onBannerTap;
-
   const _BannerCarousel({
     required this.banners,
     required this.height,
     required this.onBannerTap,
   });
-
   @override
   State<_BannerCarousel> createState() => _BannerCarouselState();
 }
@@ -634,16 +553,16 @@ class _BannerCarouselState extends State<_BannerCarousel> {
                         Text(
                           banner.title,
                           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(height: TSizes.spaceBtwItems),
                         Text(
                           banner.description,
                           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                color: Colors.white70,
-                              ),
+                            color: Colors.white70,
+                          ),
                         ),
                         const SizedBox(height: TSizes.spaceBtwItems),
                         ElevatedButton(
