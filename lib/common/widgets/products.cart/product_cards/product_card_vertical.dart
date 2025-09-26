@@ -1,3 +1,4 @@
+import 'package:ecommerce_store/features/authentication/screens/wishlist/wishlist_controller.dart';
 import 'package:ecommerce_store/features/personalization/controllers/card_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,6 +17,7 @@ class TProductCardVertical extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CartController cartController = Get.find<CartController>();
+    final WishlistController wishlistController = Get.put(WishlistController());
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
@@ -83,11 +85,11 @@ class TProductCardVertical extends StatelessWidget {
                         ),
                       ),
                     ),
-                  // Favourite Icon
+                  // FIXED: Wishlist Heart Icon with real functionality
                   Positioned(
                     top: 8,
                     right: 8,
-                    child: Container(
+                    child: Obx(() => Container(
                       decoration: BoxDecoration(
                         color: isDark 
                             ? TColors.black.withOpacity(0.6) 
@@ -96,16 +98,19 @@ class TProductCardVertical extends StatelessWidget {
                       ),
                       child: IconButton(
                         onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Added to wishlist')),
-                          );
+                          wishlistController.toggleWishlist(product);
                         },
-                        icon: const Icon(
-                          Iconsax.heart,
+                        icon: Icon(
+                          wishlistController.isInWishlist(product['id']?.toString() ?? product['name'].toString()) 
+                              ? Iconsax.heart5  // Filled heart
+                              : Iconsax.heart,  // Outline heart
                           size: 20,
+                          color: wishlistController.isInWishlist(product['id']?.toString() ?? product['name'].toString())
+                              ? Colors.red
+                              : (isDark ? Colors.white : Colors.black),
                         ),
                       ),
-                    ),
+                    )),
                   ),
                 ],
               ),
@@ -166,7 +171,7 @@ class TProductCardVertical extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: TSizes.xs),
-                      // Fixed Add to Cart Button
+                      // Add to Cart Button
                       SizedBox(
                         width: double.infinity,
                         height: 36,
@@ -179,7 +184,6 @@ class TProductCardVertical extends StatelessWidget {
                               productImage: product['image'],
                             );
                             
-                            // Show success message
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text('${product['name']} added to cart'),
