@@ -1,6 +1,7 @@
 import 'package:ecommerce_store/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_store/features/personalization/controllers/card_controller.dart';
 import 'package:ecommerce_store/features/personalization/models/cart_item.dart';
+import 'package:ecommerce_store/features/personalization/screens/checkout/checkout.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -336,96 +337,93 @@ class _CartScreenState extends State<CartScreen>
   }
 
   Widget _buildCheckoutSection(ColorScheme cs, TextTheme tt) {
-    return Container(
-      decoration: BoxDecoration(
-        color: cs.surface,
-        boxShadow: [
-          if (Theme.of(context).brightness == Brightness.light)
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-              offset: const Offset(0, -2),
+  return Container(
+    decoration: BoxDecoration(
+      color: cs.surface,
+      boxShadow: [
+        if (Theme.of(context).brightness == Brightness.light)
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, -2),
+          ),
+      ],
+    ),
+    child: SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(TSizes.defaultSpace),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Order Summary
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: cs.surfaceVariant,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Obx(() => Column(
+                    children: [
+                      _buildSummaryRow('Subtotal', cartController.subtotal, cs, tt),
+                      const SizedBox(height: 8),
+                      _buildSummaryRow('Shipping', cartController.shipping, cs, tt),
+                      const SizedBox(height: 8),
+                      _buildSummaryRow('Tax', cartController.tax, cs, tt),
+                      const Divider(height: 24),
+                      _buildSummaryRow(
+                        'Total',
+                        cartController.total,
+                        cs,
+                        tt,
+                        isTotal: true,
+                      ),
+                    ],
+                  )),
             ),
-        ],
-      ),
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(TSizes.defaultSpace),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Order Summary
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: cs.surfaceVariant,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Obx(() => Column(
+            const SizedBox(height: 16),
+            // Checkout Button
+            SizedBox(
+              width: double.infinity,
+              height: 56,
+              child: Obx(() => ElevatedButton(
+                    onPressed: () {
+                      // ✅ Navigate with smooth slide-up transition
+                      Get.to(
+                        () => const CheckoutScreen(),
+                        transition: Transition.downToUp, // slide from bottom
+                        duration: const Duration(milliseconds: 400),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: cs.primary,
+                      foregroundColor: cs.onPrimary,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16)),
+                      elevation: 2,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _buildSummaryRow(
-                            'Subtotal', cartController.subtotal, cs, tt),
-                        const SizedBox(height: 8),
-                        _buildSummaryRow(
-                            'Shipping', cartController.shipping, cs, tt),
-                        const SizedBox(height: 8),
-                        _buildSummaryRow(
-                            'Tax', cartController.tax, cs, tt),
-                        const Divider(height: 24),
-                        _buildSummaryRow(
-                          'Total',
-                          cartController.total,
-                          cs,
-                          tt,
-                          isTotal: true,
+                        const Icon(Icons.shopping_bag_outlined),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Checkout • \$${cartController.total.toStringAsFixed(2)}',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ],
-                    )),
-              ),
-              const SizedBox(height: 16),
-              // Checkout Button
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: Obx(() => ElevatedButton(
-                      onPressed: () {
-                        Get.snackbar(
-                          'Proceeding to Checkout',
-                          'Total: \$${cartController.total.toStringAsFixed(2)}',
-                          snackPosition: SnackPosition.BOTTOM,
-                          backgroundColor: cs.primary,
-                          colorText: cs.onPrimary,
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: cs.primary,
-                        foregroundColor: cs.onPrimary,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16)),
-                        elevation: 2,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.shopping_bag_outlined),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Checkout • \$${cartController.total.toStringAsFixed(2)}',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )),
-              ),
-            ],
-          ),
+                    ),
+                  )),
+            ),
+          ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 
   Widget _buildSummaryRow(
     String label,
