@@ -15,35 +15,34 @@ class CartController extends GetxController {
 
   // Add item to cart - handles both new items and quantity increment
   void quickAddToCart({
-    required String productId,
-    required String productName,
-    required double productPrice,
-    required String productImage,
-    String productSize = "Default",
-    String productColor = "Default",
-  }) {
-    final existingIndex = cartItems.indexWhere((item) => item.id == productId);
-    
-    if (existingIndex >= 0) {
-      // Item exists, increment quantity
-      cartItems[existingIndex].quantity++;
-      cartItems.refresh();
-    } else {
-      // New item, add to cart
-      cartItems.add(CartItem(
-        id: productId,
-        name: productName,
-        price: productPrice,
-        image: productImage, // Preserves asset path for proper image loading
-        size: productSize,
-        color: productColor,
-        brand: "Default", // Provide a default or pass as parameter if needed
-      ));
-    }
-    
-    // Save to persistent storage if needed
-    _saveCartItems();
+  required String productId,
+  required String productName,
+  required double productPrice,
+  required String productImage,
+  String? productSize,
+  String? productColor,
+  String productBrand = "Default",
+}) {
+  final existingIndex = cartItems.indexWhere((item) => item.id == productId);
+
+  if (existingIndex >= 0) {
+    cartItems[existingIndex].quantity++;
+    cartItems.refresh();
+  } else {
+    cartItems.add(CartItem(
+      id: productId,
+      name: productName,
+      price: productPrice,
+      image: productImage,
+      size: productSize ?? "",   // 👈 empty instead of "Default"
+      color: productColor ?? "", // 👈 empty instead of "Default"
+      brand: productBrand,
+    ));
   }
+
+  _saveCartItems();
+}
+
 
   // Increment quantity of existing item
   void incrementQuantity(String id) {
