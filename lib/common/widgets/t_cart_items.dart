@@ -108,6 +108,10 @@ class TCartItems extends StatelessWidget {
   }
 
   Widget _buildBrand(TextTheme tt, ColorScheme cs) {
+    final isDefault = item.brand.toLowerCase() == "default";
+
+    if (isDefault) return const SizedBox.shrink();
+
     return Row(
       children: [
         Text(

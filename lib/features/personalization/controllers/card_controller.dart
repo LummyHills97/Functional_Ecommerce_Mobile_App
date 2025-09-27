@@ -37,6 +37,7 @@ class CartController extends GetxController {
         image: productImage, // Preserves asset path for proper image loading
         size: productSize,
         color: productColor,
+        brand: "Default", // Provide a default or pass as parameter if needed
       ));
     }
     
@@ -91,6 +92,7 @@ class CartController extends GetxController {
   double get tax => subtotal * 0.05; // 5% tax
   
   double get total => subtotal + shipping + tax;
+
 
   // Save cart items to persistent storage (implement as needed)
   void _saveCartItems() {
