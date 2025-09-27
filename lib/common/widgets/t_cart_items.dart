@@ -140,20 +140,23 @@ class TCartItems extends StatelessWidget {
   }
 
   Widget _buildProductVariant(TextTheme tt, ColorScheme cs) {
-    String variantText = '';
-    if (item.color.isNotEmpty && item.size.isNotEmpty) {
-      variantText = 'Color: ${item.color} • Size: ${item.size}';
-    } else if (item.color.isNotEmpty) {
-      variantText = 'Color: ${item.color}';
-    } else if (item.size.isNotEmpty) {
-      variantText = 'Size: ${item.size}';
-    }
+  List<String> parts = [];
 
-    return Text(
-      variantText,
-      style: tt.bodySmall?.copyWith(color: cs.onSurfaceVariant),
-    );
+  if (item.color.isNotEmpty && item.color.toLowerCase() != "default") {
+    parts.add("Color: ${item.color}");
   }
+  if (item.size.isNotEmpty && item.size.toLowerCase() != "default") {
+    parts.add("Size: ${item.size}");
+  }
+
+  return parts.isEmpty
+      ? const SizedBox.shrink()
+      : Text(
+          parts.join(" • "),
+          style: tt.bodySmall?.copyWith(color: cs.onSurfaceVariant),
+        );
+}
+
 
   Widget _buildPriceAndQuantity(
       TextTheme tt, ColorScheme cs, CartController cartController) {
