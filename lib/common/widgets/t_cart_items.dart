@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ecommerce_store/features/personalization/controllers/card_controller.dart';
 import 'package:ecommerce_store/features/personalization/models/cart_item.dart';
-import 'package:ecommerce_store/utils/constants/colors.dart';
-import 'package:ecommerce_store/utils/constants/sizes.dart';
 
 class TCartItems extends StatelessWidget {
   final CartItem item;
@@ -31,7 +29,7 @@ class TCartItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CartController cartController = Get.find<CartController>();
+    final cartController = Get.find<CartController>();
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -53,15 +51,14 @@ class TCartItems extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Product Image
           _buildProductImage(cs),
           const SizedBox(width: 16),
-          
-          // Product Details
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                _buildBrand(tt, cs),
+                const SizedBox(height: 2),
                 _buildProductName(tt, cs),
                 const SizedBox(height: 4),
                 _buildProductVariant(tt, cs),
@@ -70,13 +67,13 @@ class TCartItems extends StatelessWidget {
               ],
             ),
           ),
-          
-          // Remove Button
           if (showRemoveButton) _buildRemoveButton(cs),
         ],
       ),
     );
   }
+
+  // --- UI helpers ---
 
   Widget _buildProductImage(ColorScheme cs) {
     return Container(
@@ -88,36 +85,41 @@ class TCartItems extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
-        child: item.image.startsWith('assets/') 
+        child: item.image.startsWith('assets/')
             ? Image.asset(
                 item.image,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: cs.surfaceVariant,
-                    child: Icon(
-                      Icons.image,
-                      color: cs.onSurfaceVariant,
-                      size: 32,
-                    ),
-                  );
-                },
+                errorBuilder: (_, __, ___) => _imagePlaceholder(cs),
               )
             : Image.network(
                 item.image,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: cs.surfaceVariant,
-                    child: Icon(
-                      Icons.image,
-                      color: cs.onSurfaceVariant,
-                      size: 32,
-                    ),
-                  );
-                },
+                errorBuilder: (_, __, ___) => _imagePlaceholder(cs),
               ),
       ),
+    );
+  }
+
+  Widget _imagePlaceholder(ColorScheme cs) {
+    return Container(
+      color: cs.surfaceVariant,
+      child: Icon(Icons.image, color: cs.onSurfaceVariant, size: 32),
+    );
+  }
+
+  Widget _buildBrand(TextTheme tt, ColorScheme cs) {
+    return Row(
+      children: [
+        Text(
+          item.brand,
+          style: tt.bodyMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+            color: cs.onSurface,
+          ),
+        ),
+        const SizedBox(width: 4),
+        const Icon(Icons.verified, color: Colors.blue, size: 16),
+      ],
     );
   }
 
@@ -134,18 +136,25 @@ class TCartItems extends StatelessWidget {
   }
 
   Widget _buildProductVariant(TextTheme tt, ColorScheme cs) {
+    String variantText = '';
+    if (item.color.isNotEmpty && item.size.isNotEmpty) {
+      variantText = 'Color: ${item.color} • Size: ${item.size}';
+    } else if (item.color.isNotEmpty) {
+      variantText = 'Color: ${item.color}';
+    } else if (item.size.isNotEmpty) {
+      variantText = 'Size: ${item.size}';
+    }
+
     return Text(
-      '${item.color} • ${item.size}',
-      style: tt.bodySmall?.copyWith(
-        color: cs.onSurfaceVariant,
-      ),
+      variantText,
+      style: tt.bodySmall?.copyWith(color: cs.onSurfaceVariant),
     );
   }
 
-  Widget _buildPriceAndQuantity(TextTheme tt, ColorScheme cs, CartController cartController) {
+  Widget _buildPriceAndQuantity(
+      TextTheme tt, ColorScheme cs, CartController cartController) {
     return Row(
       children: [
-        // Price
         Flexible(
           child: Text(
             '\$${item.price.toStringAsFixed(2)}',
@@ -157,27 +166,22 @@ class TCartItems extends StatelessWidget {
             ),
           ),
         ),
-        
         if (showQuantityControls) ...[
           const Spacer(),
-          // Quantity Controls
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _buildQuantityButton(
-                Icons.remove,
-                () {
-                  if (onDecrease != null) {
-                    onDecrease!();
-                  } else {
-                    cartController.decrementQuantity(item.id);
-                  }
-                },
-                cs,
-              ),
+              _buildQuantityButton(Icons.remove, () {
+                if (onDecrease != null) {
+                  onDecrease!();
+                } else {
+                  cartController.decrementQuantity(item.id);
+                }
+              }, cs),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 12),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   color: cs.surfaceVariant,
                   borderRadius: BorderRadius.circular(8),
@@ -190,17 +194,13 @@ class TCartItems extends StatelessWidget {
                   ),
                 ),
               ),
-              _buildQuantityButton(
-                Icons.add,
-                () {
-                  if (onIncrease != null) {
-                    onIncrease!();
-                  } else {
-                    cartController.incrementQuantity(item.id);
-                  }
-                },
-                cs,
-              ),
+              _buildQuantityButton(Icons.add, () {
+                if (onIncrease != null) {
+                  onIncrease!();
+                } else {
+                  cartController.incrementQuantity(item.id);
+                }
+              }, cs),
             ],
           ),
         ],
@@ -208,7 +208,8 @@ class TCartItems extends StatelessWidget {
     );
   }
 
-  Widget _buildQuantityButton(IconData icon, VoidCallback onPressed, ColorScheme cs) {
+  Widget _buildQuantityButton(
+      IconData icon, VoidCallback onPressed, ColorScheme cs) {
     return Container(
       decoration: BoxDecoration(
         color: cs.primary.withOpacity(0.1),
@@ -229,7 +230,7 @@ class TCartItems extends StatelessWidget {
         if (onRemove != null) {
           onRemove!();
         } else {
-          final CartController cartController = Get.find<CartController>();
+          final cartController = Get.find<CartController>();
           cartController.removeFromCart(item.id);
         }
       },
@@ -241,71 +242,3 @@ class TCartItems extends StatelessWidget {
     );
   }
 }
-
-// Extension widget for simplified usage
-class TCartItemsList extends StatelessWidget {
-  final List<CartItem> items;
-  final EdgeInsetsGeometry? padding;
-  final double spacing;
-  final ScrollPhysics? physics;
-  final bool shrinkWrap;
-
-  const TCartItemsList({
-    super.key,
-    required this.items,
-    this.padding,
-    this.spacing = 16.0,
-    this.physics,
-    this.shrinkWrap = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.separated(
-      padding: padding,
-      physics: physics,
-      shrinkWrap: shrinkWrap,
-      itemCount: items.length,
-      separatorBuilder: (_, __) => SizedBox(height: spacing),
-      itemBuilder: (context, index) {
-        return TCartItems(item: items[index]);
-      },
-    );
-  }
-}
-
-// Usage Examples:
-/*
-// Basic usage
-TCartItems(item: cartItem)
-
-// Custom styling
-TCartItems(
-  item: cartItem,
-  backgroundColor: Colors.grey[50],
-  borderRadius: 12,
-  padding: EdgeInsets.all(12),
-)
-
-// Without quantity controls (for order history, etc.)
-TCartItems(
-  item: cartItem,
-  showQuantityControls: false,
-  showRemoveButton: false,
-)
-
-// With custom callbacks
-TCartItems(
-  item: cartItem,
-  onRemove: () => customRemoveFunction(),
-  onIncrease: () => customIncreaseFunction(),
-  onDecrease: () => customDecreaseFunction(),
-)
-
-// List of cart items
-TCartItemsList(
-  items: cartController.cartItems,
-  padding: EdgeInsets.all(16),
-  spacing: 12,
-)
-*/
