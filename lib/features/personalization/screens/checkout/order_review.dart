@@ -1,9 +1,6 @@
 import 'package:ecommerce_store/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_store/common/widgets/t_cart_items.dart';
 import 'package:ecommerce_store/features/personalization/controllers/card_controller.dart';
-import 'package:ecommerce_store/features/personalization/screens/checkout/widgets/address_page.dart';
-import 'package:ecommerce_store/features/personalization/screens/checkout/widgets/coupon_page.dart';
-import 'package:ecommerce_store/features/personalization/screens/checkout/widgets/payment_page.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,7 +26,7 @@ class OrderReviewScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Section Title
+              /// Section Title
               Text(
                 'Items in your order',
                 style: tt.headlineMedium?.copyWith(
@@ -39,7 +36,7 @@ class OrderReviewScreen extends StatelessWidget {
               ),
               const SizedBox(height: TSizes.spaceBtwSections),
 
-              // Cart Items List
+              /// Cart Items List
               Obx(() => ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -59,100 +56,45 @@ class OrderReviewScreen extends StatelessWidget {
 
               const SizedBox(height: TSizes.spaceBtwSections),
 
-              // Coupon Section
+              /// Coupon Section
               GestureDetector(
-                onTap: () {
-                  Get.to(() => const CouponPage());
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: TSizes.md,
-                    vertical: TSizes.sm,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: cs.outline),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.card_giftcard),
-                      const SizedBox(width: TSizes.sm),
-                      Text(
-                        'Have a promo code? Enter here',
-                        style: tt.bodyMedium,
-                      ),
-                      const Spacer(),
-                      const Icon(Icons.arrow_forward_ios, size: 16),
-                    ],
-                  ),
+                onTap: () => Get.toNamed('/coupon'),
+                child: _buildSelectableBox(
+                  context,
+                  icon: Icons.card_giftcard,
+                  text: 'Have a promo code? Enter here',
                 ),
               ),
 
               const SizedBox(height: TSizes.spaceBtwSections),
 
-              // Address Section
+              /// Address Section
               GestureDetector(
-                onTap: () => Get.to(() => const AddressPage()),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: TSizes.md,
-                    vertical: TSizes.sm,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: cs.outline),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.location_on),
-                      const SizedBox(width: TSizes.sm),
-                      Expanded(
-                        child: Obx(() => Text(
-                              cartController.selectedAddress.value ??
-                                  'Select delivery address',
-                              style: tt.bodyMedium,
-                            )),
-                      ),
-                      const Icon(Icons.arrow_forward_ios, size: 16),
-                    ],
-                  ),
-                ),
+                onTap: () => Get.toNamed('/address'),
+                child: Obx(() => _buildSelectableBox(
+                      context,
+                      icon: Icons.location_on,
+                      text: cartController.selectedAddress.value ??
+                          'Select delivery address',
+                    )),
               ),
 
               const SizedBox(height: TSizes.spaceBtwSections),
 
-              // Payment Method Section
+              /// Payment Method Section
               GestureDetector(
-                onTap: () => Get.to(() => const PaymentMethodPage()),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: TSizes.md,
-                    vertical: TSizes.sm,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: cs.outline),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.payment),
-                      const SizedBox(width: TSizes.sm),
-                      Expanded(
-                        child: Obx(() => Text(
-                              cartController.selectedPaymentMethod.value ??
-                                  'Select payment method',
-                              style: tt.bodyMedium,
-                            )),
-                      ),
-                      const Icon(Icons.arrow_forward_ios, size: 16),
-                    ],
-                  ),
-                ),
+                onTap: () => Get.toNamed('/payment'),
+                child: Obx(() => _buildSelectableBox(
+                      context,
+                      icon: Icons.payment,
+                      text: cartController.selectedPaymentMethod.value ??
+                          'Select payment method',
+                    )),
               ),
 
               const SizedBox(height: TSizes.spaceBtwSections),
 
-              // Price Breakdown Section
+              /// Price Breakdown
               Obx(() => Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -185,6 +127,36 @@ class OrderReviewScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  /// Reusable box widget
+  Widget _buildSelectableBox(BuildContext context,
+      {required IconData icon, required String text}) {
+    final cs = Theme.of(context).colorScheme;
+    final tt = Theme.of(context).textTheme;
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: TSizes.md,
+        vertical: TSizes.sm,
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(color: cs.outline),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          Icon(icon),
+          const SizedBox(width: TSizes.sm),
+          Expanded(
+            child: Text(
+              text,
+              style: tt.bodyMedium,
+            ),
+          ),
+          const Icon(Icons.arrow_forward_ios, size: 16),
+        ],
       ),
     );
   }

@@ -4,7 +4,15 @@ import 'package:ecommerce_store/features/personalization/models/cart_item.dart';
 class CartController extends GetxController {
   var cartItems = <CartItem>[].obs;
 
+  // -----------------------
+  // Address & Payment state
+  // -----------------------
+  var selectedAddress = RxnString(); // null if not selected
+  var selectedPaymentMethod = RxnString(); // null if not selected
+
+  // -----------------------
   // Coupon & discount state
+  // -----------------------
   var appliedCoupon = RxnString(); // null if no coupon
   var discount = 0.0.obs;
 
@@ -83,6 +91,8 @@ class CartController extends GetxController {
     cartItems.clear();
     appliedCoupon.value = null;
     discount.value = 0.0;
+    selectedAddress.value = null;
+    selectedPaymentMethod.value = null;
     _saveCartItems();
   }
 
