@@ -31,29 +31,37 @@ class CartController extends GetxController {
     required String productName,
     required double productPrice,
     required String productImage,
+    required String productBrand,  // ✅ Made this required instead of optional
     String? productSize,
     String? productColor,
-    String productBrand = "Default",
   }) {
-    final existingIndex = cartItems.indexWhere((item) => item.id == productId);
+    // Check if item with same id, size, and color already exists
+    final existingIndex = cartItems.indexWhere((item) => 
+      item.id == productId && 
+      item.size == productSize && 
+      item.color == productColor
+    );
 
     if (existingIndex >= 0) {
+      // If exact match exists, increment quantity
       cartItems[existingIndex].quantity++;
       cartItems.refresh();
     } else {
+      // Add new item with all details
       cartItems.add(CartItem(
         id: productId,
         name: productName,
         price: productPrice,
         image: productImage,
-        size: productSize ?? "",
-        color: productColor ?? "",
-        brand: productBrand,
+        brand: productBrand,  // ✅ Now this will always have the actual brand value
+        size: productSize,
+        color: productColor,
+        quantity: 1,
       ));
     }
 
     _saveCartItems();
-    _recalculateDiscount(); // 👈 keep coupon active
+    _recalculateDiscount();
   }
 
   void incrementQuantity(String id) {
@@ -119,20 +127,47 @@ class CartController extends GetxController {
     if (code.toUpperCase() == "SAVE10") {
       discount.value = subtotal * 0.10; // 10% off
       appliedCoupon.value = code;
+      Get.snackbar(
+        "Coupon Applied!", 
+        "You saved \$${discount.value.toStringAsFixed(2)} with code $code",
+        snackPosition: SnackPosition.BOTTOM,
+      );
     } else if (code.toUpperCase() == "FREESHIP") {
       discount.value = shipping; // remove shipping fee
       appliedCoupon.value = code;
+      Get.snackbar(
+        "Coupon Applied!", 
+        "Free shipping applied!",
+        snackPosition: SnackPosition.BOTTOM,
+      );
     } else if (code.toUpperCase() == "WELCOME5") {
       discount.value = 5.0; // flat $5 off
       appliedCoupon.value = code;
+      Get.snackbar(
+        "Coupon Applied!", 
+        "\$5 discount applied!",
+        snackPosition: SnackPosition.BOTTOM,
+      );
     } else {
-      Get.snackbar("Invalid Coupon", "The code you entered is not valid.");
+      Get.snackbar(
+        "Invalid Coupon", 
+        "The code you entered is not valid.",
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
+  }
+
+  void removeCoupon() {
+    appliedCoupon.value = null;
+    discount.value = 0.0;
   }
 
   void _recalculateDiscount() {
     if (appliedCoupon.value != null) {
-      applyCoupon(appliedCoupon.value!); // 👈 reapply the same coupon
+      final currentCoupon = appliedCoupon.value!;
+      appliedCoupon.value = null;
+      discount.value = 0.0;
+      applyCoupon(currentCoupon);
     }
   }
 
@@ -140,11 +175,20 @@ class CartController extends GetxController {
   // Persistence
   // -----------------------
   void _saveCartItems() {
-    // TODO: Implement persistent storage
+    // TODO: Implement persistent storage with GetStorage or SharedPreferences
+    // Example:
+    // final box = GetStorage();
+    // box.write('cartItems', cartItems.map((item) => item.toJson()).toList());
   }
 
   void _loadCartItems() {
     // TODO: Implement persistent storage
+    // Example:
+    // final box = GetStorage();
+    // final savedItems = box.read<List>('cartItems');
+    // if (savedItems != null) {
+    //   cartItems.value = savedItems.map((item) => CartItem.fromJson(item)).toList();
+    // }
   }
 
   @override

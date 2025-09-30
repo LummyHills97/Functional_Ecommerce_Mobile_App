@@ -57,7 +57,7 @@ class _CartScreenState extends State<CartScreen>
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: TAppBar(
-         showBackArrow: true,
+        showBackArrow: true,
         title: Obx(() => Text(
               'My Cart (${cartController.totalQuantity})',
               style: tt.headlineSmall?.copyWith(
@@ -199,30 +199,30 @@ class _CartScreenState extends State<CartScreen>
                         borderRadius: BorderRadius.circular(12),
                         color: cs.surfaceVariant,
                       ),
-                     child: ClipRRect(
-  borderRadius: BorderRadius.circular(12),
-  child: item.image.startsWith('assets/') 
-      ? Image.asset(  // Use Image.asset for local assets
-          item.image,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return Container(
-              color: cs.surfaceVariant,
-              child: Icon(Icons.image, color: cs.onSurfaceVariant, size: 32),
-            );
-          },
-        )
-      : Image.network(  // Use Image.network for URLs
-          item.image,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return Container(
-              color: cs.surfaceVariant,
-              child: Icon(Icons.image, color: cs.onSurfaceVariant, size: 32),
-            );
-          },
-        ),
-),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: item.image.startsWith('assets/') 
+                            ? Image.asset(
+                                item.image,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    color: cs.surfaceVariant,
+                                    child: Icon(Icons.image, color: cs.onSurfaceVariant, size: 32),
+                                  );
+                                },
+                              )
+                            : Image.network(
+                                item.image,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    color: cs.surfaceVariant,
+                                    child: Icon(Icons.image, color: cs.onSurfaceVariant, size: 32),
+                                  );
+                                },
+                              ),
+                      ),
                     ),
                     const SizedBox(width: 16),
                     // Product Details
@@ -240,8 +240,9 @@ class _CartScreenState extends State<CartScreen>
                             overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 4),
+                          // ✅ FIXED: Show brand, color, and size properly
                           Text(
-                            '${item.color} • ${item.size}',
+                            _buildProductDetails(item),
                             style: tt.bodySmall
                                 ?.copyWith(color: cs.onSurfaceVariant),
                           ),
@@ -319,6 +320,23 @@ class _CartScreenState extends State<CartScreen>
     );
   }
 
+  // ✅ NEW: Helper method to build product details string
+  String _buildProductDetails(CartItem item) {
+    final details = <String>[];
+    
+    if (item.brand != null && item.brand!.isNotEmpty) {
+      details.add(item.brand!);
+    }
+    if (item.color != null && item.color!.isNotEmpty) {
+      details.add(item.color!);
+    }
+    if (item.size != null && item.size!.isNotEmpty) {
+      details.add(item.size!);
+    }
+    
+    return details.isEmpty ? 'Product Details' : details.join(' • ');
+  }
+
   Widget _buildQuantityButton(
       IconData icon, VoidCallback onPressed, ColorScheme cs) {
     return Container(
@@ -337,93 +355,91 @@ class _CartScreenState extends State<CartScreen>
   }
 
   Widget _buildCheckoutSection(ColorScheme cs, TextTheme tt) {
-  return Container(
-    decoration: BoxDecoration(
-      color: cs.surface,
-      boxShadow: [
-        if (Theme.of(context).brightness == Brightness.light)
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, -2),
-          ),
-      ],
-    ),
-    child: SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(TSizes.defaultSpace),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Order Summary
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: cs.surfaceVariant,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Obx(() => Column(
-                    children: [
-                      _buildSummaryRow('Subtotal', cartController.subtotal, cs, tt),
-                      const SizedBox(height: 8),
-                      _buildSummaryRow('Shipping', cartController.shipping, cs, tt),
-                      const SizedBox(height: 8),
-                      _buildSummaryRow('Tax', cartController.tax, cs, tt),
-                      const Divider(height: 24),
-                      _buildSummaryRow(
-                        'Total',
-                        cartController.total,
-                        cs,
-                        tt,
-                        isTotal: true,
-                      ),
-                    ],
-                  )),
+    return Container(
+      decoration: BoxDecoration(
+        color: cs.surface,
+        boxShadow: [
+          if (Theme.of(context).brightness == Brightness.light)
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, -2),
             ),
-            const SizedBox(height: 16),
-            // Checkout Button
-            SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: Obx(() => ElevatedButton(
-                    onPressed: () {
-                      // ✅ Navigate with smooth slide-up transition
-                      Get.to(
-                        () => const CheckoutScreen(),
-                        transition: Transition.downToUp, // slide from bottom
-                        duration: const Duration(milliseconds: 400),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: cs.primary,
-                      foregroundColor: cs.onPrimary,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16)),
-                      elevation: 2,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+        ],
+      ),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(TSizes.defaultSpace),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Order Summary
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: cs.surfaceVariant,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Obx(() => Column(
                       children: [
-                        const Icon(Icons.shopping_bag_outlined),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Checkout • \$${cartController.total.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        _buildSummaryRow('Subtotal', cartController.subtotal, cs, tt),
+                        const SizedBox(height: 8),
+                        _buildSummaryRow('Shipping', cartController.shipping, cs, tt),
+                        const SizedBox(height: 8),
+                        _buildSummaryRow('Tax', cartController.tax, cs, tt),
+                        const Divider(height: 24),
+                        _buildSummaryRow(
+                          'Total',
+                          cartController.total,
+                          cs,
+                          tt,
+                          isTotal: true,
                         ),
                       ],
-                    ),
-                  )),
-            ),
-          ],
+                    )),
+              ),
+              const SizedBox(height: 16),
+              // Checkout Button
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: Obx(() => ElevatedButton(
+                      onPressed: () {
+                        Get.to(
+                          () => const CheckoutScreen(),
+                          transition: Transition.downToUp,
+                          duration: const Duration(milliseconds: 400),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: cs.primary,
+                        foregroundColor: cs.onPrimary,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16)),
+                        elevation: 2,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.shopping_bag_outlined),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Checkout • \$${cartController.total.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
+              ),
+            ],
+          ),
         ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 
   Widget _buildSummaryRow(
     String label,

@@ -239,12 +239,15 @@ class FavouriteScreen extends StatelessWidget {
                     height: 32,
                     child: ElevatedButton(
                       onPressed: () {
-                        cartController.quickAddToCart(
-                          productId: item['id'].toString(),
-                          productName: item['name'],
-                          productPrice: item['price'].toDouble(),
-                          productImage: item['image'],
-                        );
+                       cartController.quickAddToCart(
+  productId: item['id'].toString(),
+  productName: item['name'],
+  productPrice: item['price'].toDouble(),
+  productImage: item['image'],
+  productBrand: item['brand'] ?? 'Unknown Brand',  // ✅ Add this line
+  productSize: null,  // ✅ Add this if you want to allow adding without size
+  productColor: null, // ✅ Add this if you want to allow adding without color
+);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: TColors.primary,

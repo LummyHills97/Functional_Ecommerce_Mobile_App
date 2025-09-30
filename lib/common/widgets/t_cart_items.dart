@@ -1,251 +1,142 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:ecommerce_store/features/personalization/controllers/card_controller.dart';
 import 'package:ecommerce_store/features/personalization/models/cart_item.dart';
+import 'package:ecommerce_store/utils/constants/sizes.dart';
+import 'package:flutter/material.dart';
 
 class TCartItems extends StatelessWidget {
-  final CartItem item;
-  final bool showQuantityControls;
-  final bool showRemoveButton;
-  final VoidCallback? onRemove;
-  final VoidCallback? onIncrease;
-  final VoidCallback? onDecrease;
-  final EdgeInsetsGeometry? padding;
-  final Color? backgroundColor;
-  final double? borderRadius;
-
   const TCartItems({
     super.key,
     required this.item,
     this.showQuantityControls = true,
     this.showRemoveButton = true,
-    this.onRemove,
-    this.onIncrease,
-    this.onDecrease,
-    this.padding,
-    this.backgroundColor,
-    this.borderRadius,
+    this.padding = const EdgeInsets.all(TSizes.defaultSpace),
   });
+
+  final CartItem item;
+  final bool showQuantityControls;
+  final bool showRemoveButton;
+  final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
-    final cartController = Get.find<CartController>();
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      padding: padding ?? const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: backgroundColor ?? cs.surface,
-        borderRadius: BorderRadius.circular(borderRadius ?? 16),
-        boxShadow: [
-          if (!isDark)
-            BoxShadow(
-              color: Colors.black.withOpacity(0.08),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
-            ),
-        ],
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildProductImage(cs),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildBrand(tt, cs),
-                const SizedBox(height: 2),
-                _buildProductName(tt, cs),
-                const SizedBox(height: 4),
-                _buildProductVariant(tt, cs),
-                const SizedBox(height: 8),
-                _buildPriceAndQuantity(tt, cs, cartController),
-              ],
-            ),
-          ),
-          if (showRemoveButton) _buildRemoveButton(cs),
-        ],
-      ),
-    );
-  }
-
-  // --- UI helpers ---
-
-  Widget _buildProductImage(ColorScheme cs) {
-    return Container(
-      width: 80,
-      height: 80,
-      decoration: BoxDecoration(
+        color: cs.surface,
         borderRadius: BorderRadius.circular(12),
-        color: cs.surfaceVariant,
+        border: Border.all(color: cs.outline.withOpacity(0.2)),
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: item.image.startsWith('assets/')
-            ? Image.asset(
-                item.image,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => _imagePlaceholder(cs),
-              )
-            : Image.network(
-                item.image,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => _imagePlaceholder(cs),
+      child: Padding(
+        padding: padding,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Product Image
+            Container(
+              width: 70,
+              height: 70,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: cs.surfaceVariant,
               ),
-      ),
-    );
-  }
-
-  Widget _imagePlaceholder(ColorScheme cs) {
-    return Container(
-      color: cs.surfaceVariant,
-      child: Icon(Icons.image, color: cs.onSurfaceVariant, size: 32),
-    );
-  }
-
-  Widget _buildBrand(TextTheme tt, ColorScheme cs) {
-    final isDefault = item.brand.toLowerCase() == "default";
-
-    if (isDefault) return const SizedBox.shrink();
-
-    return Row(
-      children: [
-        Text(
-          item.brand,
-          style: tt.bodyMedium?.copyWith(
-            fontWeight: FontWeight.w600,
-            color: cs.onSurface,
-          ),
-        ),
-        const SizedBox(width: 4),
-        const Icon(Icons.verified, color: Colors.blue, size: 16),
-      ],
-    );
-  }
-
-  Widget _buildProductName(TextTheme tt, ColorScheme cs) {
-    return Text(
-      item.name,
-      style: tt.titleMedium?.copyWith(
-        fontWeight: FontWeight.bold,
-        color: cs.onSurface,
-      ),
-      maxLines: 2,
-      overflow: TextOverflow.ellipsis,
-    );
-  }
-
-  Widget _buildProductVariant(TextTheme tt, ColorScheme cs) {
-  List<String> parts = [];
-
-  if (item.color.isNotEmpty && item.color.toLowerCase() != "default") {
-    parts.add("Color: ${item.color}");
-  }
-  if (item.size.isNotEmpty && item.size.toLowerCase() != "default") {
-    parts.add("Size: ${item.size}");
-  }
-
-  return parts.isEmpty
-      ? const SizedBox.shrink()
-      : Text(
-          parts.join(" • "),
-          style: tt.bodySmall?.copyWith(color: cs.onSurfaceVariant),
-        );
-}
-
-
-  Widget _buildPriceAndQuantity(
-      TextTheme tt, ColorScheme cs, CartController cartController) {
-    return Row(
-      children: [
-        Flexible(
-          child: Text(
-            '\$${item.price.toStringAsFixed(2)}',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: tt.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: cs.primary,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: item.image.startsWith('assets/')
+                    ? Image.asset(
+                        item.image,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(
+                            Icons.image,
+                            color: cs.onSurfaceVariant,
+                            size: 32,
+                          );
+                        },
+                      )
+                    : Image.network(
+                        item.image,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(
+                            Icons.image,
+                            color: cs.onSurfaceVariant,
+                            size: 32,
+                          );
+                        },
+                      ),
+              ),
             ),
-          ),
-        ),
-        if (showQuantityControls) ...[
-          const Spacer(),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildQuantityButton(Icons.remove, () {
-                if (onDecrease != null) {
-                  onDecrease!();
-                } else {
-                  cartController.decrementQuantity(item.id);
-                }
-              }, cs),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 12),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  color: cs.surfaceVariant,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  '${item.quantity}',
-                  style: tt.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: cs.onSurface,
+            const SizedBox(width: 12),
+            
+            // Product Details
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.name,
+                    style: tt.titleSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: cs.onSurface,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
+                  const SizedBox(height: 4),
+                  
+                  // ✅ FIXED: Show brand, color, and size
+                  Text(
+                    _buildProductDetails(item),
+                    style: tt.bodySmall?.copyWith(
+                      color: cs.onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  
+                  // Price and Quantity
+                  Row(
+                    children: [
+                      Text(
+                        '\$${item.price.toStringAsFixed(2)}',
+                        style: tt.titleSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: cs.primary,
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        'Qty: ${item.quantity}',
+                        style: tt.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: cs.onSurface,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              _buildQuantityButton(Icons.add, () {
-                if (onIncrease != null) {
-                  onIncrease!();
-                } else {
-                  cartController.incrementQuantity(item.id);
-                }
-              }, cs),
-            ],
-          ),
-        ],
-      ],
-    );
-  }
-
-  Widget _buildQuantityButton(
-      IconData icon, VoidCallback onPressed, ColorScheme cs) {
-    return Container(
-      decoration: BoxDecoration(
-        color: cs.primary.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: IconButton(
-        onPressed: onPressed,
-        icon: Icon(icon, size: 16),
-        color: cs.primary,
-        constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildRemoveButton(ColorScheme cs) {
-    return IconButton(
-      onPressed: () {
-        if (onRemove != null) {
-          onRemove!();
-        } else {
-          final cartController = Get.find<CartController>();
-          cartController.removeFromCart(item.id);
-        }
-      },
-      icon: Icon(Icons.close, color: cs.onSurfaceVariant),
-      style: IconButton.styleFrom(
-        backgroundColor: cs.surfaceVariant,
-        padding: const EdgeInsets.all(8),
-      ),
-    );
+  // ✅ NEW: Helper method to build product details string
+  String _buildProductDetails(CartItem item) {
+    final details = <String>[];
+    
+    if (item.brand != null && item.brand!.isNotEmpty) {
+      details.add(item.brand!);
+    }
+    if (item.color != null && item.color!.isNotEmpty) {
+      details.add(item.color!);
+    }
+    if (item.size != null && item.size!.isNotEmpty) {
+      details.add(item.size!);
+    }
+    
+    return details.isEmpty ? 'No details available' : details.join(' • ');
   }
 }
