@@ -88,14 +88,35 @@ class OrderReviewScreen extends StatelessWidget {
 
               const SizedBox(height: TSizes.spaceBtwSections),
 
-              // Total Section
-              Obx(() => Text(
-                    'Total: \$${cartController.total.toStringAsFixed(2)}',
-                    style: tt.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: cs.primary,
-                    ),
-                  )),
+             // Price Breakdown Section
+Obx(() => Column(
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+    Text('Subtotal: \$${cartController.subtotal.toStringAsFixed(2)}'),
+    Text('Shipping: \$${cartController.shipping.toStringAsFixed(2)}'),
+    Text('Tax: \$${cartController.tax.toStringAsFixed(2)}'),
+
+    // Show coupon if user applied one
+    if (cartController.appliedCoupon.value != null) ...[
+      const SizedBox(height: 8),
+      Text(
+        'Coupon (${cartController.appliedCoupon.value}): '
+        '-\$${cartController.discount.value.toStringAsFixed(2)}',
+        style: TextStyle(color: Colors.green[700]),
+      ),
+    ],
+
+    const Divider(),
+
+    Text(
+      'Total: \$${cartController.total.toStringAsFixed(2)}',
+      style: tt.headlineSmall?.copyWith(
+        fontWeight: FontWeight.bold,
+        color: cs.primary,
+      ),
+    ),
+  ],
+)),
             ],
           ),
         ),
