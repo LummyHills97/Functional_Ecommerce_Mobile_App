@@ -153,7 +153,6 @@ class Store extends StatelessWidget {
       ],
     };
 
-    // FIXED: Dynamic product data with unique IDs based on category
     final categoryProducts = {
       'sport': [
         {
@@ -317,7 +316,6 @@ class Store extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Featured Brands Section
           Column(
             children: brands.map((name) {
               final images = brandImages[name] ?? [];
@@ -330,7 +328,6 @@ class Store extends StatelessWidget {
           ),
           const SizedBox(height: TSizes.spaceBtwSections),
           
-          // More Products Section
           TSectionHeading(
             title: 'More Products',
             showActionButton: true,
@@ -339,7 +336,6 @@ class Store extends StatelessWidget {
           ),
           const SizedBox(height: TSizes.spaceBtwItems),
           
-          // FIXED: Dynamic grid with proper cart and wishlist integration
           GridView.builder(
             itemCount: products.length,
             shrinkWrap: true,
@@ -348,7 +344,7 @@ class Store extends StatelessWidget {
               crossAxisCount: 2,
               mainAxisSpacing: TSizes.gridViewSpacing,
               crossAxisSpacing: TSizes.gridViewSpacing,
-              mainAxisExtent: 280, // Increased from 260 to 280 for more space
+              mainAxisExtent: 280,
             ),
             itemBuilder: (context, index) {
               final product = products[index];
@@ -360,7 +356,6 @@ class Store extends StatelessWidget {
     );
   }
 
-  // FIXED: Updated product card with proper cart and wishlist functionality
   Widget _buildProductCard(
     BuildContext context, 
     Map<String, dynamic> product, 
@@ -388,9 +383,8 @@ class Store extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Product Image
               Container(
-                height: 140, // Reduced from 150 to give more space for content
+                height: 140,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: isDark ? Colors.grey[800] : Colors.grey[100],
@@ -416,19 +410,18 @@ class Store extends StatelessWidget {
                 ),
               ),
               
-              // Product Details
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(8), // Reduced padding from TSizes.sm
+                  padding: const EdgeInsets.all(8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min, // Added this to minimize space usage
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         product['name'],
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
                           fontWeight: FontWeight.w600,
-                          fontSize: 13, // Slightly smaller font
+                          fontSize: 13,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -439,27 +432,26 @@ class Store extends StatelessWidget {
                         product['brand'],
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Colors.grey[600],
-                          fontSize: 11, // Smaller font
+                          fontSize: 11,
                         ),
                       ),
                       const SizedBox(height: 4),
                       
-                      // Price Row
                       Row(
                         children: [
                           Text(
-                            "${product['price']}",
+                            "\$${product['price']}",
                             style: Theme.of(context).textTheme.titleSmall?.copyWith(
                               color: TColors.primary,
                               fontWeight: FontWeight.bold,
-                              fontSize: 13, // Adjusted font size
+                              fontSize: 13,
                             ),
                           ),
                           const SizedBox(width: 4),
                           if (product['originalPrice'] != null)
                             Flexible(
                               child: Text(
-                                "${product['originalPrice']}",
+                                "\$${product['originalPrice']}",
                                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                   color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6),
                                   decoration: TextDecoration.lineThrough,
@@ -471,28 +463,14 @@ class Store extends StatelessWidget {
                         ],
                       ),
                       
-                      const SizedBox(height: 6), // Fixed spacing instead of Spacer
+                      const SizedBox(height: 6),
                       
-                      // FIXED: Add to Cart Button with proper functionality
                       SizedBox(
                         width: double.infinity,
-                        height: 28, // Reduced height from 32
+                        height: 28,
                         child: ElevatedButton(
                           onPressed: () {
-                            cartController.quickAddToCart(
-                              productId: product['id'],
-                              productName: product['name'],
-                              productPrice: product['price'].toDouble(),
-                              productImage: product['image'],
-                            );
-                            
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('${product['name']} added to cart'),
-                                duration: const Duration(seconds: 1),
-                                backgroundColor: TColors.primary,
-                              ),
-                            );
+                            _showAddToCartDialog(context, product, cartController);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: TColors.primary,
@@ -501,8 +479,8 @@ class Store extends StatelessWidget {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(6),
                             ),
-                            minimumSize: Size.zero, // Allow button to be smaller
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap, // Reduce tap target
+                            minimumSize: Size.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
                           child: const Text(
                             'Add to Cart',
@@ -519,7 +497,6 @@ class Store extends StatelessWidget {
             ],
           ),
           
-          // Discount Badge
           if (product['discount'] > 0)
             Positioned(
               top: 8,
@@ -541,7 +518,6 @@ class Store extends StatelessWidget {
               ),
             ),
           
-          // FIXED: Wishlist Heart Button with real functionality
           Positioned(
             top: 8,
             right: 8,
@@ -587,6 +563,155 @@ class Store extends StatelessWidget {
     );
   }
 
+  void _showAddToCartDialog(
+    BuildContext context, 
+    Map<String, dynamic> product,
+    CartController cartController,
+  ) {
+    String? selectedSize;
+    String? selectedColor;
+    
+    final sizes = ['S', 'M', 'L', 'XL'];
+    final colors = ['Black', 'White', 'Blue', 'Red', 'Green'];
+    
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          title: Text(
+            product['name'],
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: 120,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.grey[200],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(
+                      product['image'],
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                
+                Text(
+                  '\$${product['price']}',
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: TColors.primary,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                
+                const Text(
+                  'Select Size:',
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  children: sizes.map((size) {
+                    final isSelected = selectedSize == size;
+                    return ChoiceChip(
+                      label: Text(size),
+                      selected: isSelected,
+                      onSelected: (selected) {
+                        setState(() {
+                          selectedSize = selected ? size : null;
+                        });
+                      },
+                      selectedColor: TColors.primary,
+                      labelStyle: TextStyle(
+                        color: isSelected ? Colors.white : Colors.black,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    );
+                  }).toList(),
+                ),
+                const SizedBox(height: 16),
+                
+                const Text(
+                  'Select Color:',
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  children: colors.map((color) {
+                    final isSelected = selectedColor == color;
+                    return ChoiceChip(
+                      label: Text(color),
+                      selected: isSelected,
+                      onSelected: (selected) {
+                        setState(() {
+                          selectedColor = selected ? color : null;
+                        });
+                      },
+                      selectedColor: TColors.primary,
+                      labelStyle: TextStyle(
+                        color: isSelected ? Colors.white : Colors.black,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: (selectedSize != null && selectedColor != null)
+                  ? () {
+                      cartController.quickAddToCart(
+                        productId: product['id'],
+                        productName: product['name'],
+                        productPrice: product['price'].toDouble(),
+                        productImage: product['image'],
+                        productBrand: product['brand'],
+                        productSize: selectedSize,
+                        productColor: selectedColor,
+                      );
+                      
+                      Navigator.pop(context);
+                      
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            '${product['name']} ($selectedColor, $selectedSize) added to cart'
+                          ),
+                          duration: const Duration(seconds: 2),
+                          backgroundColor: TColors.primary,
+                        ),
+                      );
+                    }
+                  : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: TColors.primary,
+                foregroundColor: Colors.white,
+              ),
+              child: const Text('Add to Cart'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildBrandCard(BuildContext context, String name, int index, bool isDark, List<String> images) {
     return Container(
       padding: const EdgeInsets.all(TSizes.sm),
@@ -610,7 +735,6 @@ class Store extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Brand Header
           Row(
             children: [
               Container(
@@ -662,7 +786,6 @@ class Store extends StatelessWidget {
             ],
           ),
           
-          // Brand Products Images
           if (images.isNotEmpty) ...[
             const SizedBox(height: TSizes.spaceBtwItems),
             SizedBox(
