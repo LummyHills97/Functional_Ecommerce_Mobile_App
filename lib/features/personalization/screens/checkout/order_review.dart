@@ -1,7 +1,9 @@
 import 'package:ecommerce_store/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_store/common/widgets/t_cart_items.dart';
 import 'package:ecommerce_store/features/personalization/controllers/card_controller.dart';
+import 'package:ecommerce_store/features/personalization/screens/checkout/widgets/address_page.dart';
 import 'package:ecommerce_store/features/personalization/screens/checkout/widgets/coupon_page.dart';
+import 'package:ecommerce_store/features/personalization/screens/checkout/widgets/payment_page.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -57,7 +59,7 @@ class OrderReviewScreen extends StatelessWidget {
 
               const SizedBox(height: TSizes.spaceBtwSections),
 
-              // Coupon Section (Navigate to Coupon Page)
+              // Coupon Section
               GestureDetector(
                 onTap: () {
                   Get.to(() => const CouponPage());
@@ -88,35 +90,98 @@ class OrderReviewScreen extends StatelessWidget {
 
               const SizedBox(height: TSizes.spaceBtwSections),
 
-             // Price Breakdown Section
-Obx(() => Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-    Text('Subtotal: \$${cartController.subtotal.toStringAsFixed(2)}'),
-    Text('Shipping: \$${cartController.shipping.toStringAsFixed(2)}'),
-    Text('Tax: \$${cartController.tax.toStringAsFixed(2)}'),
+              // Address Section
+              GestureDetector(
+                onTap: () => Get.to(() => const AddressPage()),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: TSizes.md,
+                    vertical: TSizes.sm,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: cs.outline),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.location_on),
+                      const SizedBox(width: TSizes.sm),
+                      Expanded(
+                        child: Obx(() => Text(
+                              cartController.selectedAddress.value ??
+                                  'Select delivery address',
+                              style: tt.bodyMedium,
+                            )),
+                      ),
+                      const Icon(Icons.arrow_forward_ios, size: 16),
+                    ],
+                  ),
+                ),
+              ),
 
-    // Show coupon if user applied one
-    if (cartController.appliedCoupon.value != null) ...[
-      const SizedBox(height: 8),
-      Text(
-        'Coupon (${cartController.appliedCoupon.value}): '
-        '-\$${cartController.discount.value.toStringAsFixed(2)}',
-        style: TextStyle(color: Colors.green[700]),
-      ),
-    ],
+              const SizedBox(height: TSizes.spaceBtwSections),
 
-    const Divider(),
+              // Payment Method Section
+              GestureDetector(
+                onTap: () => Get.to(() => const PaymentMethodPage()),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: TSizes.md,
+                    vertical: TSizes.sm,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: cs.outline),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.payment),
+                      const SizedBox(width: TSizes.sm),
+                      Expanded(
+                        child: Obx(() => Text(
+                              cartController.selectedPaymentMethod.value ??
+                                  'Select payment method',
+                              style: tt.bodyMedium,
+                            )),
+                      ),
+                      const Icon(Icons.arrow_forward_ios, size: 16),
+                    ],
+                  ),
+                ),
+              ),
 
-    Text(
-      'Total: \$${cartController.total.toStringAsFixed(2)}',
-      style: tt.headlineSmall?.copyWith(
-        fontWeight: FontWeight.bold,
-        color: cs.primary,
-      ),
-    ),
-  ],
-)),
+              const SizedBox(height: TSizes.spaceBtwSections),
+
+              // Price Breakdown Section
+              Obx(() => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          'Subtotal: \$${cartController.subtotal.toStringAsFixed(2)}'),
+                      Text(
+                          'Shipping: \$${cartController.shipping.toStringAsFixed(2)}'),
+                      Text('Tax: \$${cartController.tax.toStringAsFixed(2)}'),
+
+                      if (cartController.appliedCoupon.value != null) ...[
+                        const SizedBox(height: 8),
+                        Text(
+                          'Coupon (${cartController.appliedCoupon.value}): '
+                          '-\$${cartController.discount.value.toStringAsFixed(2)}',
+                          style: TextStyle(color: Colors.green[700]),
+                        ),
+                      ],
+
+                      const Divider(),
+
+                      Text(
+                        'Total: \$${cartController.total.toStringAsFixed(2)}',
+                        style: tt.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: cs.primary,
+                        ),
+                      ),
+                    ],
+                  )),
             ],
           ),
         ),
