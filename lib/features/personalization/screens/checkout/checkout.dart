@@ -45,28 +45,53 @@ class CheckoutScreen extends StatelessWidget {
                   final item = cartController.cartItems[index];
                   return TCartItems(
                     item: item,
-                    showQuantityControls: false, // Fixed property name
-                    showRemoveButton: false,     // Hide remove button for checkout
-                    backgroundColor: Theme.of(context).cardColor,
-                    borderRadius: 12,
+                    showQuantityControls: false,
+                    showRemoveButton: false,
+                    padding: const EdgeInsets.all(TSizes.md),
                   );
                 },
               )),
               
               const SizedBox(height: TSizes.spaceBtwSections),
               
-              // Order Summary Section
-              _buildOrderSummary(context, cartController),
-              
-              const SizedBox(height: TSizes.spaceBtwSections),
-              
-              // Payment Method Section
-              _buildPaymentMethod(context),
+              // Coupon Section
+              GestureDetector(
+                onTap: () => Get.toNamed('/coupon'),
+                child: _buildSelectableBox(
+                  context,
+                  icon: Icons.card_giftcard,
+                  text: 'Have a promo code? Enter here',
+                ),
+              ),
               
               const SizedBox(height: TSizes.spaceBtwSections),
               
               // Delivery Address Section
-              _buildDeliveryAddress(context),
+              GestureDetector(
+                onTap: () => Get.toNamed('/address'),
+                child: Obx(() => _buildSelectableBox(
+                  context,
+                  icon: Icons.location_on,
+                  text: cartController.selectedAddress.value ?? 'Select delivery address',
+                )),
+              ),
+              
+              const SizedBox(height: TSizes.spaceBtwSections),
+              
+              // Payment Method Section
+              GestureDetector(
+                onTap: () => Get.toNamed('/payment'),
+                child: Obx(() => _buildSelectableBox(
+                  context,
+                  icon: Icons.payment,
+                  text: cartController.selectedPaymentMethod.value ?? 'Select payment method',
+                )),
+              ),
+              
+              const SizedBox(height: TSizes.spaceBtwSections),
+              
+              // Order Summary Section
+              _buildOrderSummary(context, cartController),
               
               const SizedBox(height: TSizes.spaceBtwSections * 2),
               
@@ -75,6 +100,40 @@ class CheckoutScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildSelectableBox(
+    BuildContext context, {
+    required IconData icon,
+    required String text,
+  }) {
+    final cs = Theme.of(context).colorScheme;
+    final tt = Theme.of(context).textTheme;
+    
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: TSizes.md,
+        vertical: TSizes.sm,
+      ),
+      decoration: BoxDecoration(
+        color: cs.surface,
+        border: Border.all(color: cs.outline.withOpacity(0.3)),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: cs.primary),
+          const SizedBox(width: TSizes.sm),
+          Expanded(
+            child: Text(
+              text,
+              style: tt.bodyMedium,
+            ),
+          ),
+          Icon(Icons.arrow_forward_ios, size: 16, color: cs.onSurfaceVariant),
+        ],
       ),
     );
   }
@@ -104,6 +163,30 @@ class CheckoutScreen extends StatelessWidget {
               _buildSummaryRow('Shipping', cartController.shipping, tt, cs),
               const SizedBox(height: 8),
               _buildSummaryRow('Tax', cartController.tax, tt, cs),
+              
+              // Show discount if coupon applied
+              if (cartController.appliedCoupon.value != null) ...[
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Discount (${cartController.appliedCoupon.value})',
+                      style: tt.bodyMedium?.copyWith(
+                        color: cs.onSurfaceVariant,
+                      ),
+                    ),
+                    Text(
+                      '-\$${cartController.discount.value.toStringAsFixed(2)}',
+                      style: tt.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.green,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+              
               const Divider(height: 24),
               _buildSummaryRow(
                 'Total',
@@ -147,108 +230,6 @@ class CheckoutScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPaymentMethod(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-    final tt = Theme.of(context).textTheme;
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: cs.surface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: cs.outline.withOpacity(0.2)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Payment Method',
-            style: tt.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Icon(Icons.credit_card, color: cs.primary),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Credit Card',
-                      style: tt.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
-                    ),
-                    Text(
-                      '**** **** **** 1234',
-                      style: tt.bodySmall?.copyWith(color: cs.onSurfaceVariant),
-                    ),
-                  ],
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  // Navigate to payment method selection
-                },
-                child: const Text('Change'),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDeliveryAddress(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-    final tt = Theme.of(context).textTheme;
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: cs.surface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: cs.outline.withOpacity(0.2)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Delivery Address',
-            style: tt.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Icon(Icons.location_on, color: cs.primary),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Home',
-                      style: tt.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
-                    ),
-                    Text(
-                      '123 Main Street, City, State 12345',
-                      style: tt.bodySmall?.copyWith(color: cs.onSurfaceVariant),
-                    ),
-                  ],
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  // Navigate to address selection
-                },
-                child: const Text('Change'),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildPlaceOrderButton(BuildContext context, CartController cartController) {
     final cs = Theme.of(context).colorScheme;
 
@@ -258,7 +239,6 @@ class CheckoutScreen extends StatelessWidget {
       child: Obx(() => ElevatedButton(
         onPressed: cartController.cartItems.isNotEmpty
             ? () {
-                // Handle order placement
                 _showOrderConfirmation(context, cartController);
               }
             : null,
@@ -293,18 +273,27 @@ class CheckoutScreen extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Order Placed!'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Row(
+            children: [
+              Icon(Icons.check_circle, color: Theme.of(context).colorScheme.primary, size: 28),
+              const SizedBox(width: 12),
+              const Text('Order Placed!'),
+            ],
+          ),
           content: Text(
-            'Your order of \$${cartController.total.toStringAsFixed(2)} has been placed successfully.',
+            'Your order of \$${cartController.total.toStringAsFixed(2)} has been placed successfully.\n\nYou will receive a confirmation email shortly.',
           ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                cartController.clearCart(); // Clear cart after order
-                Get.back(); // Return to previous screen
+                cartController.clearCart();
+                Get.offAllNamed('/navigation'); // Navigate to home
               },
-              child: const Text('OK'),
+              child: const Text('Continue Shopping'),
             ),
           ],
         );
