@@ -1,6 +1,7 @@
 import 'package:ecommerce_store/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_store/common/widgets/t_cart_items.dart';
 import 'package:ecommerce_store/features/personalization/controllers/card_controller.dart';
+import 'package:ecommerce_store/features/personalization/screens/checkout/widgets/coupon_page.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -47,11 +48,53 @@ class OrderReviewScreen extends StatelessWidget {
                       final item = cartController.cartItems[index];
                       return TCartItems(
                         item: item,
-                        showQuantityControls: false, // Read-only in review
-                        showRemoveButton: false, // No removal in review
+                        showQuantityControls: false,
+                        showRemoveButton: false,
                         padding: const EdgeInsets.all(TSizes.md),
                       );
                     },
+                  )),
+
+              const SizedBox(height: TSizes.spaceBtwSections),
+
+              // Coupon Section (Navigate to Coupon Page)
+              GestureDetector(
+                onTap: () {
+                  Get.to(() => const CouponPage());
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: TSizes.md,
+                    vertical: TSizes.sm,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: cs.outline),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.card_giftcard),
+                      const SizedBox(width: TSizes.sm),
+                      Text(
+                        'Have a promo code? Enter here',
+                        style: tt.bodyMedium,
+                      ),
+                      const Spacer(),
+                      const Icon(Icons.arrow_forward_ios, size: 16),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: TSizes.spaceBtwSections),
+
+              // Total Section
+              Obx(() => Text(
+                    'Total: \$${cartController.total.toStringAsFixed(2)}',
+                    style: tt.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: cs.primary,
+                    ),
                   )),
             ],
           ),
