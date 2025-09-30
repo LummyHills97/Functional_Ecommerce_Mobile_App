@@ -8,16 +8,16 @@ class CartController extends GetxController {
   var appliedCoupon = RxnString(); // null if no coupon
   var discount = 0.0.obs;
 
-  // Getters
+  // -----------------------
+  // Cart logic
+  // -----------------------
   int get itemCount => cartItems.length;
   int get totalQuantity => cartItems.fold(0, (sum, item) => sum + item.quantity);
 
-  // Check if a product is already in the cart
   bool isInCart(String productId) {
     return cartItems.any((item) => item.id == productId);
   }
 
-  // Add item to cart
   void quickAddToCart({
     required String productId,
     required String productName,
@@ -45,19 +45,19 @@ class CartController extends GetxController {
     }
 
     _saveCartItems();
+    _recalculateDiscount(); // 👈 keep coupon active
   }
 
-  // Increment quantity
   void incrementQuantity(String id) {
     final index = cartItems.indexWhere((item) => item.id == id);
     if (index >= 0) {
       cartItems[index].quantity++;
       cartItems.refresh();
       _saveCartItems();
+      _recalculateDiscount();
     }
   }
 
-  // Decrement quantity
   void decrementQuantity(String id) {
     final index = cartItems.indexWhere((item) => item.id == id);
     if (index >= 0) {
@@ -69,16 +69,16 @@ class CartController extends GetxController {
         return;
       }
       _saveCartItems();
+      _recalculateDiscount();
     }
   }
 
-  // Remove item
   void removeFromCart(String id) {
     cartItems.removeWhere((item) => item.id == id);
     _saveCartItems();
+    _recalculateDiscount();
   }
 
-  // Clear cart
   void clearCart() {
     cartItems.clear();
     appliedCoupon.value = null;
@@ -86,7 +86,9 @@ class CartController extends GetxController {
     _saveCartItems();
   }
 
+  // -----------------------
   // Price calculations
+  // -----------------------
   double get subtotal =>
       cartItems.fold(0, (sum, item) => sum + (item.price * item.quantity));
 
@@ -101,11 +103,9 @@ class CartController extends GetxController {
   // Coupon logic
   // -----------------------
   void applyCoupon(String code) {
-    // Reset first
     appliedCoupon.value = null;
     discount.value = 0.0;
 
-    // Example coupons
     if (code.toUpperCase() == "SAVE10") {
       discount.value = subtotal * 0.10; // 10% off
       appliedCoupon.value = code;
@@ -120,7 +120,15 @@ class CartController extends GetxController {
     }
   }
 
-  // Save cart items to persistent storage (implement as needed)
+  void _recalculateDiscount() {
+    if (appliedCoupon.value != null) {
+      applyCoupon(appliedCoupon.value!); // 👈 reapply the same coupon
+    }
+  }
+
+  // -----------------------
+  // Persistence
+  // -----------------------
   void _saveCartItems() {
     // TODO: Implement persistent storage
   }
