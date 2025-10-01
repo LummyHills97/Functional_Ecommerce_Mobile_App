@@ -69,6 +69,7 @@ class _AnimatedCartButtonState extends State<AnimatedCartButton>
         productName: widget.productName,
         productPrice: widget.productPrice,
         productImage: widget.productImage,
+        productBrand: '', // TODO: Replace with actual brand if available
       );
     } else {
       cartController.removeFromCart(widget.productId);

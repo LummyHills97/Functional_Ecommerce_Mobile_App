@@ -182,6 +182,7 @@ class TProductCardVertical extends StatelessWidget {
                               productName: product['name'],
                               productPrice: product['price'].toDouble(),
                               productImage: product['image'],
+                              productBrand: product['brand'],
                             );
                             
                             ScaffoldMessenger.of(context).showSnackBar(
