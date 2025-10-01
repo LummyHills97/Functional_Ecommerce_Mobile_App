@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     _buildBannerCarousel(),
                     const SizedBox(height: TSizes.spaceBtwSections),
-                    _buildPopularProducts(context), // <-- updated to open dialog on tap
+                    _buildPopularProducts(context),
                     const SizedBox(height: TSizes.spaceBtwSections),
                     _buildFeaturedProducts(context),
                     const SizedBox(height: TSizes.spaceBtwSections),
@@ -199,17 +199,15 @@ class _HomePageState extends State<HomePage> {
             itemBuilder: (context, index) {
               final product = _popularProducts[index];
 
-              // <<< ONLY CHANGE: wrap product card so tapping the card opens the same popup
-              return GestureDetector(
-                onTap: () {
-                  _showAddToCartDialog(context, product, cartController);
-                },
-                child: SizedBox(
-                  width: 180,
-                  child: TProductCardVertical(product: product),
+              return SizedBox(
+                width: 180,
+                child: TProductCardVertical(
+                  product: product,
+                  onAddToCart: () {
+                    _showAddToCartDialog(context, product, cartController);
+                  },
                 ),
               );
-              // <<< end change
             },
           ),
         ),
@@ -308,7 +306,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // FIXED: Today's Deal section with proper spacing for dark mode
   Widget _buildDealsSection(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Column(
@@ -323,7 +320,7 @@ class _HomePageState extends State<HomePage> {
         ),
         const SizedBox(height: TSizes.spaceBtwItems),
         Container(
-          height: 125, // Increased from 120 to fix overflow
+          height: 125,
           width: double.infinity,
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
@@ -422,209 +419,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildProductCard(
-    BuildContext context, 
-    Map<String, dynamic> product, 
-    bool isDark,
-    CartController cartController,
-    dynamic wishlistController
-  ) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(TSizes.productImageRadius),
-        boxShadow: [
-          BoxShadow(
-            color: isDark 
-                ? Colors.black.withOpacity(0.3)
-                : Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 3,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Stack(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 140,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: isDark ? Colors.grey[800] : Colors.grey[100],
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(TSizes.productImageRadius),
-                  ),
-                ),
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(TSizes.productImageRadius),
-                  ),
-                  child: Image.asset(
-                    product['image'],
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Icon(
-                        Icons.shopping_bag_outlined,
-                        size: 48,
-                        color: isDark ? Colors.grey[600] : Colors.grey[400],
-                      );
-                    },
-                  ),
-                ),
-              ),
-              
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        product['name'],
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 2),
-                      
-                      Text(
-                        product['brand'],
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.grey[600],
-                          fontSize: 11,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      
-                      Row(
-                        children: [
-                          Text(
-                            "\$${product['price']}",
-                            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              color: TColors.primary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 13,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          if (product['originalPrice'] != null)
-                            Flexible(
-                              child: Text(
-                                "\$${product['originalPrice']}",
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6),
-                                  decoration: TextDecoration.lineThrough,
-                                  fontSize: 10,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                        ],
-                      ),
-                      
-                      const SizedBox(height: 6),
-                      
-                      SizedBox(
-                        width: double.infinity,
-                        height: 28,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            _showAddToCartDialog(context, product, cartController);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: TColors.primary,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            minimumSize: Size.zero,
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          ),
-                          child: const Text(
-                            'Add to Cart',
-                            style: TextStyle(fontSize: 9, fontWeight: FontWeight.w600),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          
-          if (product['discount'] > 0)
-            Positioned(
-              top: 8,
-              left: 8,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Text(
-                  '${product['discount']}% OFF',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          
-          Positioned(
-            top: 8,
-            right: 8,
-            child: Obx(() => Container(
-              width: 28,
-              height: 28,
-              decoration: BoxDecoration(
-                color: isDark 
-                    ? Colors.black.withOpacity(0.7)
-                    : Colors.white.withOpacity(0.9),
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    spreadRadius: 1,
-                    blurRadius: 2,
-                    offset: const Offset(0, 1),
-                  ),
-                ],
-              ),
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(14),
-                  onTap: () {
-                    // wishlistController.toggleWishlist(product);
-                  },
-                  child: Icon(
-                    Icons.favorite_border,
-                    size: 16,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-            )),
-          ),
-        ],
-      ),
     );
   }
 
@@ -773,124 +567,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildBrandCard(BuildContext context, String name, int index, bool isDark, List<String> images) {
-    return Container(
-      padding: const EdgeInsets.all(TSizes.sm),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        border: Border.all(
-          color: isDark ? TColors.darkGrey : TColors.grey,
-        ),
-        borderRadius: BorderRadius.circular(TSizes.productImageRadius),
-        boxShadow: [
-          BoxShadow(
-            color: isDark 
-                ? Colors.black.withOpacity(0.2)
-                : Colors.grey.withOpacity(0.05),
-            spreadRadius: 1,
-            blurRadius: 2,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                padding: const EdgeInsets.all(TSizes.xs),
-                decoration: BoxDecoration(
-                  color: isDark ? TColors.darkGrey : TColors.light,
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                child: const Icon(
-                  Icons.storefront,
-                  size: 20,
-                  color: TColors.primary,
-                ),
-              ),
-              const SizedBox(width: TSizes.spaceBtwItems / 2),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          name,
-                          style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(width: TSizes.xs / 2),
-                        const Icon(
-                          Icons.verified,
-                          color: TColors.primary,
-                          size: 14,
-                        ),
-                      ],
-                    ),
-                    Text(
-                      '${(index + 1) * 25} Products',
-                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: isDark ? TColors.grey : TColors.darkGrey,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          
-          if (images.isNotEmpty) ...[
-            const SizedBox(height: TSizes.spaceBtwItems),
-            SizedBox(
-              height: 70,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: images.length,
-                separatorBuilder: (context, index) => const SizedBox(width: TSizes.sm),
-                itemBuilder: (context, index) {
-                  return Container(
-                    width: 70,
-                    height: 70,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: isDark ? Colors.grey[800] : TColors.light,
-                      border: Border.all(
-                        color: isDark ? Colors.grey[700]! : Colors.grey[300]!,
-                        width: 0.5,
-                      ),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.asset(
-                        images[index],
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Icon(
-                            Icons.image_not_supported_outlined,
-                            color: isDark ? Colors.grey[600] : Colors.grey[400],
-                            size: 24,
-                          );
-                        },
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        ],
       ),
     );
   }
