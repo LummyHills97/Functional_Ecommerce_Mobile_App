@@ -570,6 +570,7 @@ class Store extends StatelessWidget {
   ) {
     String? selectedSize;
     String? selectedColor;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     
     final sizes = ['S', 'M', 'L', 'XL'];
     final colors = ['Black', 'White', 'Blue', 'Red', 'Green'];
@@ -578,9 +579,14 @@ class Store extends StatelessWidget {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
+          backgroundColor: isDark ? TColors.dark : Colors.white,
           title: Text(
             product['name'],
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: isDark ? Colors.white : TColors.dark,
+            ),
           ),
           content: SingleChildScrollView(
             child: Column(
@@ -592,7 +598,7 @@ class Store extends StatelessWidget {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    color: Colors.grey[200],
+                    color: isDark ? Colors.grey[800] : Colors.grey[200],
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
@@ -614,9 +620,12 @@ class Store extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 
-                const Text(
+                Text(
                   'Select Size:',
-                  style: TextStyle(fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: isDark ? Colors.white : TColors.dark,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Wrap(
@@ -632,8 +641,9 @@ class Store extends StatelessWidget {
                         });
                       },
                       selectedColor: TColors.primary,
+                      backgroundColor: isDark ? Colors.grey[800] : Colors.grey[200],
                       labelStyle: TextStyle(
-                        color: isSelected ? Colors.white : Colors.black,
+                        color: isSelected ? Colors.white : (isDark ? Colors.white : Colors.black),
                         fontWeight: FontWeight.w600,
                       ),
                     );
@@ -641,9 +651,12 @@ class Store extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 
-                const Text(
+                Text(
                   'Select Color:',
-                  style: TextStyle(fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: isDark ? Colors.white : TColors.dark,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Wrap(
@@ -659,8 +672,9 @@ class Store extends StatelessWidget {
                         });
                       },
                       selectedColor: TColors.primary,
+                      backgroundColor: isDark ? Colors.grey[800] : Colors.grey[200],
                       labelStyle: TextStyle(
-                        color: isSelected ? Colors.white : Colors.black,
+                        color: isSelected ? Colors.white : (isDark ? Colors.white : Colors.black),
                         fontWeight: FontWeight.w600,
                       ),
                     );
@@ -672,7 +686,10 @@ class Store extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text(
+                'Cancel',
+                style: TextStyle(color: isDark ? Colors.white70 : TColors.dark),
+              ),
             ),
             ElevatedButton(
               onPressed: (selectedSize != null && selectedColor != null)
