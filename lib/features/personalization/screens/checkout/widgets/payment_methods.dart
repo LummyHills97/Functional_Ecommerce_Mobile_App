@@ -3,6 +3,7 @@ import 'package:ecommerce_store/features/personalization/controllers/card_contro
 import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class PaymentMethodPage extends StatelessWidget {
@@ -41,82 +42,82 @@ class PaymentMethodPage extends StatelessWidget {
             // Digital Wallets Section
             _buildSectionTitle(context, 'Digital Wallets', isDark),
             const SizedBox(height: TSizes.spaceBtwItems),
-            Obx(() => Column(
+            Column(
               children: [
-                _buildPaymentOption(
+                Obx(() => _buildPaymentOption(
                   context,
                   'PayPal',
                   'assets/icons/payment_methods/paypal.png',
                   cartController,
                   isDark,
-                ),
+                )),
                 const SizedBox(height: TSizes.sm),
-                _buildPaymentOption(
+                Obx(() => _buildPaymentOption(
                   context,
                   'Google Pay',
                   'assets/icons/payment_methods/google-pay.png',
                   cartController,
                   isDark,
-                ),
+                )),
                 const SizedBox(height: TSizes.sm),
-                _buildPaymentOption(
+                Obx(() => _buildPaymentOption(
                   context,
                   'Apple Pay',
                   'assets/icons/payment_methods/apple-pay.png',
                   cartController,
                   isDark,
-                ),
+                )),
                 const SizedBox(height: TSizes.sm),
-                _buildPaymentOption(
+                Obx(() => _buildPaymentOption(
                   context,
                   'Paystack',
                   'assets/icons/payment_methods/paystack.png',
                   cartController,
                   isDark,
-                ),
+                )),
                 const SizedBox(height: TSizes.sm),
-                _buildPaymentOption(
+                Obx(() => _buildPaymentOption(
                   context,
                   'Paytm',
                   'assets/icons/payment_methods/paytm.png',
                   cartController,
                   isDark,
-                ),
+                )),
               ],
-            )),
+            ),
 
             const SizedBox(height: TSizes.spaceBtwSections),
 
             // Cards Section
             _buildSectionTitle(context, 'Credit & Debit Cards', isDark),
             const SizedBox(height: TSizes.spaceBtwItems),
-            Obx(() => Column(
+            Column(
               children: [
-                _buildPaymentOption(
+                Obx(() => _buildPaymentOption(
                   context,
                   'Credit Card',
                   'assets/icons/payment_methods/credit-card.png',
                   cartController,
                   isDark,
-                ),
+                )),
                 const SizedBox(height: TSizes.sm),
-                _buildPaymentOption(
+                Obx(() => _buildPaymentOption(
                   context,
                   'Visa',
                   'assets/icons/payment_methods/visa.png',
                   cartController,
                   isDark,
-                ),
+                )),
                 const SizedBox(height: TSizes.sm),
-                _buildPaymentOption(
+                Obx(() => _buildPaymentOption(
                   context,
                   'Mastercard',
                   'assets/icons/payment_methods/master-card.png',
                   cartController,
                   isDark,
-                ),
+                )),
               ],
-            )),
+            ),
 
             const SizedBox(height: TSizes.spaceBtwSections),
 
@@ -160,8 +161,16 @@ class PaymentMethodPage extends StatelessWidget {
     return InkWell(
       onTap: () {
         controller.selectedPaymentMethod.value = method;
-        Get.back();
+        // Add haptic feedback
+        HapticFeedback.selectionClick();
+        // Navigate back after a short delay for visual feedback
+        Future.delayed(const Duration(milliseconds: 150), () {
+          if (Get.isDialogOpen == false && Get.isBottomSheetOpen == false) {
+            Get.back();
+          }
+        });
       },
+      borderRadius: BorderRadius.circular(TSizes.cardRadiusMd),
       child: Container(
         padding: const EdgeInsets.all(TSizes.md),
         decoration: BoxDecoration(
@@ -230,3 +239,5 @@ class PaymentMethodPage extends StatelessWidget {
     );
   }
 }
+
+// Add this import at the top if not already present
