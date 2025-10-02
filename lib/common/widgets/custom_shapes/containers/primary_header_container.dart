@@ -16,49 +16,41 @@ class TPrimaryHeaderContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // get status bar height so we can extend behind it
-    final double statusBar = MediaQuery.of(context).padding.top;
-
-    return ClipRRect(
-      borderRadius: const BorderRadius.only(
-        bottomLeft: Radius.circular(40),
-        bottomRight: Radius.circular(40),
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.only(top: 60), // more padding for notch
+      decoration: BoxDecoration(
+        color: backgroundColor ?? TColors.primary,
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(40),
+          bottomRight: Radius.circular(40),
+        ),
       ),
-      child: Container(
-        width: double.infinity,
-        // ensure the header is at least `height` + statusBar so blue covers top
-        constraints: BoxConstraints(minHeight: height + statusBar),
-        // add top padding that includes the status bar so content is not under the notch
-        padding: EdgeInsets.only(top: statusBar + 12, left: 0, right: 0, bottom: 16),
-        decoration: BoxDecoration(
-          color: backgroundColor ?? TColors.primary,
-        ),
-        child: Stack(
-          children: [
-            // Decorative circular backgrounds
-            Positioned(
-              top: -150,
-              right: -250,
-              child: TCircular(
-                width: 400,
-                height: 400,
-                backgroundColor: TColors.textWhite.withOpacity(0.1),
-              ),
+      child: Stack(
+        children: [
+          // Decorative circles
+          Positioned(
+            top: -150,
+            right: -250,
+            child: TCircular(
+              width: 400,
+              height: 400,
+              backgroundColor: TColors.textWhite.withOpacity(0.1),
             ),
-            Positioned(
-              top: 100,
-              right: -300,
-              child: TCircular(
-                width: 400,
-                height: 400,
-                backgroundColor: TColors.textWhite.withOpacity(0.1),
-              ),
+          ),
+          Positioned(
+            top: 100,
+            right: -300,
+            child: TCircular(
+              width: 400,
+              height: 400,
+              backgroundColor: TColors.textWhite.withOpacity(0.1),
             ),
+          ),
 
-            // Your main content inside the header
-            child,
-          ],
-        ),
+          // Main child (like greeting + search + categories)
+          child,
+        ],
       ),
     );
   }
