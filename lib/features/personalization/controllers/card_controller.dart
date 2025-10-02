@@ -2,6 +2,9 @@ import 'package:get/get.dart';
 import 'package:ecommerce_store/features/personalization/models/cart_item.dart';
 
 class CartController extends GetxController {
+  // -----------------------
+  // Cart state
+  // -----------------------
   var cartItems = <CartItem>[].obs;
 
   // -----------------------
@@ -9,6 +12,29 @@ class CartController extends GetxController {
   // -----------------------
   var selectedAddress = RxnString(); // null if not selected
   var selectedPaymentMethod = RxnString(); // null if not selected
+
+  // -----------------------
+  // Saved cards list
+  // -----------------------
+  final RxList<Map<String, String>> savedCards = <Map<String, String>>[].obs;
+
+  void addCard(Map<String, String> card) {
+    savedCards.add(card);
+    // Optionally, save to local storage here
+  }
+
+  void removeCard(int index) {
+    if (index >= 0 && index < savedCards.length) {
+      savedCards.removeAt(index);
+    }
+  }
+
+  Map<String, String>? getCard(int index) {
+    if (index >= 0 && index < savedCards.length) {
+      return savedCards[index];
+    }
+    return null;
+  }
 
   // -----------------------
   // Coupon & discount state
@@ -31,29 +57,26 @@ class CartController extends GetxController {
     required String productName,
     required double productPrice,
     required String productImage,
-    required String productBrand,  // ✅ Made this required instead of optional
+    required String productBrand,
     String? productSize,
     String? productColor,
   }) {
-    // Check if item with same id, size, and color already exists
-    final existingIndex = cartItems.indexWhere((item) => 
-      item.id == productId && 
-      item.size == productSize && 
+    final existingIndex = cartItems.indexWhere((item) =>
+      item.id == productId &&
+      item.size == productSize &&
       item.color == productColor
     );
 
     if (existingIndex >= 0) {
-      // If exact match exists, increment quantity
       cartItems[existingIndex].quantity++;
       cartItems.refresh();
     } else {
-      // Add new item with all details
       cartItems.add(CartItem(
         id: productId,
         name: productName,
         price: productPrice,
         image: productImage,
-        brand: productBrand,  // ✅ Now this will always have the actual brand value
+        brand: productBrand,
         size: productSize,
         color: productColor,
         quantity: 1,
@@ -128,7 +151,7 @@ class CartController extends GetxController {
       discount.value = subtotal * 0.10; // 10% off
       appliedCoupon.value = code;
       Get.snackbar(
-        "Coupon Applied!", 
+        "Coupon Applied!",
         "You saved \$${discount.value.toStringAsFixed(2)} with code $code",
         snackPosition: SnackPosition.BOTTOM,
       );
@@ -136,7 +159,7 @@ class CartController extends GetxController {
       discount.value = shipping; // remove shipping fee
       appliedCoupon.value = code;
       Get.snackbar(
-        "Coupon Applied!", 
+        "Coupon Applied!",
         "Free shipping applied!",
         snackPosition: SnackPosition.BOTTOM,
       );
@@ -144,13 +167,13 @@ class CartController extends GetxController {
       discount.value = 5.0; // flat $5 off
       appliedCoupon.value = code;
       Get.snackbar(
-        "Coupon Applied!", 
+        "Coupon Applied!",
         "\$5 discount applied!",
         snackPosition: SnackPosition.BOTTOM,
       );
     } else {
       Get.snackbar(
-        "Invalid Coupon", 
+        "Invalid Coupon",
         "The code you entered is not valid.",
         snackPosition: SnackPosition.BOTTOM,
       );
@@ -172,23 +195,14 @@ class CartController extends GetxController {
   }
 
   // -----------------------
-  // Persistence
+  // Persistence (stub)
   // -----------------------
   void _saveCartItems() {
     // TODO: Implement persistent storage with GetStorage or SharedPreferences
-    // Example:
-    // final box = GetStorage();
-    // box.write('cartItems', cartItems.map((item) => item.toJson()).toList());
   }
 
   void _loadCartItems() {
     // TODO: Implement persistent storage
-    // Example:
-    // final box = GetStorage();
-    // final savedItems = box.read<List>('cartItems');
-    // if (savedItems != null) {
-    //   cartItems.value = savedItems.map((item) => CartItem.fromJson(item)).toList();
-    // }
   }
 
   @override
