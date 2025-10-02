@@ -16,6 +16,9 @@ class TPrimaryHeaderContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // get status bar height so we can extend behind it
+    final double statusBar = MediaQuery.of(context).padding.top;
+
     return ClipRRect(
       borderRadius: const BorderRadius.only(
         bottomLeft: Radius.circular(40),
@@ -23,8 +26,10 @@ class TPrimaryHeaderContainer extends StatelessWidget {
       ),
       child: Container(
         width: double.infinity,
-        height: height,
-        padding: const EdgeInsets.only(top: 40),
+        // ensure the header is at least `height` + statusBar so blue covers top
+        constraints: BoxConstraints(minHeight: height + statusBar),
+        // add top padding that includes the status bar so content is not under the notch
+        padding: EdgeInsets.only(top: statusBar + 12, left: 0, right: 0, bottom: 16),
         decoration: BoxDecoration(
           color: backgroundColor ?? TColors.primary,
         ),
