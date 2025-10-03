@@ -2,6 +2,7 @@ import 'package:ecommerce_store/common/widgets/products.cart/product_cards/produ
 import 'package:ecommerce_store/common/widgets/appbar/home_appbar.dart';
 import 'package:ecommerce_store/features/personalization/controllers/card_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Add this import
 import 'dart:async';
 import 'package:get/get.dart';
 import 'package:ecommerce_store/common/widgets/custom_shapes/containers/primary_header_container.dart';
@@ -87,29 +88,37 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              _buildHeader(context),
-              Padding(
-                padding: const EdgeInsets.all(TSizes.defaultSpace),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildBannerCarousel(),
-                    const SizedBox(height: TSizes.spaceBtwSections),
-                    _buildPopularProducts(context),
-                    const SizedBox(height: TSizes.spaceBtwSections),
-                    _buildFeaturedProducts(context),
-                    const SizedBox(height: TSizes.spaceBtwSections),
-                    _buildDealsSection(context),
-                  ],
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
+      child: Scaffold(
+        body: SafeArea(
+          top: false, // Allow content behind status bar
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                _buildHeader(context),
+                Padding(
+                  padding: const EdgeInsets.all(TSizes.defaultSpace),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildBannerCarousel(),
+                      const SizedBox(height: TSizes.spaceBtwSections),
+                      _buildPopularProducts(context),
+                      const SizedBox(height: TSizes.spaceBtwSections),
+                      _buildFeaturedProducts(context),
+                      const SizedBox(height: TSizes.spaceBtwSections),
+                      _buildDealsSection(context),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -121,6 +130,8 @@ class _HomePageState extends State<HomePage> {
       height: 420,
       child: Column(
         children: [
+          // Add top padding for status bar
+          SizedBox(height: MediaQuery.of(context).padding.top),
           Obx(() => THomeAppBar(
             userName: 'Olumide Akinnuli',
             cartItemCount: cartController.cartItems.length,
