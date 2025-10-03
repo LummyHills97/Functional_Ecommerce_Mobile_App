@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
     Banner(
       title: 'Free Shipping',
       description: 'On orders above \$50',
-      imageUrl: 'assets/images/banners/banner_3.jpg',
+      imageUrl: 'assets/images/banners/banner_2.jpg',
     ),
   ];
 
@@ -131,13 +131,13 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         children: [
           // Add top padding for status bar
-          SizedBox(height: MediaQuery.of(context).padding.top),
+          SizedBox(height: MediaQuery.of(context).padding.top / 2),
           Obx(() => THomeAppBar(
             userName: 'Olumide Akinnuli',
             cartItemCount: cartController.cartItems.length,
             onCartPressed: () => Get.toNamed('/cart'),
           )),
-          const SizedBox(height: TSizes.spaceBtwItems),
+          const SizedBox(height: TSizes.spaceBtwItems / 2),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
             child: TSearchContainer(
