@@ -1,3 +1,4 @@
+import 'package:ecommerce_store/features/authentication/screens/order/widgets/order.dart';
 import 'package:ecommerce_store/features/personalization/screens/address/widgets/address.dart';
 import 'package:ecommerce_store/features/personalization/screens/cart/widgets/cart.dart';
 import 'package:ecommerce_store/features/personalization/screens/profile/widgets/profile.dart';
@@ -5,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-// import your profile page
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -17,7 +16,7 @@ class SettingsScreen extends StatelessWidget {
     
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(140), // Increased height
+        preferredSize: const Size.fromHeight(140),
         child: AppBar(
           backgroundColor: TColors.primary,
           elevation: 0,
@@ -172,7 +171,15 @@ class SettingsScreen extends StatelessWidget {
             leading: Icon(Icons.shopping_bag_outlined, color: Colors.blue),
             title: const Text('My Order'),
             subtitle: const Text('Track your current and past orders'),
-            onTap: () {},
+            onTap: () {
+              // Navigate to Order Screen
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const OrderScreen(),
+                ),
+              );
+            },
           ),
           const Divider(),
           ListTile(
