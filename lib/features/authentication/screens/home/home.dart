@@ -1,8 +1,10 @@
 import 'package:ecommerce_store/common/widgets/products.cart/product_cards/product_card_vertical.dart';
 import 'package:ecommerce_store/common/widgets/appbar/home_appbar.dart';
 import 'package:ecommerce_store/features/personalization/controllers/card_controller.dart';
+import 'package:ecommerce_store/features/authentication/screens/sub_category/sub_categories.dart';
+import 'package:ecommerce_store/utils/constants/image_strings.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Add this import
+import 'package:flutter/services.dart';
 import 'dart:async';
 import 'package:get/get.dart';
 import 'package:ecommerce_store/common/widgets/custom_shapes/containers/primary_header_container.dart';
@@ -36,23 +38,28 @@ class _HomePageState extends State<HomePage> {
 
   static final List<Category> _categories = [
     Category(name: 'Electronics', icon: Icons.phone_android, color: Colors.blue),
-    Category(name: 'Fashion', icon: Icons.shopping_bag, color: Colors.pink),
-    Category(name: 'Home', icon: Icons.home, color: Colors.green),
-    Category(name: 'Books', icon: Icons.book, color: Colors.orange),
+    Category(name: 'Fashion', icon: Icons.checkroom, color: Colors.pink),
+    Category(name: 'Shoes', icon: Icons.skateboarding, color: Colors.green),
+    Category(name: 'Cosmetics', icon: Icons.face, color: Colors.orange),
     Category(name: 'Sports', icon: Icons.sports_soccer, color: Colors.red),
-    Category(name: 'Beauty', icon: Icons.face, color: Colors.purple),
+    Category(name: 'Furniture', icon: Icons.chair, color: Colors.purple),
   ];
 
   static final List<Banner> _banners = [
     Banner(
       title: 'Summer Sale',
       description: 'Up to 50% off on selected items',
-      imageUrl: 'assets/images/banners/banner_1.jpg',
+      imageUrl: TImages.banner1,
+    ),
+    Banner(
+      title: 'New Arrivals',
+      description: 'Check out our latest collection',
+      imageUrl: TImages.banner2,
     ),
     Banner(
       title: 'Free Shipping',
       description: 'On orders above \$50',
-      imageUrl: 'assets/images/banners/banner_2.jpg',
+      imageUrl: TImages.banner3,
     ),
   ];
 
@@ -96,7 +103,7 @@ class _HomePageState extends State<HomePage> {
       ),
       child: Scaffold(
         body: SafeArea(
-          top: false, // Allow content behind status bar
+          top: false,
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
@@ -130,7 +137,6 @@ class _HomePageState extends State<HomePage> {
       height: 420,
       child: Column(
         children: [
-          // Add top padding for status bar
           SizedBox(height: MediaQuery.of(context).padding.top / 2),
           Obx(() => THomeAppBar(
             userName: 'Olumide Akinnuli',
@@ -176,7 +182,7 @@ class _HomePageState extends State<HomePage> {
               final category = _categories[index];
               return _CategoryItem(
                 category: category,
-                onTap: () => debugPrint('Tapped ${category.name}'),
+                onTap: () => Get.to(() => const SubCategoriesScreen()),
               );
             },
           ),
@@ -245,7 +251,7 @@ class _HomePageState extends State<HomePage> {
               isDarkMode ? Colors.orange[400]! : Colors.orange[700]!,
               isDarkMode ? Colors.orange[600]! : Colors.transparent,
               isDarkMode,
-              () => debugPrint('Electronics category tapped'),
+              () => Get.to(() => const SubCategoriesScreen()),
             ),
             const SizedBox(width: TSizes.spaceBtwItems),
             _buildFeaturedCategory(
@@ -256,7 +262,7 @@ class _HomePageState extends State<HomePage> {
               isDarkMode ? Colors.pink[400]! : Colors.pink[700]!,
               isDarkMode ? Colors.pink[600]! : Colors.transparent,
               isDarkMode,
-              () => debugPrint('Fashion category tapped'),
+              () => Get.to(() => const SubCategoriesScreen()),
             ),
             const SizedBox(width: TSizes.spaceBtwItems),
             _buildFeaturedCategory(
@@ -267,7 +273,7 @@ class _HomePageState extends State<HomePage> {
               isDarkMode ? Colors.green[400]! : Colors.green[700]!,
               isDarkMode ? Colors.green[600]! : Colors.transparent,
               isDarkMode,
-              () => debugPrint('Sports category tapped'),
+              () => Get.to(() => const SubCategoriesScreen()),
             ),
           ],
         ),
@@ -604,6 +610,7 @@ class _CategoryItem extends StatelessWidget {
   final Category category;
   final VoidCallback onTap;
   const _CategoryItem({required this.category, required this.onTap});
+  
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -624,7 +631,7 @@ class _CategoryItem extends StatelessWidget {
             child: Icon(
               category.icon,
               color: category.color,
-              size: 24,
+              size: 28,
             ),
           ),
           const SizedBox(height: 4),
@@ -710,14 +717,6 @@ class _BannerCarouselState extends State<_BannerCarousel> {
                   margin: const EdgeInsets.symmetric(horizontal: 4),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(TSizes.md),
-                    gradient: LinearGradient(
-                      colors: [
-                        TColors.primary.withOpacity(0.8),
-                        TColors.primary.withOpacity(0.6),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.1),
@@ -727,43 +726,57 @@ class _BannerCarouselState extends State<_BannerCarousel> {
                       ),
                     ],
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(TSizes.defaultSpace),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(TSizes.md),
+                    child: Stack(
+                      fit: StackFit.expand,
                       children: [
-                        Text(
-                          banner.title,
-                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        Image.asset(
+                          banner.imageUrl,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              color: Colors.grey[300],
+                              child: const Center(
+                                child: Icon(Icons.image_not_supported, size: 50),
+                              ),
+                            );
+                          },
                         ),
-                        const SizedBox(height: TSizes.spaceBtwItems),
-                        Text(
-                          banner.description,
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Colors.white70,
-                          ),
-                        ),
-                        const SizedBox(height: TSizes.spaceBtwItems),
-                        ElevatedButton(
-                          onPressed: () => widget.onBannerTap(banner),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: TColors.primary,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 8,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                        Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.black.withOpacity(0.6),
+                                Colors.transparent,
+                              ],
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
                             ),
                           ),
-                          child: const Text(
-                            'Shop Now',
-                            style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        Positioned(
+                          bottom: 16,
+                          left: 16,
+                          right: 16,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                banner.title,
+                                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                banner.description,
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  color: Colors.white70,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
