@@ -1,5 +1,5 @@
 import 'package:ecommerce_store/common/widgets/appbar/appbar.dart';
-import 'package:ecommerce_store/common/widgets/products.cart/product_cards/product_card_vertical.dart';
+import 'package:ecommerce_store/common/widgets/products.cart/product_cards/product_card_horizontal.dart';
 import 'package:ecommerce_store/common/widgets/texts/section_heading.dart';
 import 'package:ecommerce_store/features/personalization/controllers/card_controller.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
@@ -98,20 +98,17 @@ class SubCategoriesScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: TSizes.spaceBtwItems),
 
-                  // Products Grid
-                  GridView.builder(
+                  // Products List (Horizontal Cards)
+                  ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: TSizes.gridViewSpacing,
-                      crossAxisSpacing: TSizes.gridViewSpacing,
-                      mainAxisExtent: 288,
-                    ),
                     itemCount: products.length,
+                    separatorBuilder: (context, index) => const SizedBox(
+                      height: TSizes.spaceBtwItems,
+                    ),
                     itemBuilder: (context, index) {
                       final product = products[index];
-                      return TProductCardVertical(
+                      return TProductCardHorizontal(
                         product: product,
                         onAddToCart: () {
                           _showAddToCartDialog(context, product, cartController);
