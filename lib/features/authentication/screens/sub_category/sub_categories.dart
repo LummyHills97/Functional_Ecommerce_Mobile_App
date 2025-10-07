@@ -87,13 +87,13 @@ class SubCategoriesScreen extends StatelessWidget {
               _buildFashionSaleBanner(context, isDark),
               const SizedBox(height: TSizes.spaceBtwSections),
 
-              // Sports Shirts Section
+              // Sports Shoe Section
               Column(
                 children: [
                   TSectionHeading(
-                    title: 'Sports shirts',
+                    title: 'Sports shoes',
                     onPressed: () {
-                      debugPrint('View all sports shirts');
+                      debugPrint('View all sports shoes');
                     },
                   ),
                   const SizedBox(height: TSizes.spaceBtwItems),
