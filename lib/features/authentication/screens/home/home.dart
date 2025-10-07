@@ -2,6 +2,8 @@ import 'package:ecommerce_store/common/widgets/products.cart/product_cards/produ
 import 'package:ecommerce_store/common/widgets/appbar/home_appbar.dart';
 import 'package:ecommerce_store/features/personalization/controllers/card_controller.dart';
 import 'package:ecommerce_store/features/authentication/screens/sub_category/sub_categories.dart';
+import 'package:ecommerce_store/features/shop/screens/all_products/all_product.dart';
+
 import 'package:ecommerce_store/utils/constants/image_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -204,7 +206,8 @@ class _HomePageState extends State<HomePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildSectionTitle(context, 'Popular Products', () {
-          debugPrint('View all popular products');
+          // Navigate to AllProducts page
+          Get.to(() => const AllProducts());
         }),
         const SizedBox(height: TSizes.spaceBtwItems),
         SizedBox(
