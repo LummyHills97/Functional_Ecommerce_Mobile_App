@@ -1,47 +1,62 @@
 import 'package:flutter/material.dart';
 
 class TSectionHeading extends StatelessWidget {
-  const TSectionHeading({
-    super.key,
-    this.onPressed,
-    this.textColor,
-    this.buttonTitle = 'View all',
-    required this.title,
-    this.showActionButton = true,
-  });
-
+  final String title;
+  final String buttonTitle;
   final Color? textColor;
   final bool showActionButton;
-  final String title, buttonTitle;
-  final void Function()? onPressed;
+  final VoidCallback? onPressed;
+  final TextStyle? titleStyle;
+  final TextStyle? buttonStyle;
+
+  const TSectionHeading({
+    super.key,
+    required this.title,
+    this.buttonTitle = 'View all',
+    this.textColor,
+    this.showActionButton = true,
+    this.onPressed,
+    this.titleStyle,
+    this.buttonStyle,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-            color: textColor,
-          ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        if (showActionButton)
-          TextButton(
-            onPressed: onPressed,
+    final defaultTitleStyle = Theme.of(context).textTheme.headlineSmall?.copyWith(
+      color: textColor ?? Theme.of(context).colorScheme.onBackground,
+      fontWeight: FontWeight.w600,
+    );
+
+    final defaultButtonStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
+      color: Theme.of(context).primaryColor,
+      fontWeight: FontWeight.w600,
+    );
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
             child: Text(
-              buttonTitle,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).primaryColor,
-                fontWeight: FontWeight.w600,
-              ),
+              title,
+              style: titleStyle ?? defaultTitleStyle,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
           ),
-      ],
+          if (showActionButton)
+            TextButton(
+              onPressed: onPressed,
+              child: Text(
+                buttonTitle,
+                style: buttonStyle ?? defaultButtonStyle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
