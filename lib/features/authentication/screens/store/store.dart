@@ -1,4 +1,5 @@
 import 'package:ecommerce_store/features/authentication/screens/wishlist/wishlist_controller.dart';
+import 'package:ecommerce_store/features/shop/screens/all_brands/all_brands.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ecommerce_store/common/widgets/appbar/appbar.dart';
@@ -55,10 +56,10 @@ class Store extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                     child: TSectionHeading(
-                      title: 'Featured Brands',
-                      showActionButton: true,
-                      buttonTitle: 'View all',
-                      onPressed: () {},
+  title: 'Featured Brands',
+  showActionButton: true,
+  buttonTitle: 'View all',
+  onPressed: () => Get.to(() => const AllBrandsScreen()),
                     ),
                   ),
                   const SizedBox(height: TSizes.spaceBtwSections),

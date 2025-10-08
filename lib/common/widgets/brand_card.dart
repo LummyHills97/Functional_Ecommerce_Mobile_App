@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class TBrandCard extends StatelessWidget {
   final Map<String, dynamic> brand;
 
-  const TBrandCard({Key? key, required this.brand}) : super(key: key);
+  const TBrandCard({Key? key, required this.brand, required String brandName, required int productCount, required Null Function() onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
