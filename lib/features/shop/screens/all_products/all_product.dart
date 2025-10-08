@@ -17,6 +17,7 @@ class AllProducts extends StatefulWidget {
 class _AllProductsState extends State<AllProducts> {
   final CartController cartController = Get.find<CartController>();
   String selectedCategory = 'All';
+  String selectedSortOption = 'Name';
 
   // Complete product list with various categories
   final List<Map<String, dynamic>> allProducts = [
@@ -290,10 +291,39 @@ class _AllProductsState extends State<AllProducts> {
   }
 
   List<Map<String, dynamic>> get filteredProducts {
+    List<Map<String, dynamic>> products;
+    
     if (selectedCategory == 'All') {
-      return allProducts;
+      products = List.from(allProducts);
+    } else {
+      products = allProducts.where((p) => p['category'] == selectedCategory).toList();
     }
-    return allProducts.where((p) => p['category'] == selectedCategory).toList();
+    
+    // Apply sorting
+    switch (selectedSortOption) {
+      case 'Name':
+        products.sort((a, b) => (a['name'] as String).compareTo(b['name'] as String));
+        break;
+      case 'Price: Low to High':
+        products.sort((a, b) => (a['price'] as double).compareTo(b['price'] as double));
+        break;
+      case 'Price: High to Low':
+        products.sort((a, b) => (b['price'] as double).compareTo(a['price'] as double));
+        break;
+      case 'Discount':
+        products.sort((a, b) => (b['discount'] as int).compareTo(a['discount'] as int));
+        break;
+      case 'Newest':
+        // Keep original order for newest (assuming list order is newest first)
+        break;
+      case 'Popularity':
+        // You can add a popularity score to products later
+        // For now, sort by discount as a proxy
+        products.sort((a, b) => (b['discount'] as int).compareTo(a['discount'] as int));
+        break;
+    }
+    
+    return products;
   }
 
   @override
@@ -338,15 +368,61 @@ class _AllProductsState extends State<AllProducts> {
             ),
           ),
           
-          // Products Count
+          // Products Count and Sort Dropdown
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   '${filteredProducts.length} Products',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: isDark ? Colors.grey[400] : Colors.grey[600],
+                  ),
+                ),
+                // Sort Dropdown
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: isDark ? Colors.grey[800] : Colors.grey[200],
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: isDark ? Colors.grey[700]! : Colors.grey[300]!,
+                    ),
+                  ),
+                  child: DropdownButton<String>(
+                    value: selectedSortOption,
+                    underline: const SizedBox(),
+                    icon: Icon(
+                      Icons.arrow_drop_down,
+                      color: isDark ? Colors.white : TColors.dark,
+                    ),
+                    dropdownColor: isDark ? Colors.grey[800] : Colors.white,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: isDark ? Colors.white : TColors.dark,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    items: [
+                      'Name',
+                      'Price: Low to High',
+                      'Price: High to Low',
+                      'Discount',
+                      'Newest',
+                      'Popularity',
+                    ].map((String option) {
+                      return DropdownMenuItem<String>(
+                        value: option,
+                        child: Text(option),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      if (newValue != null) {
+                        setState(() {
+                          selectedSortOption = newValue;
+                        });
+                      }
+                    },
                   ),
                 ),
               ],
