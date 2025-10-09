@@ -3,6 +3,7 @@ import 'package:ecommerce_store/common/widgets/brands/brand_show_case.dart';
 import 'package:ecommerce_store/common/widgets/texts/section_heading.dart';
 import 'package:ecommerce_store/utils/constants/sizes.dart';
 import 'package:ecommerce_store/utils/constants/colors.dart';
+import 'package:ecommerce_store/utils/constants/image_strings.dart';
 import 'package:ecommerce_store/utils/helpers/helpers_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,16 +15,80 @@ class AllBrandsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);
     
-    // All available brands with their categories and product counts
+    // Expanded brands list with logos and categories
     final List<Map<String, dynamic>> brands = [
-      {'name': 'Nike', 'category': 'sport', 'productCount': 3},
-      {'name': 'Adidas', 'category': 'sport', 'productCount': 3},
-      {'name': 'IKEA', 'category': 'furniture', 'productCount': 2},
-      {'name': 'Ashley', 'category': 'furniture', 'productCount': 2},
-      {'name': 'Samsung', 'category': 'electronics', 'productCount': 2},
-      {'name': 'Acer', 'category': 'electronics', 'productCount': 3},
-      {'name': 'Zara', 'category': 'clothes', 'productCount': 3},
-      {'name': 'H&M', 'category': 'clothes', 'productCount': 3},
+      {
+        'name': 'Nike',
+        'category': 'sport',
+        'productCount': 8,
+        'logo': TImages.nikeLogo,
+      },
+      {
+        'name': 'Adidas',
+        'category': 'sport',
+        'productCount': 6,
+        'logo': TImages.adidasLogo,
+      },
+      {
+        'name': 'Jordan',
+        'category': 'sport',
+        'productCount': 5,
+        'logo': TImages.jordanLogo,
+      },
+      {
+        'name': 'Puma',
+        'category': 'sport',
+        'productCount': 4,
+        'logo': TImages.pumaLogo,
+      },
+      {
+        'name': 'IKEA',
+        'category': 'furniture',
+        'productCount': 8,
+        'logo': TImages.ikeaLogo,
+      },
+      {
+        'name': 'Herman Miller',
+        'category': 'furniture',
+        'productCount': 6,
+        'logo': TImages.hermanMillerLogo,
+      },
+      {
+        'name': 'Kenwood',
+        'category': 'furniture',
+        'productCount': 4,
+        'logo': TImages.kenwoodLogo,
+      },
+      {
+        'name': 'Apple',
+        'category': 'electronics',
+        'productCount': 6,
+        'logo': TImages.appleLogo,
+      },
+      {
+        'name': 'Acer',
+        'category': 'electronics',
+        'productCount': 8,
+        'logo': TImages.acerlogo,
+      },
+      {
+        'name': 'Samsung',
+        'category': 'electronics',
+        'productCount': 4,
+        'logo': '',
+      },
+      {
+        'name': 'Zara',
+        'category': 'clothes',
+        'productCount': 7,
+        'logo': TImages.zaraLogo,
+      },
+      {
+        'name': 'H&M',
+        'category': 'clothes',
+        'productCount': 6,
+        'logo': '',
+      },
     ];
 
     return Scaffold(
@@ -59,12 +124,14 @@ class AllBrandsScreen extends StatelessWidget {
                   final brandName = brand['name'].toString();
                   final productCount = brand['productCount'] as int;
                   final category = brand['category'].toString();
+                  final logo = brand['logo'].toString();
                   
                   return _buildBrandCard(
                     context,
                     brandName,
                     productCount,
                     category,
+                    logo,
                     isDark,
                   );
                 },
@@ -81,6 +148,7 @@ class AllBrandsScreen extends StatelessWidget {
     String brandName,
     int productCount,
     String category,
+    String logoPath,
     bool isDark,
   ) {
     return GestureDetector(
@@ -112,7 +180,7 @@ class AllBrandsScreen extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // Brand Icon
+            // Brand Logo/Icon
             Container(
               width: 50,
               height: 50,
@@ -121,11 +189,26 @@ class AllBrandsScreen extends StatelessWidget {
                 color: isDark ? TColors.darkGrey : TColors.light,
                 borderRadius: BorderRadius.circular(100),
               ),
-              child: const Icon(
-                Icons.storefront,
-                size: 24,
-                color: TColors.primary,
-              ),
+              child: logoPath.isNotEmpty
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: Image.asset(
+                        logoPath,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(
+                            Icons.storefront,
+                            size: 24,
+                            color: TColors.primary,
+                          );
+                        },
+                      ),
+                    )
+                  : const Icon(
+                      Icons.storefront,
+                      size: 24,
+                      color: TColors.primary,
+                    ),
             ),
             const SizedBox(width: TSizes.spaceBtwItems / 2),
             
@@ -133,7 +216,7 @@ class AllBrandsScreen extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Row(
                     children: [
@@ -154,6 +237,7 @@ class AllBrandsScreen extends StatelessWidget {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 2),
                   Text(
                     '$productCount Products',
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
