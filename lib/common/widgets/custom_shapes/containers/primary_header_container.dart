@@ -18,7 +18,7 @@ class TPrimaryHeaderContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.only(top: 60), // more padding for notch
+      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 20),
       decoration: BoxDecoration(
         color: backgroundColor ?? TColors.primary,
         borderRadius: const BorderRadius.only(
@@ -27,8 +27,8 @@ class TPrimaryHeaderContainer extends StatelessWidget {
         ),
       ),
       child: Stack(
+        clipBehavior: Clip.none,
         children: [
-          // Decorative circles
           Positioned(
             top: -150,
             right: -250,
@@ -47,9 +47,10 @@ class TPrimaryHeaderContainer extends StatelessWidget {
               backgroundColor: TColors.textWhite.withOpacity(0.1),
             ),
           ),
-
-          // Main child (like greeting + search + categories)
-          child,
+          Align(
+            alignment: Alignment.topCenter,
+            child: child,
+          ),
         ],
       ),
     );

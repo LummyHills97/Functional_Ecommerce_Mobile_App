@@ -139,7 +139,7 @@ class _HomePageState extends State<HomePage> {
       height: 420,
       child: Column(
         children: [
-          SizedBox(height: MediaQuery.of(context).padding.top / 300),
+          SizedBox(height: MediaQuery.of(context).padding.top / 2),
           Obx(() => THomeAppBar(
             userName: 'Olumide Akinnuli',
             cartItemCount: cartController.cartItems.length,
