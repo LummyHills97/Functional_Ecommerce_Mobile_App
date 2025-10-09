@@ -134,33 +134,36 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
-    return TPrimaryHeaderContainer(
-      height: 420,
-      child: Column(
-        children: [
-          SizedBox(height: MediaQuery.of(context).padding.top / 2),
-          Obx(() => THomeAppBar(
-            userName: 'Olumide Akinnuli',
-            cartItemCount: cartController.cartItems.length,
-            onCartPressed: () => Get.toNamed('/cart'),
-          )),
-          const SizedBox(height: TSizes.spaceBtwItems / 2),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-            child: TSearchContainer(
-              onTap: () => debugPrint('Search tapped'),
-            ),
+    Widget _buildHeader(BuildContext context) {
+  return TPrimaryHeaderContainer(
+    height: 420, // adjust this if you want a taller/shorter header
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // removed the SizedBox(MediaQuery.of(context).padding.top / 2)
+        Obx(() => THomeAppBar(
+              userName: 'Olumide Akinnuli',
+              cartItemCount: cartController.cartItems.length,
+              onCartPressed: () => Get.toNamed('/cart'),
+            )),
+        const SizedBox(height: TSizes.spaceBtwItems / 2),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+          child: TSearchContainer(
+            onTap: () => debugPrint('Search tapped'),
           ),
-          const SizedBox(height: TSizes.spaceBtwSections),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-            child: _buildPopularCategories(context),
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+        const SizedBox(height: TSizes.spaceBtwSections),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+          child: _buildPopularCategories(context),
+        ),
+      ],
+    ),
+  );
+}
+
 
   Widget _buildPopularCategories(BuildContext context) {
     return Column(
