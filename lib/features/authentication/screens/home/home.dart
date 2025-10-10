@@ -42,7 +42,6 @@ class _HomePageState extends State<HomePage> {
     Category(name: 'Electronics', icon: Icons.phone_android, color: Colors.blue),
     Category(name: 'Fashion', icon: Icons.checkroom, color: Colors.pink),
     Category(name: 'Shoes', icon: Icons.skateboarding, color: Colors.green),
-    Category(name: 'Cosmetics', icon: Icons.face, color: Colors.orange),
     Category(name: 'Sports', icon: Icons.sports_soccer, color: Colors.red),
     Category(name: 'Furniture', icon: Icons.chair, color: Colors.purple),
   ];
@@ -165,36 +164,38 @@ class _HomePageState extends State<HomePage> {
 }
 
 
-  Widget _buildPopularCategories(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Popular Categories',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            color: TColors.textWhite,
-            fontWeight: FontWeight.w600,
-          ),
+       Widget _buildPopularCategories(BuildContext context) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        'Popular Categories',
+        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+          color: TColors.textWhite,
+          fontWeight: FontWeight.w600,
         ),
-        const SizedBox(height: TSizes.spaceBtwItems),
-        SizedBox(
-          height: 80,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: _categories.length,
-            separatorBuilder: (context, index) => const SizedBox(width: TSizes.spaceBtwItems),
-            itemBuilder: (context, index) {
-              final category = _categories[index];
-              return _CategoryItem(
-                category: category,
-                onTap: () => Get.to(() => const SubCategoriesScreen()),
-              );
-            },
-          ),
+      ),
+      const SizedBox(height: TSizes.spaceBtwItems),
+      SizedBox(
+        height: 80,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          itemCount: _categories.length,
+          separatorBuilder: (context, index) => const SizedBox(width: TSizes.spaceBtwItems),
+          itemBuilder: (context, index) {
+            final category = _categories[index];
+            return _CategoryItem(
+              category: category,
+              onTap: () => Get.to(() => SubCategoriesScreen(
+                categoryName: category.name,  // ✅ Pass the category name!
+              )),
+            );
+          },
         ),
-      ],
-    );
-  }
+      ),
+    ],
+  );
+}
 
   Widget _buildBannerCarousel() {
     return _BannerCarousel(
@@ -238,54 +239,54 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildFeaturedProducts(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildSectionTitle(context, 'Featured Categories', () {
-          debugPrint('View all featured');
-        }),
-        const SizedBox(height: TSizes.spaceBtwItems),
-        Row(
-          children: [
-            _buildFeaturedCategory(
-              context,
-              'Electronics',
-              Icons.laptop_mac,
-              isDarkMode ? Colors.orange[800]! : Colors.orange[100]!,
-              isDarkMode ? Colors.orange[400]! : Colors.orange[700]!,
-              isDarkMode ? Colors.orange[600]! : Colors.transparent,
-              isDarkMode,
-              () => Get.to(() => const SubCategoriesScreen()),
-            ),
-            const SizedBox(width: TSizes.spaceBtwItems),
-            _buildFeaturedCategory(
-              context,
-              'Fashion',
-              Icons.checkroom,
-              isDarkMode ? Colors.pink[800]! : Colors.pink[100]!,
-              isDarkMode ? Colors.pink[400]! : Colors.pink[700]!,
-              isDarkMode ? Colors.pink[600]! : Colors.transparent,
-              isDarkMode,
-              () => Get.to(() => const SubCategoriesScreen()),
-            ),
-            const SizedBox(width: TSizes.spaceBtwItems),
-            _buildFeaturedCategory(
-              context,
-              'Sports',
-              Icons.sports_soccer,
-              isDarkMode ? Colors.green[800]! : Colors.green[100]!,
-              isDarkMode ? Colors.green[400]! : Colors.green[700]!,
-              isDarkMode ? Colors.green[600]! : Colors.transparent,
-              isDarkMode,
-              () => Get.to(() => const SubCategoriesScreen()),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
+      Widget _buildFeaturedProducts(BuildContext context) {
+  final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      _buildSectionTitle(context, 'Featured Categories', () {
+        debugPrint('View all featured');
+      }),
+      const SizedBox(height: TSizes.spaceBtwItems),
+      Row(
+        children: [
+          _buildFeaturedCategory(
+            context,
+            'Electronics',
+            Icons.laptop_mac,
+            isDarkMode ? Colors.orange[800]! : Colors.orange[100]!,
+            isDarkMode ? Colors.orange[400]! : Colors.orange[700]!,
+            isDarkMode ? Colors.orange[600]! : Colors.transparent,
+            isDarkMode,
+            () => Get.to(() => const SubCategoriesScreen(categoryName: 'Electronics')),  // ✅ Fixed
+          ),
+          const SizedBox(width: TSizes.spaceBtwItems),
+          _buildFeaturedCategory(
+            context,
+            'Fashion',
+            Icons.checkroom,
+            isDarkMode ? Colors.pink[800]! : Colors.pink[100]!,
+            isDarkMode ? Colors.pink[400]! : Colors.pink[700]!,
+            isDarkMode ? Colors.pink[600]! : Colors.transparent,
+            isDarkMode,
+            () => Get.to(() => const SubCategoriesScreen(categoryName: 'Fashion')),  // ✅ Fixed
+          ),
+          const SizedBox(width: TSizes.spaceBtwItems),
+          _buildFeaturedCategory(
+            context,
+            'Sports',
+            Icons.sports_soccer,
+            isDarkMode ? Colors.green[800]! : Colors.green[100]!,
+            isDarkMode ? Colors.green[400]! : Colors.green[700]!,
+            isDarkMode ? Colors.green[600]! : Colors.transparent,
+            isDarkMode,
+            () => Get.to(() => const SubCategoriesScreen(categoryName: 'Sports')),  // ✅ Fixed
+          ),
+        ],
+      ),
+    ],
+  );
+}
 
   Widget _buildFeaturedCategory(
     BuildContext context,
