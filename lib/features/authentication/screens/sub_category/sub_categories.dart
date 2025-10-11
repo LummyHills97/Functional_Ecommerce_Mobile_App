@@ -500,6 +500,7 @@ class SubCategoriesScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         'NEW OFFER',
@@ -515,25 +516,29 @@ class SubCategoriesScreen extends StatelessWidget {
                         title,
                         style: TextStyle(
                           color: Color(0xFFFFD700),
-                          fontSize: 28,
+                          fontSize: 26,
                           fontWeight: FontWeight.w900,
                           height: 1.1,
-                          letterSpacing: 1,
+                          letterSpacing: 0.5,
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 4),
                       Text(
                         subtitle,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: Colors.grey[300],
-                              height: 1.3,
+                              height: 1.2,
                             ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 6),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 4,
+                          horizontal: 8,
+                          vertical: 3,
                         ),
                         decoration: BoxDecoration(
                           color: Color(0xFFFFD700),
@@ -543,9 +548,9 @@ class SubCategoriesScreen extends StatelessWidget {
                           'SHOP NOW',
                           style: TextStyle(
                             color: Colors.black,
-                            fontSize: 10,
+                            fontSize: 9,
                             fontWeight: FontWeight.w900,
-                            letterSpacing: 1,
+                            letterSpacing: 0.8,
                           ),
                         ),
                       ),
@@ -564,7 +569,7 @@ class SubCategoriesScreen extends StatelessWidget {
                         angle: -0.3,
                         child: Icon(
                           icon,
-                          size: 80,
+                          size: 75,
                           color: iconColor,
                         ),
                       ),
@@ -574,8 +579,8 @@ class SubCategoriesScreen extends StatelessWidget {
                         top: 0,
                         right: 0,
                         child: Container(
-                          width: 50,
-                          height: 50,
+                          width: 48,
+                          height: 48,
                           decoration: BoxDecoration(
                             color: Color(0xFFFFD700),
                             shape: BoxShape.circle,
@@ -588,7 +593,7 @@ class SubCategoriesScreen extends StatelessWidget {
                                 '50%',
                                 style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 16,
+                                  fontSize: 15,
                                   fontWeight: FontWeight.w900,
                                   height: 1,
                                 ),
@@ -597,7 +602,7 @@ class SubCategoriesScreen extends StatelessWidget {
                                 'OFF',
                                 style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 8,
+                                  fontSize: 7,
                                   fontWeight: FontWeight.w900,
                                   height: 1,
                                 ),
